@@ -1,0 +1,108 @@
+<?php
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =====================================================================================
+ *
+ *        Filename: Express_model.php
+ *
+ *     Description: 快递模型
+ *
+ *         Created: 2016-12-27 15:50:49
+ *
+ *          Author: wuhaohua
+ *
+ * =====================================================================================
+ */
+class Express_model extends CI_Model {
+    public function __construct(){
+        parent::__construct();
+        $this->load->library(['Jys_kdniao', 'Jys_mongo']);
+    }
+
+    /**
+     * 根据订单ID查询订单发货物流信息
+     * @param $order_id 订单ID
+     * @return array
+     */
+    public function show_express_info_by_order_id($order_id, $user_id) {
+        $result = array('success'=>FALSE, 'msg'=>'此单无物流信息', 'data'=>array());
+        if (intval($order_id) < 1 || intval($user_id) < 1) {
+            $result['msg'] = '订单ID或用户信息不正确';
+            return $result;
+        }
+
+        $this->db->select('order.id,
+                       order.number,
+                       order.express_number,
+                       order.express_company_id,
+                       order.delivered_time,
+                       order.status_id,
+                       order_status.name as status,
+                       express_company.name as express_company_name,
+                       express_company.code as express_company_code,
+                       express_company.trajectory_query');
+        $this->db->join('system_code as order_status', 'order_status.value = order.status_id', 'left');
+        $this->db->join('express_company', 'express_company.id = order.express_company_id');
+        $this->db->where('order.id', $order_id);
+        $this->db->where('order.user_id', $user_id);
+        $this->db->where('order_status.type', jys_system_code::ORDER_STATUS);
+        $order = $this->db->get('order');
+
+        if ($order && $order->num_rows() > 0) {
+            $order = $order->row_array();
+            $traces = [];
+            $logistics_info = $this->jys_mongo->find('logistics', ['order_number'=>$order['number']], 'sw-shines-shop');
+            foreach ($logistics_info as $key => $row){
+                $traces[$key]['AcceptTime'] = $row['AcceptTime'];
+                $traces[$key]['AcceptStation'] = $row['AcceptStation'];
+            }
+
+            if (!empty($traces) && is_array($traces)){
+                $result['success'] = TRUE;
+                $result['msg'] = '查询成功';
+                $express_info['express_company_name'] = $order['express_company_name'];
+                $express_info['Traces'] = $traces;
+                $result['data'] = $express_info;
+            }
+        }else {
+            $result['msg'] = '未查询到订单信息';
+        }
+
+        return $result;
+    }
+
+    /**
+     * 更新物流信息
+     *
+     * @param array $logistics
+     * @return bool
+     */
+    public function update_logistics_info($logistics_arrs = []){
+        if (empty($logistics_arrs)){
+            return FALSE;
+        }
+
+        foreach ($logistics_arrs as $logistics){
+            $order = $this->jys_db_helper->get_where('order', ['express_number'=>$logistics['LogisticCode']]);
+
+            if ($order && is_array($logistics['Traces']) && !empty($logistics['Traces'])) {
+                $multiple = [];
+                foreach ($logistics['Traces'] as $trace){
+                    $arr = [];
+                    $arr['order_number']    = $order['number'];
+                    $arr['AcceptStation']   = $trace['AcceptStation'];
+                    $arr['AcceptTime']      = $trace['AcceptTime'];
+
+                    if (!$this->jys_mongo->is_exist('logistics', $arr, 'sw-shines-shop')){
+                        $multiple[] = $arr;
+                    }
+                }
+
+                $this->jys_mongo->insert_multi('logistics', $multiple, 'sw-shines-shop');
+            }
+        }
+
+        return TRUE;
+    }
+}

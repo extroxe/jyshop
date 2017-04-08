@@ -1,0 +1,13 @@
+/**
+ * Created by sailwish009 on 2017/1/20.
+ */
+angular.module('app')
+    .controller('forumHealthCtrl', ['$scope', 'ajax', function ($scope, ajax) {
+        $scope.back = function () {
+            history.go(-1);
+        }
+
+        $scope.goToUrl = function (url) {
+            window.location.href = SITE_URL + 'weixin/index/'+ url;
+        }
+    }])

@@ -1,0 +1,26 @@
+<div class="collection-wrapper">
+    <div class="content">
+        <ul id="collection_content">
+        </ul>
+    </div>
+    <div class="collection-page">
+        <div class="page-wrapper">
+            <div class="home">首页</div>
+            <div class="prev-page"><上一页</div>
+            <div class="next-page">下一页></div>
+        </div>
+    </div>
+</div>
+
+<script id="collection_list" type="text/html">
+    <% for(var i = 0; i < 2; i++){ %>
+    <li>
+        <div class="collection-item">
+            收藏了帖子
+            <a><%:=list[0].title%></a>
+            <div class="operated">取消收藏</div>
+            <div class="item-date"><%:=list[0].create_time%></div>
+        </div>
+    </li>
+    <% } %>
+</script>

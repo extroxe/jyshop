@@ -1,0 +1,174 @@
+<?php
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =====================================================================================
+ *
+ *        Filename:  User.php
+ *
+ *     Description:  微信用户控制器
+ *
+ *         Created:  2016-12-29 17:20:12
+ *
+ *          Author:  sunzuosheng
+ *
+ * =====================================================================================
+ */
+
+Class User extends CI_Controller {
+    /**
+     * 构造函数
+     */
+    public function __construct(){
+        parent::__construct();
+        $this->load->library(['form_validation']);
+    }
+
+    /**
+     * 积分详情
+     */
+    public function integral_detail(){
+        $data['title'] = "积分详情";
+        $data['js'] = array('integral_detail');
+        $data['css'] = array('integral_detail');
+        $data['main_content'] = 'integral_detail';
+        $this->load->view('mobile/includes/template_view', $data);
+    }
+
+    /**
+     * 个人中心
+     */
+    public function center(){
+        $data['title'] = "个人中心";
+        $data['js'] = array('user_center');
+        $data['css'] = array('user_center');
+        $data['main_content'] = 'user_center';
+        $data['tab_nav'] = TRUE;
+        $data['active_flag'] = 4;
+        $this->load->view('mobile/includes/template_view', $data);
+    }
+
+    /**
+     * 个人信息
+     */
+    public function user_info(){
+        $data['title'] = "个人信息";
+        $data['js'] = array('user_info');
+        $data['css'] = array('user_info');
+        $data['main_content'] = 'user_info';
+        $this->load->view('mobile/includes/template_view', $data);
+    }
+    
+    /**
+     * 订单详情
+     */
+    public function order_detail(){
+        $data['title'] = "订单详情";
+        $data['js'] = array('order_detail');
+        $data['css'] = array('order_detail');
+        $data['main_content'] = 'order_detail';
+        $this->load->view('mobile/includes/template_view', $data);
+    }
+
+    /**
+     * 查看订单列表
+     */
+    public function order_list(){
+        $data['title'] = "订单列表";
+        $data['js'] = array('order_list');
+        $data['css'] = array('order_list');
+        $data['main_content'] = 'order_list';
+        $this->load->view('mobile/includes/template_view', $data);
+    }
+
+
+    /**
+     * 收货地址
+     */
+    public function receipt_address(){
+        $data['title'] = "收货地址";
+        $data['js'] = array('receipt_address');
+        $data['css'] = array('receipt_address');
+        $data['main_content'] = 'receipt_address';
+        $data['need_gaode_api'] = TRUE;
+        $this->load->view('mobile/includes/template_view', $data);
+    }
+
+    /**
+     * 修改密码
+     */
+    public function change_password(){
+        $data['title'] = "修改密码";
+        $data['js'] = array('change_password');
+        $data['css'] = array('change_password');
+        $data['main_content'] = 'change_password';
+        $this->load->view('mobile/includes/template_view', $data);
+    }
+
+    /**
+     * 评价晒图
+     */
+    public function evaluation($order_id){
+        $data['title'] = "评价晒图";
+        $data['js'] = array('evaluation');
+        $data['css'] = array('evaluation');
+        $data['order_id'] = $order_id;
+        $data['main_content'] = 'evaluation';
+        $this->load->view('mobile/includes/template_view', $data);
+    }
+    /**
+     * 评价列表
+     */
+    public function evaluation_list($commodity_id){
+        $data['title'] = "累计评价";
+        $data['js'] = array('evaluation_list');
+        $data['css'] = array('evaluation_list');
+        $data['commodity_id'] = $commodity_id;
+        $data['main_content'] = 'evaluation_list';
+        $this->load->view('mobile/includes/template_view', $data);
+    }
+
+    /**
+     * 我的优惠券
+     */
+    public function discount_coupon(){
+        $data['title'] = "我的优惠券";
+        $data['js'] = array('discount_coupon');
+        $data['css'] = array('discount_coupon');
+        $data['main_content'] = 'discount_coupon';
+        $this->load->view('mobile/includes/template_view', $data);
+    }
+
+    /**
+     * 会员中心
+     */
+    public function member_center() {
+        $data['title'] = "会员中心";
+        $data['js'] = array('member_center');
+        $data['css'] = array('user_center', 'member_center');
+        $data['main_content'] = 'member_center';
+        $this->load->view('mobile/includes/template_view', $data);
+    }
+
+    /**
+     * 我的城
+     */
+    public function my_city() {
+        $data['title'] = "我的城";
+        $data['js'] = array('my_city');
+        $data['css'] = array('my_city');
+        $data['main_content'] = 'my_city';
+        $this->load->view('mobile/includes/template_view', $data);
+    }
+
+    /**
+     * 我的收藏
+     */
+    public function collection_list() {
+        $data['title'] = "我的收藏";
+        $data['js'] = array('collection_list');
+        $data['css'] = array('collection_list');
+        $data['main_content'] = 'collection_list';
+        $this->load->view('mobile/includes/template_view', $data);
+    }
+}

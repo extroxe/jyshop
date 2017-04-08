@@ -1,0 +1,75 @@
+<?php
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =====================================================================================
+ *
+ *        Filename:  System_setting_model.php
+ *
+ *     Description:  系统设置模型
+ *
+ *         Created:  2016-12-09 10:08:03
+ *
+ *          Author:  zourui
+ *
+ * =====================================================================================
+ */
+Class System_setting_model extends CI_Model {
+    public function __construct(){
+        parent::__construct();
+    }
+
+    /**
+	 * 设置加载或更新状态
+	 * @param array $array
+	 */
+	public function set_load_status($array = []){
+		$data['success'] = FALSE;
+		$data['msg'] = '设置失败';
+
+		if (empty($array) || !is_array($array)){
+			return $data;
+		}
+
+		if ($this->db->where('name', $array['name'])) {
+			$post['value']       = $array['value'];
+			$post['update_time'] = $array['update_time'];
+			$status = $this->db->update('system_setting', $post);
+			if ($status) {
+				$data['success'] = TRUE;
+				$data['msg'] = '更新成功';
+			}
+		}else{
+			$post['name']  = $array['name'];
+			$post['value'] = $array['value'];
+			$post['create_time'] = $array['create_time'];
+			$status = $this->db->insert('system_setting', $post);
+			if ($status) {
+				$data['success'] = TRUE;
+				$data['msg'] = '设置成功';
+			}
+		}
+
+		return $data;
+	}
+
+
+	/**
+	*获取订单预计完成天数
+	*/
+	public function get_system_info(){
+		$result = $this->db->get('system_setting');
+		if($result && $result->num_rows() > 0){
+			$data['success'] = TRUE;
+			$data['msg'] = '获取订单预计完成天数成功';
+			$data['data'] = $result->result_array();
+		}else{
+			$data['success'] = FALSE;
+			$data['msg'] = '当前系统中未设置该订单预计完成天数';
+		}
+
+		return $data;
+	}
+
+
+}

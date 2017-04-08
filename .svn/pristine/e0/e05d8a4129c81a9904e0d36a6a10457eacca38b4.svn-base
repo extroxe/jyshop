@@ -1,0 +1,336 @@
+<?php
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =========================================================
+ *
+ *      Filename: Report_model.php
+ *
+ *   Description: 查询报告管理
+ *
+ *       Created: 2016-11-24 22:14:23
+ *
+ *        Author: zourui
+ *
+ * =========================================================
+ */
+Class Report_model extends CI_Model{
+    /**
+     * 构造函数
+     */
+    public function __construct(){
+        parent::__construct();
+    }
+
+    /**
+     * 根据用户身份证号后六位和手机号查询报告
+     * @param null $identity_card 身份证号后六位
+     * @param null $phone 手机号
+     */
+    public function get_report_by_phone($identity_card = NULL, $phone = NULL) {
+        if (empty($identity_card) || empty($phone)) {
+            return false;
+        }
+
+        $this->db->select('order_commodity.id,
+                           order_commodity.nummber,
+                           order_commodity.commodity_id,
+                           commodity.name,
+                           commodity.price,
+                           commodity.nummber,
+                           order_commodity.amount,
+                           order_commodity.total_price,
+                           order_commodity.name,
+                           order_commodity.age,
+                           order_commodity.gender,
+                           order_commodity.identity_card,
+                           order_commodity.phone,
+                           order_commodity.upload_time,
+                           commodity.category_id,
+                           category.name,
+                           category.parent_id');
+        $this->db->where('phone', $phone);
+        $this->db->like('identity_card', $identity_card, 'before');
+        $this->db->join('commodity', 'order_commodity.commodity_id = commodity.id');
+        $this->db->join('category', 'commodity.category_id = category.id');
+        $this->db->join('category', 'category.id = category.parent_id');
+        $this->db->from('order_commodity');
+        $data = $this->db->get();
+        if($data && $data -> num_rows() > 0){
+            return $data->result_array();
+        }else{
+            return false;
+        }
+    }
+
+
+    /**
+     * 根据attachment_id获取附件路径
+     * @param int $id 报告Id
+     * @return string || bool  
+     */
+    public function get_path_by_report_id($id = 1){
+        if(empty($id)){
+            return FALSE;
+        }
+
+        $this->db->select('attachment.path');
+        $this->db->where('report.id', $id);
+        $this->db->join('attachment', 'report.attachment_id = attachment.id', 'left');
+        $result = $this->db->get('report');
+        if($result && $result -> num_rows() > 0){
+            return $result -> row_array();
+        }else{
+            return FALSE;
+        }
+    }
+
+    /**
+     * 获取当前用户的检测报告
+     */
+    public function get_report_by_user_id($user_id){
+        if (empty($user_id)){
+            return FALSE;
+        }
+        $this->db->select('order_commodity.id,
+                           order_commodity.order_id,
+                           order_commodity.number,
+                           order_commodity.report_id,
+                           order_commodity.name,
+                           order_commodity.phone,
+                           order_commodity.gender,
+                           order_commodity.age,
+                           order_commodity.identity_card,
+                           order_commodity.upload_time,
+                           order_commodity.create_time,
+                           order.user_id');
+        $this->db->join('order', 'order.id = order_commodity.order_id', 'left');
+        $this->db->where('order_commodity.report_id !=', 'Null');
+        $this->db->where('order.user_id = ', $user_id);
+        $result = $this->db->get('order_commodity');
+
+        if ($result && $result->num_rows() > 0){
+            return $result->result_array();
+        }else{
+            return FALSE;
+        }
+    }
+
+    /**
+     * 分页获取用户检测报告
+     * @param int $page 页数
+     * @param int $page_size 页面大小
+     * @param int $user_id 用户ID
+     * @return array
+     */
+    public function paginate_for_report($page = 1, $page_size = 10, $user_id = 0) {
+        $result = array('success'=>TRUE, 'msg'=>'获取报告列表失败', 'data'=>array(), 'total_page'=>0);
+        if (intval($page) < 1 || intval($page_size) < 1) {
+            $result['msg'] = '分页参数错误';
+            return $result;
+        }
+
+        $this->db->select('
+            order.id as order_id,
+            order.number as order_number,
+            order_commodity.id as order_commodity_id,
+            order_commodity.number as order_commodity_number,
+            report_path.path,
+            report.*
+        ');
+        $this->db->join('order_commodity', 'order_commodity.id = report.order_commodity_id', 'left');
+        $this->db->join('order', 'order.id = order_commodity.order_id', 'left');
+        $this->db->join('attachment as report_path', 'report_path.id = report.attachment_id', 'left');
+        if (intval($user_id) > 0) {
+            $this->db->where('order.user_id', $user_id);
+        }
+        $this->db->order_by('report.create_time', 'DESC');
+        $this->db->limit($page_size, ($page - 1) * $page_size);
+        $data = $this->db->get('report');
+
+        if ($data && $data->num_rows() > 0) {
+            $data = $data->result_array();
+            $result['success'] = TRUE;
+            $result['msg'] = '查询报告成功';
+            $result['data'] = $data;
+
+            if (intval($user_id) > 0) {
+                $this->db->select('order.id');
+                $this->db->join('order_commodity', 'order_commodity.id = report.order_commodity_id', 'left');
+                $this->db->join('order', 'order.id = order_commodity.order_id', 'left');
+                $this->db->where('order.user_id', $user_id);
+                $page_data = $this->db->get('report');
+                if ($page_data && $page_data->num_rows() > 0) {
+                    $total_num = $page_data->num_rows();
+                    $result['total_page'] = ceil($total_num / $page_size * 1.0);
+                }else {
+                    $result['total_page'] = 1;
+                }
+            }else {
+                $total_page = $this->jys_db_helper->get_total_page('report', $page_size);
+                if (intval($total_page) > 0) {
+                    $result['total_page'] = intval($total_page);
+                }else {
+                    $total_page = 1;
+                }
+            }
+        }else {
+            $result['msg'] = '未查询到相关报告';
+        }
+        return $result;
+    }
+
+    /**
+     * 根据子订单ID获取其下所有报告
+     * @param $order_commodity_id
+     * @return bool
+     */
+    public function get_report_list_by_order_commodity_id($order_commodity_id) {
+        if (intval($order_commodity_id) < 1) {
+            return FALSE;
+        }
+
+        $this->db->select('
+            order.id as order_id,
+            order.number as order_number,
+            order_commodity.id as order_commodity_id,
+            order_commodity.number as order_commodity_number,
+            report_path.path,
+            report.*
+        ');
+        $this->db->join('order_commodity', 'order_commodity.id = report.order_commodity_id', 'left');
+        $this->db->join('order', 'order.id = order_commodity.order_id', 'left');
+        $this->db->join('attachment as report_path', 'report_path.id = report.attachment_id', 'left');
+        $this->db->where('order_commodity.id', $order_commodity_id);
+        $this->db->order_by('report.update_time', 'DESC');
+        $data = $this->db->get('report');
+
+        if ($data && $data->num_rows() > 0) {
+            return $data->result_array();
+        }else {
+            return FALSE;
+        }
+    }
+
+    /**
+     * 添加检测报告
+     * @param $order_commodity_id 子订单ID
+     * @param $number 报告编号
+     * @param $name 姓名
+     * @param $age 年龄
+     * @param $gender 性别
+     * @param $phone 手机号
+     * @param $identity_card 身份证号
+     * @param $attachment_id 报告ID
+     */
+    public function add($order_commodity_id, $number, $name, $age, $gender, $phone, $identity_card, $attachment_id) {
+        $result = array('success'=>FALSE, 'msg'=>'添加报告失败');
+        if (intval($order_commodity_id) < 1 || empty($number) || empty($name) || empty($age) || empty($gender) || empty($phone) || empty($identity_card) || intval($attachment_id) < 1) {
+            $result['msg'] = '参数不正确';
+            return $result;
+        }
+
+        $this->db->trans_start();
+        $order_commodity = $this->jys_db_helper->get_where('order_commodity', ['id'=>$order_commodity_id]);
+        $total = $this->jys_db_helper->get_total_num('report', ['order_commodity_id'=>$order_commodity_id]);
+        $this->db->trans_complete();
+
+        if (intval($total) >= intval($order_commodity['amount'])) {
+            // 报告数量已达上限
+            $result['msg'] = '报告数量已达上限';
+            return $result;
+        }
+
+        $current_time = date('Y-m-d H:i:s');
+        $insert = array(
+            'order_commodity_id'=>$order_commodity_id,
+            'number'=>$number,
+            'name'=>$name,
+            'age'=>$age,
+            'gender'=>$gender,
+            'phone'=>$phone,
+            'identity_card'=>$identity_card,
+            'attachment_id'=>$attachment_id,
+            'create_time'=>$current_time,
+            'update_time'=>$current_time
+        );
+        $this->db->trans_start();
+        $insert_result = $this->jys_db_helper->add('report', $insert, true);
+        if ($insert_result['success']) {
+            $result['success'] = TRUE;
+            $result['msg'] = '添加报告成功';
+            $result['report_id'] = $insert_result['insert_id'];
+        }else {
+            $result['msg'] = '添加报告失败';
+        }
+        $this->db->trans_complete();
+
+        return $result;
+    }
+
+    /**
+     * 更新报告
+     * @param $id 报告ID
+     * @param string $number 报告编号
+     * @param string $name 姓名
+     * @param string $phone 电话号码
+     * @param string $identity_card 身份证号
+     * @param string $attachment_id 报告ID
+     */
+    public function update($id, $number = "", $name = "", $age = "", $gender = 0,  $phone = "", $identity_card = "", $attachment_id = "") {
+        $result = array('success'=>FALSE, 'msg'=>'添加报告失败');
+        if (intval($id) < 1) {
+            $result['msg'] = '请选择要更新的报告';
+            return $result;
+        }
+
+        $update = array();
+        if (!empty($number)) {
+            $update['number'] = $number;
+        }
+        if (!empty($name)) {
+            $update['name'] = $name;
+        }
+        if (!empty($age)) {
+            $update['age'] = $age;
+        }
+        if (!empty($gender)) {
+            $update['gender'] = $gender;
+        }
+        if (!empty($phone)) {
+            $update['phone'] = $phone;
+        }
+        if (!empty($identity_card)) {
+            $update['identity_card'] = $identity_card;
+        }
+        if (intval($attachment_id) > 0) {
+            $update['attachment_id'] = $attachment_id;
+        }
+
+
+        if (!empty($update) && is_array($update)) {
+            $update['update_time'] = date('Y-m-d H:i:s');
+            if ($this->jys_db_helper->update('report', $id, $update)) {
+                $result['success'] = TRUE;
+                $result['msg'] = '更新报告成功';
+            }else {
+                $result['msg'] = '更新报告失败';
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     *删除报告
+     */
+    public function delete_report_by_id($report_id)
+    {
+        $result['success'] = FALSE;
+
+        if ($this->jys_db_helper->delete('report', $report_id)){
+            $result['success'] = TRUE;
+        }
+        return $result;
+    }
+}

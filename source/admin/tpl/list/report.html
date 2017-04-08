@@ -1,0 +1,142 @@
+<div ng-controller="reportCtrl">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n font-thin h3">报告管理</h1>
+    </div>
+    <div class="wrapper-md">
+        <div class="row">
+            <div class="col-md-2">
+                <div>
+                    <a class="btn m-b-xs btn-sm btn-success btn-addon" style="margin-left: 35px;width: 120px" ng-click="back()"><i class="fa fa-angle-double-left"></i>返回子订单</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="wrapper-md">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    报告管理表
+                </div>
+                <div class="panel-body b-b b-light">
+                    <button class="btn m-b-xs  btn-primary" ng-click="add()"><i class="fa fa-plus"></i> 增加</button>
+                    <span class="pull-right">
+                        Search: <input id="filter" type="text" class="form-control input-sm w-sm inline m-r"/>
+                    </span>
+                </div>
+                <div>
+                    <table class="table table-striped m-b-none" ui-footable="footable" data-filter="#filter">
+                        <thead>
+                        <tr>
+                            <th>
+                                报告编号
+                            </th>
+                            <th>
+                                姓名
+                            </th>
+                            <th>
+                                年龄
+                            </th>
+                            <th>
+                                手机号
+                            </th>
+                            <th>
+                                身份证号
+                            </th>
+                            <th>
+                                操作
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="data in reportList">
+                            <td>{{data.number}}</td>
+                            <td><i class="icon-symbol-male" style="color: #00a8f3" ng-if="data.gender == 1"> </i>
+                                <i class="icon-symbol-female" style="color: #9289ca" ng-if="data.gender == 0"></i>
+                                {{data.name}}
+                            </td>
+                            <td>{{data.age}}</td>
+                            <td>{{data.phone}}</td>
+                            <td>{{data.identity_card}}</td>
+                            <td>
+                                <button class="btn m-b-xs btn-sm btn-success btn-addon" ng-click="download(data)">下载</button>
+                                <button class="btn m-b-xs btn-sm btn-info btn-addon" ng-click="edit(data)">编辑</button>
+                                <button class="btn m-b-xs btn-sm btn-default btn-addon" ng-click="delete(data)">删除</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav>
+                    <ul class="pager">
+                        <li><a ng-click="firstPage()">第一页</a></li>
+                        <li><a ng-click="previousPage()">上一页</a></li>
+                        <li> 当 前 第 <input type="text" style="padding: 5px; width: 50px; text-align: center" ng-model="inputPage" ng-change="selectPage(inputPage)"> 页 / 共 {{totalPage}} 页 </li>
+                        <li><a ng-click="nextPage()">下一页</a></li>
+                        <li><a ng-click="lastPage()">最后一页</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">{{flag == true ? '添加报告' : '编辑报告'}}</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="reportForm" name="reportForm" class="form-horizontal" method="POST">
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label redstar">报告编号</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" ng-model="list.number" placeholder="报告编号" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label redstar">姓名</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control" ng-model="list.name" placeholder="姓名" required>
+                            </div>
+                            <label class="col-lg-2 control-label redstar">手机号</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control" ng-model="list.phone" placeholder="手机号" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label redstar">性别</label>
+                            <div class="col-lg-4">
+                                <select class="form-control" ng-model="list.gender">
+                                    <option value="">--请选择--</option>
+                                    <option value="1">男</option>
+                                    <option value="0">女</option>
+                                </select>
+                            </div>
+                            <label class="col-lg-2 control-label redstar">年龄</label>
+                            <div class="col-lg-4">
+                                <input type="text" class="form-control" ng-model="list.age" placeholder="年龄" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">身份证号</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" ng-model="list.identity_card" placeholder="身份证号" required>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-controller="reportFileUploadCtrl" uploader="uploader" filters="queueLimit, customFilter">
+                            <label for="name" class="col-sm-2 control-label redstar no-padding-right must">上传报告</label>
+                            <div data-ng-include=" '/source/admin/tpl/uploader.html' "></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" ng-click="ok()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

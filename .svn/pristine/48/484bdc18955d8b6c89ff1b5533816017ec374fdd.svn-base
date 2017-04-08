@@ -1,0 +1,109 @@
+<article class="post_bar" ng-controller="visitOthersHome" style="padding-bottom: 60px;" ng-init="user_id = '<?php echo $user_id; ?>'" >
+    <div class="titlebar" style="background-color: #117d94">
+        <a class="titlebar-button" ng-click="back()">
+            <i style="color: #eee" class="icon size16 icon-arrowleft back_btn"></i>
+        </a>
+        <h1 class="head"><?php echo $title; ?></h1>
+        <i class="icon icon-home" style=" color: #fff;right: 8px;" ng-click="home()"></i>
+    </div>
+    <div id="user_hook">
+        <div class="user-wrapper">
+            <div class="header">
+                <div class="avatar-wrapper">
+                    <img src="{{ SITE_URL + user_info.avatar_path }}" alt="" class="avatar">
+                </div>
+                <div class="name">{{user_info.nickname}}</div>
+            </div>
+            <div class="nav-wrapper">
+                <ul class="tabbar tabbar-line animated">
+                    <li class="tab active" ng-click="selectTab('post')">
+                        <label class="tab-label">帖子</label>
+                    </li>
+                    <li class="tab" ng-click="selectTab('focus')">
+                        <label class="tab-label">关注</label>
+                    </li>
+                    <li class="tab" ng-click="selectTab('fans')">
+                        <label class="tab-label">粉丝</label>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="post-content" ng-show="block == 'post'">
+                <ul>
+                    <li class="list-item" ng-repeat="post in post_lists" ng-click="view_post(post.post_bar_id, post.id)">
+                        <div class="title">{{post.title}}</div>
+                        <!--<div class="content">
+                            好像啥子都没干一样
+                        </div>-->
+                        <div class="info">
+                            <span>发表于</span>
+                            <span>{{post.bar_name_post}}</span>
+                            <span>{{post.publish_time}}</span>
+                        </div>
+                    </li>
+                </ul>
+                <div class="group" style="padding: 10px;text-align: center;" ng-if="post_lists == ''">
+                    人懒无贴~
+                </div>
+            </div>
+            <div class="focus-content" ng-show="block == 'focus'">
+                <!--<div class="bar">
+                    <div class="title">关注的吧</div>
+                    <ul>
+                        <li class="bar-list">
+                            <div class="name">武动乾坤</div>
+                            <div class="detail">关注 4396</div>
+                        </li>
+                        <li class="bar-list">
+                            <div class="name">斗破苍穹</div>
+                            <div class="detail">关注 4396</div>
+                        </li>
+                    </ul>
+                </div>-->
+                <div class="person">
+                    <div class="title">关注的人</div>
+                    <ul>
+                        <li class="person-list" ng-repeat="focus in focus_lists" ng-click="view_friends(focus.focus_user_id)">
+                            <div class="avatar">
+                                <img src="{{ SITE_URL + focus.avatar_path }}" alt="">
+                            </div>
+                            <div class="name">{{focus.nickname}}</div>
+                        </li>
+                    </ul>
+                    <div class="group" style="padding: 10px;text-align: center;" ng-if="focus_lists == ''">
+                        唯吾独尊~
+                    </div>
+                </div>
+            </div>
+            <div class="fans-content" ng-show="block == 'fans'">
+                <div class="person">
+                    <ul>
+                        <li class="person-list" ng-repeat="fans in fans_lists" ng-click="view_friends(fans.fans_user_id)">
+                            <div class="avatar">
+                                <img src="{{ SITE_URL + fans.avatar_path }}" alt="">
+                            </div>
+                            <div class="name">{{fans.nickname}}</div>
+                        </li>
+                    </ul>
+                    <div class="group" style="padding: 10px;text-align: center;" ng-if="fans_lists == ''">
+                        没有吸引粉丝的魅力~
+                    </div>
+                </div>
+            </div>
+           <!-- <div class="collect-content" ng-show="block == 'collect'">
+                <div class="bar">
+                    <ul>
+                        <li class="bar-list">
+                            <div class="name">武动乾坤</div>
+                            <div class="detail">关注 4396</div>
+                        </li>
+                        <li class="bar-list">
+                            <div class="name">斗破苍穹</div>
+                            <div class="detail">关注 4396</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>-->
+        </div>
+    </div>
+</article>

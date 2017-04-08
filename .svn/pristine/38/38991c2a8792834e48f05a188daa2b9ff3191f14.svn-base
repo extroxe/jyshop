@@ -1,0 +1,58 @@
+/**
+ * Created by sailwish009 on 2016/12/2.
+ */
+$(document).ready(function () {
+    $('.info_input').each(function () {
+        // $(this).focus(function () {
+        //     $(this).siblings('.user_hinter').css('color', '#117d94');
+        // });
+        // $(this).blur(function () {
+        //     $(this).siblings('.user_hinter').css('color', 'transparent');
+        // })
+    });
+
+    /**
+     * 登录验证
+     */
+    $('#username').bind('keypress',function(event){
+        if(event.keyCode == "13") {
+            $(this).parents('.form-horizontal').find('#password').focus();
+        }
+    })
+    $('#password').bind('keypress',function(event){
+        if(event.keyCode == "13") {
+            sign_in()
+        }
+    })
+
+    $('#login').click(function(){
+        sign_in()
+    });
+});
+
+/**
+ * 登录验证
+ */
+function sign_in() {
+    var username = $('#username').val();
+    var password = $('#password').val();
+    $.ajax({
+        type : 'post',
+        dataType: "json",
+        url : SITE_URL+'index/do_login',
+        data : {
+            username : username,
+            password : password
+        },
+        success : function(response){
+            if (response.success){
+                history.go(-1);
+            }else{
+                alert(response.msg);
+            }
+        },
+        error : function(error){
+
+        }
+    });
+}

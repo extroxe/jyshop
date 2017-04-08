@@ -1,0 +1,259 @@
+<?php
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =========================================================
+ *
+ *      Filename: Order_admin.php
+ *
+ *   Description: 订单管理
+ *
+ *       Created: 2016-11-23 11:19:46
+ *
+ *        Author: sunzuosheng
+ *
+ * =========================================================
+ */
+
+class Order_admin extends CI_Controller{
+    /**
+     * 构造函数
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->helper('form');
+        $this->load->library(['form_validation', 'Jys_kdniao']);
+        $this->load->model(['Order_model']);
+    }
+
+    /**
+     * 分页
+     *
+     * @param int $page 页数
+     * @param int $page_size 页大小
+     */
+    public function paginate($page = 1, $page_size = 10){
+        $is_point = $this->input->post('is_point', TRUE) ? intval($this->input->post('is_point', TRUE)) : 0;
+
+        if ($is_point) {
+            // 积分订单
+            $data = $this->Order_model->paginate($page, $page_size, array('payment_id'=>jys_system_code::PAYMENT_POINTPAY));
+            $data['total_page'] = $this->jys_db_helper->get_total_page('order', $page_size, array('payment_id'=>jys_system_code::PAYMENT_POINTPAY));
+        }else {
+            // 现金订单
+            $data = $this->Order_model->paginate($page, $page_size, array('payment_id !='=>jys_system_code::PAYMENT_POINTPAY));
+            $data['total_page'] = $this->jys_db_helper->get_total_page('order', $page_size);
+        }
+
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 修改订单
+     */
+    public function update()
+    {
+        //验证表单信息
+        $this->form_validation->set_rules('id', '订单ID', 'trim|required|numeric');
+        $this->form_validation->set_rules('number', '订单编号', 'trim|required|max_length[100]');
+        $this->form_validation->set_rules('total_price', '订单总价', 'trim|required|numeric');
+        $this->form_validation->set_rules('user_discount_coupon_id', '优惠券ID', 'trim|numeric');
+        $this->form_validation->set_rules('payment_amount', '实际支付金额', 'trim|numeric');
+        $this->form_validation->set_rules('payment_id', '支付方式', 'trim|numeric');
+        $this->form_validation->set_rules('payment_order', '支付单号', 'trim|max_length[100]');
+        $this->form_validation->set_rules('terminal_type', '终端类型', 'trim|required|numeric');
+        $this->form_validation->set_rules('status_id', '订单状态', 'trim|required|numeric');
+        $this->form_validation->set_rules('express_company_id', '快递公司ID', 'trim|numeric');
+        $this->form_validation->set_rules('express_number', '快递单号', 'trim|numeric');
+        $this->form_validation->set_rules('predict_complete_time', '预计完成时间', 'trim|required');
+        $this->form_validation->set_rules('payment_time', '支付时间', 'trim');
+
+        //表单验证是否通过, 若不通过 返回表单错误信息，停止执行
+        $res = $this->Common_model->deal_validation_errors();
+
+        if ($res['success']){
+            //处理数据
+            $id                                 = intval($this->input->post('id', TRUE));
+            $post['number']                     = $this->input->post('number', TRUE);
+            $post['total_price']                = floatval($this->input->post('total_price', TRUE));
+            $user_discount_coupon_id    = intval($this->input->post('user_discount_coupon_id', TRUE));
+            $post['payment_id']                 = intval($this->input->post('payment_id', TRUE));
+            $post['payment_order']              = $this->input->post('payment_order', TRUE);
+            $post['terminal_type']              = intval($this->input->post('terminal_type', TRUE));
+            $post['status_id']                  = intval($this->input->post('status_id', TRUE));
+            $express_company_id         = intval($this->input->post('express_company_id', TRUE));
+            $post['express_number']             = $this->input->post('express_number', TRUE);
+            $post['predict_complete_time']      = $this->input->post('predict_complete_time', TRUE);
+
+            if ($user_discount_coupon_id > 0) {
+                $post['user_discount_coupon_id'] = $user_discount_coupon_id;
+            }
+            if ($express_company_id > 0) {
+                $post['express_company_id'] = $express_company_id;
+            }
+
+            if ($post['status_id'] == jys_system_code::ORDER_STATUS_DELIVERED){
+                if (empty($post['express_company_id']) || empty($post['express_number'])){
+                    echo json_encode([
+                        'success' => FALSE,
+                        'msg' => '发货请填写物流公司及物流单号'
+                    ]);
+                    exit;
+                }else {
+                    // 订阅物流信息
+                    $express_company = $this->jys_db_helper->get('express_company', $express_company_id);
+                    if (isset($express_company['code']) && !empty($express_company['code'])) {
+                        // 记录调用订阅快递信息接口的次数
+                        $subscribe_express_infotimes = 0;
+                        while (TRUE) {
+                            if ($this->_subscribe_express_info($express_company['code'], $post['express_number'])) {
+                                break;
+                            }else {
+                                // 订阅失败，次数增加
+                                $subscribe_express_infotimes++;
+                            }
+
+                            if ($subscribe_express_infotimes > 3) {
+                                // 当调用次数大于3次时，返回错误信息
+                                echo json_encode([
+                                    'success' => FALSE,
+                                    'msg' => '订阅快递信息失败'
+                                ]);
+                                exit;
+                            }
+                        }
+                    }else {
+                        // 快递公司不存在
+                        echo json_encode([
+                            'success' => FALSE,
+                            'msg' => '所选快递公司不存在，请重新选择'
+                        ]);
+                        exit;
+                    }
+
+                }
+            }
+
+            if ($this->jys_db_helper->update('order', $id, $post)){
+                $data['success'] = TRUE;
+                $data['msg'] = '更新成功';
+            }
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '输入有错误';
+            $data['error'] = $res['msg'];
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 订阅快递订单信息
+     * @param $express_company_code 快递公司代码
+     * @param $express_number 快递单号
+     * @param string $order_number 订单号
+     * @param string $callback 自定义回调信息
+     * @return 订阅成功返回TRUE，订阅失败返回FALSE
+     */
+    private function _subscribe_express_info($express_company_code, $express_number, $order_number = "", $callback = "") {
+        if (empty($express_company_code) || empty($express_number)) {
+            return FALSE;
+        }
+        $dist_result = $this->jys_kdniao->dist($express_company_code, $express_number, $order_number, $callback);
+        if (!empty($dist_result) && is_array($dist_result) && isset($dist_result['Success']) && $dist_result['Success']) {
+            // 订阅快递信息成功
+            return TRUE;
+        }else {
+            // 订阅快递信息失败
+            return FALSE;
+        }
+    }
+
+    /**
+     * 修改订单状态
+     */
+    public function update_status()
+    {
+        $id        = intval($this->input->post('id', TRUE));
+        $status_id = intval($this->input->post('status_id', true));
+        if ($this->jys_db_helper->update('order', $id, ['status_id'=>$status_id])){
+            $data['success'] = TRUE;
+            $data['msg'] = '更新成功';
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '更新失败';
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 根据订单ID显示子订单
+     */
+    public function show_sub_order(){
+        $order_id = $this->input->post('order_id', TRUE);
+
+        $data = $this->Order_model->show_sub_order($order_id);
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 更新子订单
+     */
+    public function update_sub_order(){
+        //验证表单信息
+        $this->form_validation->set_rules('id', '子订单ID', 'trim|required|is_natural_no_zero');
+        $this->form_validation->set_rules('order_id', '订单ID', 'trim|required|is_natural_no_zero');
+        $this->form_validation->set_rules('number', '订单编号', 'trim|required|max_length[100]');
+        $this->form_validation->set_rules('commodity_id', '商品ID', 'trim|required|is_natural_no_zero');
+        $this->form_validation->set_rules('price', '商品单价', 'trim|required|numeric');
+        $this->form_validation->set_rules('amount', '商品数量', 'trim|required|numeric');
+        $this->form_validation->set_rules('total_price', '订单总价', 'trim|required|numeric');
+        $this->form_validation->set_rules('points', '订单获取积分', 'trim|required|numeric');
+        $this->form_validation->set_rules('express_company_id', '快递公司ID', 'trim|numeric');
+        $this->form_validation->set_rules('express_number', '快递单号', 'trim|numeric');
+        $this->form_validation->set_rules('report_id', '报告ID', 'trim|numeric');
+        $this->form_validation->set_rules('name', '被检测人姓名', 'trim|required|max_length[100]');
+        $this->form_validation->set_rules('gender', '被检测人性别', 'trim|required|numeric');
+        $this->form_validation->set_rules('age', '被检测人年龄', 'trim|required|numeric');
+        $this->form_validation->set_rules('identity_card', '被检测人身份证号', 'trim|required|min_length[18]|max_length[18]');
+
+        //表单验证是否通过, 若不通过 返回表单错误信息，停止执行
+        $res = $this->Common_model->deal_validation_errors();
+
+        if ($res['success']){
+            //处理数据
+            $id                                 = intval($this->input->post('id', TRUE));
+            $post['order_id']                   = intval($this->input->post('order_id', TRUE));
+            $post['number']                     = $this->input->post('number', TRUE);
+            $post['commodity_id']               = intval($this->input->post('commodity_id', TRUE));
+            $post['price']                      = floatval($this->input->post('price', TRUE));
+            $post['amount']                     = intval($this->input->post('amount', TRUE));
+            $post['total_price']                = floatval($this->input->post('total_price', TRUE));
+            $post['points']                     = intval($this->input->post('points', TRUE));
+            $post['express_company_id']         = intval($this->input->post('express_company_id', TRUE));
+            $post['express_number']             = $this->input->post('express_number', TRUE);
+            $post['report_id']                  = $this->input->post('report_id', TRUE);
+            $post['name']                       = $this->input->post('name', TRUE);
+            $post['gender']                     = intval($this->input->post('gender', TRUE));
+            $post['age']                        = intval($this->input->post('age', TRUE));
+            $post['identity_card']              = $this->input->post('identity_card', TRUE);
+            $post['update_time']                = $this->input->post('update_time', TRUE);
+
+
+            if ($this->jys_db_helper->update('order_commodity', $id, $post)){
+                $data['success'] = TRUE;
+                $data['msg'] = '更新成功';
+            }
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '输入有错误';
+            $data['error'] = $res['msg'];
+        }
+
+        echo json_encode($data);
+    }
+}

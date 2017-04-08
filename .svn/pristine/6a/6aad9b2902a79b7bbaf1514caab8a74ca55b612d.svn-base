@@ -1,0 +1,121 @@
+/*header*/
+header #logo{
+    margin-left: 70px
+}
+header #logo img{
+
+}
+header .input_search{
+    width: 672px;margin: 16px 0 0 36px
+}
+header #search-btn{
+    border-radius: 0;position: absolute;
+}
+
+/*个人信息*/
+.personal_info{
+    background-color: #eee;
+    height: 500px;
+    width: 223px;
+    display: inline-block;
+    float: left;
+    overflow: hidden;
+    zoom: 1
+}
+.personal_info .personal_box span:first-child{
+    font-family: '黑体';
+    font-weight: bold;
+}
+.head_portrait img{
+    width: 80px;
+    border: 1px solid #aaa;
+    padding: 3px;
+}
+
+/*热门贴子*/
+.hot_post ul{padding: 5px 0;     height: 205px;}
+.hot_post ul li{
+    list-style: none;
+    padding: 5px 0;
+    margin-top: 8px;
+}
+.hot_post ul li span{
+    padding: 0 5px;
+}
+.hot_post ul li span.background{
+    background-color: #FF7F42;
+}
+.hot_post ul li a{
+    border: 1px solid #ddd;
+    padding: 5px 20px;
+    border-radius: 3px;
+    margin-left: 15px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+}
+.hot_post .exchange{
+    border: 1px solid #ddd;
+    margin-top: 15px;
+    background-color: #f9f9f9;
+    border-radius: 3px;
+    /* padding: 7px 71px; */
+    display: block;
+    font-size: 15px;
+    padding: 6px;
+}
+
+.post_list_box{
+    min-height: 500px;
+    width: 907px;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+/*帖子列表*/
+.post_list_box .announcement p{
+    padding: 20px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9
+}
+.post_list_box .publish_post{
+    border: 1px solid #117d94;
+    background-color: #C2D5E3;
+    color: #555;
+    text-shadow: none;
+    font-size: 16px;
+    padding: 5px 16px;
+}
+
+table{
+    border: 1px solid #ddd;
+    width: 100%;
+    margin-top: 20px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+}
+td{padding: 10px 0}
+table tbody tr{    text-align: center;    border-bottom: 1px solid #ddd;}
+table tbody td:first-child span{
+    border: 1px solid #ddd;
+    padding: 3px 6px;
+    background-color: #eee;
+}
+table tbody td:nth-child(2){text-align: left}
+table tbody td:nth-child(2) a{display: block; color: #117d94}
+table tbody td:nth-child(2) span{display: block;  margin-left: 10px;}
+table tbody td:last-child span{color: #777}
+
+
+/*分页*/
+.pagination ul{box-shadow: none}
+.pagination ul > li > a, .pagination ul > li > span{
+    float: none;
+    border:none;
+    text-decoration: underline;
+}
+#page_num{
+    width: 20px;
+    margin-bottom: 5px;
+    text-align: center;
+}

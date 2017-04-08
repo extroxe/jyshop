@@ -1,0 +1,156 @@
+/**
+ * Created by sailwish009 on 2017/2/9.
+ */
+$(function () {
+    var page = 1;
+    var page_size = 5;
+    var url = window.location.href;
+    var post_id = url.substring(url.lastIndexOf('/') + 1);
+    var post_bar_id = url.split('/')[url.split('/').length - 2];
+    var all_comment = [];
+    var comment = [];
+    var reply_comment = [];
+    var post_detail = [];
+    // var editor = UE.getEditor('myEditor');
+    // $('#myEditor').css('margin', '0 auto');
+
+
+    /**
+     * 根据帖子id查看帖子详情
+     */
+    $.ajax({
+        type: 'get',
+        dataType: 'json',
+        url: SITE_URL + 'post/get_post_by_id/' + post_id ,
+        success:function (response) {
+            if(response.success){
+                $('.post_title').text(response.data.title);
+                comment['post_detail']=response.data;
+                alert(response.msg);
+            }else{
+                alert(response.msg);
+            }
+        }
+    });
+    /**
+     * 根据帖子id分页查看帖子评论及回复
+     */
+    $.ajax({
+        type: 'post',
+        dataType: 'json',
+        url: SITE_URL + 'post/paginate_comment/' + page + '/' + page_size,
+        data:{
+            post_id:post_id
+        },
+        success:function (response) {
+            // var m=1, n=0;
+            if(response.success){
+                $('.delt_comment').hide();
+                all_comment = response.data;
+                for(var i = 0; i<all_comment.length; i++){
+                    if(all_comment[i].comment_id == null){
+                        comment.push(all_comment[i]);
+                        // m++;
+                    }else{
+                        reply_comment.push(all_comment[i]);
+                        // n++;
+                    };
+                }
+
+                console.log(response.msg);
+            }else{
+                $('.delt_comment').show();
+                alert(response.msg);
+            };
+
+            var comment_tpl = document.getElementById('post_comment_tpl').innerHTML;
+            $('.post_detail tbody').html(template(comment_tpl, {comment_data: comment}));
+
+             var reply_comment_tpl = document.getElementById('reply_comment_tpl').innerHTML;
+            $('.replay_comment_list').html(template(reply_comment_tpl, {reply_comment_data: reply_comment}));
+
+            $('.replay_content_del').hide();
+            for(var i = 0; i<reply_comment.length; i++){
+                if(reply_comment[i].status_id == 4){
+                    $('.replay_box').hide();
+                    $('.replay_content_del').text('提示：该评论已被(本人)删除')
+                    $('.replay_content_del').show();
+                }else if(reply_comment[i].status_id == 2){
+                    $('.replay_box').hide();
+                    $('.replay_content_del').text('提示：该评论已被(管理员)删除')
+                    $('.replay_content_del').show();
+                }else if(reply_comment[i].status_id == 3){
+                    $('.replay_box').hide();
+                    $('.replay_content_del').text('提示：该评论已被(楼主)删除')
+                    $('.replay_content_del').show();
+                }else{
+                    $('.replay_box').show();
+                    $('.replay_content_del').hide();
+                }
+            }
+        },
+        error:function () {
+            
+        }
+    });
+
+    /**
+     * 关注贴吧
+     */
+    $('#cancel_focus_post_bar').hide();
+    $(document).on('click', '#focus_post_bar', function () {
+        var self = $(this);
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: SITE_URL + 'post_bar/focus_post_bar/' + post_bar_id,
+            success:function (response) {
+                if(response.success){
+                    alert(response.msg);
+                    self.hide();
+                    $('#cancel_focus_post_bar').show();
+                }else{
+                    alert(response.msg);
+                }
+            },
+            error:function () {
+
+            }
+        })
+    });
+    /**
+     * 取消关注
+     */
+    $(document).on('click', '#cancel_focus_post_bar', function () {
+        var self = $(this);
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: SITE_URL + 'post_bar/cancel_focus_post_bar/' + post_bar_id,
+            success:function (response) {
+                if(response.success){
+                    alert(response.msg);
+                    self.hide();
+                    $('#focus_post_bar').show();
+                }else{
+                    alert(response.msg);
+                }
+            },
+            error:function () {
+
+            }
+        })
+    })
+
+    $(document).on('click', '.replay_btn', function () {
+        if($(this).html() == '回复(10)'){
+            $(this).text('收起回复(10)')
+        }else{
+            $(this).text('回复(10)')
+        }
+    });
+
+    $(document).on('click', '.more_replay', function () {
+        $(this).parent('div').hide()
+    });
+})

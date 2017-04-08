@@ -1,0 +1,23 @@
+<div id="page-content" class="home-page">
+    <div class="container">
+        <div class="row-fluid">
+            <div class="span12">
+                <div id="check_img">
+                    <span class="fa fa-check-circle"></span>
+                    <label id="hinter_info" style="font-size: 20px">支付成功</label>
+                    <span id="timer">3</span>
+                    <span class="turn_to_orderdetail">秒后跳转至
+                        <a href="order_detail.html">订单详情</a>页
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="text_box">
+                    <p>红尘陌上，独自行走，绿萝拂过衣襟，青云打湿诺言，山和水可以两两相忘，日与月可以毫无瓜葛。那时候，只一个人的浮世清欢，一个人的细水长流。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

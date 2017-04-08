@@ -1,0 +1,107 @@
+.color-font {
+    color: #00A1DD;
+}
+
+article > div {
+    padding: 15px 20px;
+    background-color: #FFFFFF;
+}
+
+.item-info {
+    margin-top: 1px;
+    display: flex;
+}
+
+.item-info > img {
+    width: 100px;
+    height: 100px;
+}
+
+.item-info > div {
+    color: #999999;
+    margin-left: 20px;
+}
+
+.item-info > div > span:nth-child(2),
+.item-info > div > span:nth-child(3) {
+    margin-top: 20px;
+}
+
+.detail-title {
+    margin-top: 20px;
+    color: #666666;
+}
+
+.detail-content {
+    margin-top: 1px;
+    color: #999999;
+}
+
+.active-point {
+    border-radius: 50%;
+    border: 5px solid rgba(0, 161, 221, 0.3);
+}
+
+.active-point > i {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #00A1DD;
+}
+
+.point > i {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #CCCCCC;
+}
+
+.card.box-flex-1 {
+    line-height: 22px;
+}
+
+.leftline:before {
+    top: 25px;
+    left: -3px;
+    width: 4px;
+    height: 90%;
+}
+
+.endline:before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: -20px;
+    width: 4px;
+    height: 100%;
+    -webkit-transform-origin: 100% 50%;
+    background-color: #ffffff;
+}
+
+@media only screen and (max-width: 320px){
+    article > div:nth-child(1){
+        font-size: 13px;
+    }
+
+    .item-info > img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .item-info > div > span{
+        font-size: 13px;
+    }
+
+    .item-info > div > span:nth-child(2),
+    .item-info > div > span:nth-child(3) {
+        margin-top: 8px;
+    }
+
+    .detail-title {
+        font-size: 13px;
+    }
+
+    .detail-content {
+        font-size: 12px;
+    }
+}

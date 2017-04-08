@@ -1,0 +1,76 @@
+<?php
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =========================================================
+ *
+ *      Filename: Post.php
+ *
+ *   Description: 帖子前台控制器
+ *
+ *       Created: 2017-2-10 15:58:15
+ *
+ *        Author: sunzusoheng
+ *
+ * =========================================================
+ */
+class Post extends CI_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model(['Post_model']);
+    }
+
+    /**
+     * 按条件分页获取帖子
+     * @param int $page 页数
+     * @param int $page_size 页面大小
+     */
+    public function paginate($page = 1, $page_size = 10) {
+        $result = array('success'=>FALSE, 'msg'=>'查询失败', 'data'=>array(), 'total_page'=>0);
+        if (intval($page_size) < 1 || intval($page) < 1) {
+            $result['msg'] = '参数错误';
+            echo json_encode($result);
+            exit;
+        }
+
+        $post_bar_id = $this->input->post('post_bar_id', TRUE);
+
+        $result = $this->Post_model->paginate($page, $page_size, $post_bar_id);
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 按条件分页获取帖子评论
+     * @param int $page 页数
+     * @param int $page_size 页面大小
+     */
+    public function paginate_comment($page = 1, $page_size = 10) {
+        $result = array('success'=>FALSE, 'msg'=>'查询失败', 'data'=>array(), 'total_page'=>0);
+        if (intval($page_size) < 1 || intval($page) < 1) {
+            $result['msg'] = '参数错误';
+            echo json_encode($result);
+            exit;
+        }
+
+        $post_id = intval($this->input->post('post_id', TRUE));
+
+        $result = $this->Post_model->paginate_comment($page, $page_size, $post_id);
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 根据帖子id获取帖子内容
+     *
+     * @param $id
+     * @return array
+     */
+    public function get_post_by_id($id){
+        $result = $this->Post_model->get_by_id($id);
+
+        echo json_encode($result);
+    }
+}

@@ -1,0 +1,1087 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" readonly="true" id="bd23fa9f-5f8b-4959-bd83-a95f132baf70" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/img/logo.png" afterPath="$PROJECT_DIR$/source/admin/img/logo.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/image/images/refresh.png" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/image/images/refresh.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/multiimage/images/image.png" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/multiimage/images/image.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/multiimage/images/select-files-en.png" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/multiimage/images/select-files-en.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/multiimage/images/select-files-zh_CN.png" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/multiimage/images/select-files-zh_CN.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/themes/default/background.png" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/themes/default/background.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/themes/default/default.png" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/themes/default/default.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/admin/js/config.router.js" afterPath="$PROJECT_DIR$/admin/js/config.router.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/config/config.php" afterPath="$PROJECT_DIR$/application/config/config.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/libraries/Jys_mongo.php" afterPath="$PROJECT_DIR$/application/libraries/Jys_mongo.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/css/animate.css" afterPath="$PROJECT_DIR$/source/admin/css/animate.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/css/app.css" afterPath="$PROJECT_DIR$/source/admin/css/app.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/css/bootstrap.css" afterPath="$PROJECT_DIR$/source/admin/css/bootstrap.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/css/font-awesome.min.css" afterPath="$PROJECT_DIR$/source/admin/css/font-awesome.min.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/css/font.css" afterPath="$PROJECT_DIR$/source/admin/css/font.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/css/simple-line-icons.css" afterPath="$PROJECT_DIR$/source/admin/css/simple-line-icons.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/app.js" afterPath="$PROJECT_DIR$/source/admin/js/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/app/calendar/calendar.js" afterPath="$PROJECT_DIR$/source/admin/js/app/calendar/calendar.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/app/contact/contact.js" afterPath="$PROJECT_DIR$/source/admin/js/app/contact/contact.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/app/mail/mail-service.js" afterPath="$PROJECT_DIR$/source/admin/js/app/mail/mail-service.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/app/mail/mail.js" afterPath="$PROJECT_DIR$/source/admin/js/app/mail/mail.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/app/map/load-google-maps.js" afterPath="$PROJECT_DIR$/source/admin/js/app/map/load-google-maps.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/app/map/map.js" afterPath="$PROJECT_DIR$/source/admin/js/app/map/map.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/app/map/ui-map.js" afterPath="$PROJECT_DIR$/source/admin/js/app/map/ui-map.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/app/music/ctrl.js" afterPath="$PROJECT_DIR$/source/admin/js/app/music/ctrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/app/music/theme.css" afterPath="$PROJECT_DIR$/source/admin/js/app/music/theme.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/app/music/videogular.css" afterPath="$PROJECT_DIR$/source/admin/js/app/music/videogular.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/app/note/note.js" afterPath="$PROJECT_DIR$/source/admin/js/app/note/note.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/app/weather/angular-skycons.js" afterPath="$PROJECT_DIR$/source/admin/js/app/weather/angular-skycons.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/app/weather/ctrl.js" afterPath="$PROJECT_DIR$/source/admin/js/app/weather/ctrl.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/app/weather/skycons.js" afterPath="$PROJECT_DIR$/source/admin/js/app/weather/skycons.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/config.js" afterPath="$PROJECT_DIR$/source/admin/js/config.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/config.lazyload.js" afterPath="$PROJECT_DIR$/source/admin/js/config.lazyload.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/config.router.js" afterPath="$PROJECT_DIR$/source/admin/js/config.router.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/controllers/bootstrap.js" afterPath="$PROJECT_DIR$/source/admin/js/controllers/bootstrap.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/controllers/chart.js" afterPath="$PROJECT_DIR$/source/admin/js/controllers/chart.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/controllers/editor.js" afterPath="$PROJECT_DIR$/source/admin/js/controllers/editor.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/controllers/file-upload.js" afterPath="$PROJECT_DIR$/source/admin/js/controllers/file-upload.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/controllers/form.js" afterPath="$PROJECT_DIR$/source/admin/js/controllers/form.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/controllers/grid.js" afterPath="$PROJECT_DIR$/source/admin/js/controllers/grid.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/controllers/imgcrop.js" afterPath="$PROJECT_DIR$/source/admin/js/controllers/imgcrop.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/controllers/select.js" afterPath="$PROJECT_DIR$/source/admin/js/controllers/select.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/controllers/signin.js" afterPath="$PROJECT_DIR$/source/admin/js/controllers/signin.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/controllers/signup.js" afterPath="$PROJECT_DIR$/source/admin/js/controllers/signup.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/controllers/slider.js" afterPath="$PROJECT_DIR$/source/admin/js/controllers/slider.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/controllers/tab.js" afterPath="$PROJECT_DIR$/source/admin/js/controllers/tab.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/controllers/toaster.js" afterPath="$PROJECT_DIR$/source/admin/js/controllers/toaster.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/controllers/tree.js" afterPath="$PROJECT_DIR$/source/admin/js/controllers/tree.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/controllers/vectormap.js" afterPath="$PROJECT_DIR$/source/admin/js/controllers/vectormap.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/directives/setnganimate.js" afterPath="$PROJECT_DIR$/source/admin/js/directives/setnganimate.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/directives/ui-butterbar.js" afterPath="$PROJECT_DIR$/source/admin/js/directives/ui-butterbar.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/directives/ui-editor.js" afterPath="$PROJECT_DIR$/source/admin/js/directives/ui-editor.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/directives/ui-focus.js" afterPath="$PROJECT_DIR$/source/admin/js/directives/ui-focus.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/directives/ui-fullscreen.js" afterPath="$PROJECT_DIR$/source/admin/js/directives/ui-fullscreen.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/directives/ui-jq.js" afterPath="$PROJECT_DIR$/source/admin/js/directives/ui-jq.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/directives/ui-module.js" afterPath="$PROJECT_DIR$/source/admin/js/directives/ui-module.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/directives/ui-nav.js" afterPath="$PROJECT_DIR$/source/admin/js/directives/ui-nav.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/directives/ui-scroll.js" afterPath="$PROJECT_DIR$/source/admin/js/directives/ui-scroll.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/directives/ui-shift.js" afterPath="$PROJECT_DIR$/source/admin/js/directives/ui-shift.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/directives/ui-toggleclass.js" afterPath="$PROJECT_DIR$/source/admin/js/directives/ui-toggleclass.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/directives/ui-validate.js" afterPath="$PROJECT_DIR$/source/admin/js/directives/ui-validate.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/filters/fromNow.js" afterPath="$PROJECT_DIR$/source/admin/js/filters/fromNow.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/login.js" afterPath="$PROJECT_DIR$/source/admin/js/login.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/main.js" afterPath="$PROJECT_DIR$/source/admin/js/main.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/service/sw.service.js" afterPath="$PROJECT_DIR$/source/admin/js/service/sw.service.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/js/services/ui-load.js" afterPath="$PROJECT_DIR$/source/admin/js/services/ui-load.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/app.html" afterPath="$PROJECT_DIR$/source/admin/tpl/app.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/blocks/aside.html" afterPath="$PROJECT_DIR$/source/admin/tpl/blocks/aside.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/blocks/aside.music.html" afterPath="$PROJECT_DIR$/source/admin/tpl/blocks/aside.music.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/blocks/header.html" afterPath="$PROJECT_DIR$/source/admin/tpl/blocks/header.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/commodity/commodityCategory.js" afterPath="$PROJECT_DIR$/source/admin/tpl/commodity/commodityCategory.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/commodity/commodityClass.js" afterPath="$PROJECT_DIR$/source/admin/tpl/commodity/commodityClass.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/commodity/discount.js" afterPath="$PROJECT_DIR$/source/admin/tpl/commodity/discount.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/commodity/drawUser.js" afterPath="$PROJECT_DIR$/source/admin/tpl/commodity/drawUser.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/commodity/evaluate.js" afterPath="$PROJECT_DIR$/source/admin/tpl/commodity/evaluate.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/commodity/indianaUser.js" afterPath="$PROJECT_DIR$/source/admin/tpl/commodity/indianaUser.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/commodity/integralCommodity.js" afterPath="$PROJECT_DIR$/source/admin/tpl/commodity/integralCommodity.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/commodity/integralDraw.js" afterPath="$PROJECT_DIR$/source/admin/tpl/commodity/integralDraw.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/commodity/integralIndiana.js" afterPath="$PROJECT_DIR$/source/admin/tpl/commodity/integralIndiana.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/commodity/prize.js" afterPath="$PROJECT_DIR$/source/admin/tpl/commodity/prize.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/commodity/recommend.js" afterPath="$PROJECT_DIR$/source/admin/tpl/commodity/recommend.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/coupon/coupon.js" afterPath="$PROJECT_DIR$/source/admin/tpl/coupon/coupon.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/coupon/couponPayment.js" afterPath="$PROJECT_DIR$/source/admin/tpl/coupon/couponPayment.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/coupon/couponUser.js" afterPath="$PROJECT_DIR$/source/admin/tpl/coupon/couponUser.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/health/article.js" afterPath="$PROJECT_DIR$/source/admin/tpl/health/article.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/index/banner.html" afterPath="$PROJECT_DIR$/source/admin/tpl/index/banner.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/index/banner.js" afterPath="$PROJECT_DIR$/source/admin/tpl/index/banner.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/index/hotCommodity.js" afterPath="$PROJECT_DIR$/source/admin/tpl/index/hotCommodity.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/list/integrationEditor.js" afterPath="$PROJECT_DIR$/source/admin/tpl/list/integrationEditor.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/list/integrationList.js" afterPath="$PROJECT_DIR$/source/admin/tpl/list/integrationList.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/list/ordinaryEditor.js" afterPath="$PROJECT_DIR$/source/admin/tpl/list/ordinaryEditor.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/list/ordinaryList.js" afterPath="$PROJECT_DIR$/source/admin/tpl/list/ordinaryList.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/list/report.js" afterPath="$PROJECT_DIR$/source/admin/tpl/list/report.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/list/subOrderList.js" afterPath="$PROJECT_DIR$/source/admin/tpl/list/subOrderList.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/member/memberFamily.js" afterPath="$PROJECT_DIR$/source/admin/tpl/member/memberFamily.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/member/memberInformation.js" afterPath="$PROJECT_DIR$/source/admin/tpl/member/memberInformation.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/member/memberLevel.js" afterPath="$PROJECT_DIR$/source/admin/tpl/member/memberLevel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/modal/modal-article.js" afterPath="$PROJECT_DIR$/source/admin/tpl/modal/modal-article.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/modal/modal-banner.js" afterPath="$PROJECT_DIR$/source/admin/tpl/modal/modal-banner.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/modal/modal-category.js" afterPath="$PROJECT_DIR$/source/admin/tpl/modal/modal-category.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/modal/modal-commoClass.js" afterPath="$PROJECT_DIR$/source/admin/tpl/modal/modal-commoClass.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/modal/modal-coupon.js" afterPath="$PROJECT_DIR$/source/admin/tpl/modal/modal-coupon.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/modal/modal-discount.js" afterPath="$PROJECT_DIR$/source/admin/tpl/modal/modal-discount.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/modal/modal-level.js" afterPath="$PROJECT_DIR$/source/admin/tpl/modal/modal-level.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/modal/modal-orderList.js" afterPath="$PROJECT_DIR$/source/admin/tpl/modal/modal-orderList.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/modal/modal-recommond.js" afterPath="$PROJECT_DIR$/source/admin/tpl/modal/modal-recommond.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/modal/modal-refund.js" afterPath="$PROJECT_DIR$/source/admin/tpl/modal/modal-refund.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/modal/modal-subOrderList.js" afterPath="$PROJECT_DIR$/source/admin/tpl/modal/modal-subOrderList.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/modal/modal-userInfo.js" afterPath="$PROJECT_DIR$/source/admin/tpl/modal/modal-userInfo.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/postBar/comment.js" afterPath="$PROJECT_DIR$/source/admin/tpl/postBar/comment.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/postBar/post.js" afterPath="$PROJECT_DIR$/source/admin/tpl/postBar/post.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/postBar/postBar.js" afterPath="$PROJECT_DIR$/source/admin/tpl/postBar/postBar.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/postBar/recommended.js" afterPath="$PROJECT_DIR$/source/admin/tpl/postBar/recommended.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/refund/alipayRefund.js" afterPath="$PROJECT_DIR$/source/admin/tpl/refund/alipayRefund.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/refund/unionPayRefund.js" afterPath="$PROJECT_DIR$/source/admin/tpl/refund/unionPayRefund.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/refund/weChatRefund.js" afterPath="$PROJECT_DIR$/source/admin/tpl/refund/weChatRefund.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/sys/hotexchange.js" afterPath="$PROJECT_DIR$/source/admin/tpl/sys/hotexchange.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/sys/hotsale.js" afterPath="$PROJECT_DIR$/source/admin/tpl/sys/hotsale.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/sys/indianaRules.js" afterPath="$PROJECT_DIR$/source/admin/tpl/sys/indianaRules.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/sys/sweepstakesRules.js" afterPath="$PROJECT_DIR$/source/admin/tpl/sys/sweepstakesRules.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/sys/sysSetting.js" afterPath="$PROJECT_DIR$/source/admin/tpl/sys/sysSetting.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/tpl/user/user.js" afterPath="$PROJECT_DIR$/source/admin/tpl/user/user.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/angular-animate/angular-animate.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/angular-animate/angular-animate.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/angular-bootstrap/ui-bootstrap-tpls.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/angular-bootstrap/ui-bootstrap-tpls.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/angular-cookies/angular-cookies.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/angular-cookies/angular-cookies.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/angular-resource/angular-resource.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/angular-resource/angular-resource.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/angular-sanitize/angular-sanitize.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/angular-sanitize/angular-sanitize.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/angular-touch/angular-touch.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/angular-touch/angular-touch.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/angular-translate/angular-translate.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/angular-translate/angular-translate.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/angular-translate/loader-static-files.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/angular-translate/loader-static-files.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/angular-translate/storage-cookie.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/angular-translate/storage-cookie.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/angular-translate/storage-local.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/angular-translate/storage-local.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/angular-ui-router/angular-ui-router.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/angular-ui-router/angular-ui-router.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/angular-ui-utils/ui-utils.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/angular-ui-utils/ui-utils.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/angular.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/angular.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/ngstorage/ngStorage.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/ngstorage/ngStorage.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/oclazyload/ocLazyLoad.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/oclazyload/ocLazyLoad.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/toaster.css" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/toaster.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/angular/toaster.js" afterPath="$PROJECT_DIR$/source/admin/vendor/angular/toaster.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/bootstrap.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/bootstrap.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/charts/easypiechart/jquery.easy-pie-chart.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/charts/easypiechart/jquery.easy-pie-chart.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/charts/flot/jquery.flot.orderBars.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/charts/flot/jquery.flot.orderBars.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/charts/flot/jquery.flot.resize.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/charts/flot/jquery.flot.resize.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/charts/flot/jquery.flot.spline.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/charts/flot/jquery.flot.spline.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/chosen/chosen.css" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/chosen/chosen.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/datatables/dataTables.bootstrap.css" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/datatables/dataTables.bootstrap.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/datatables/dataTables.bootstrap.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/datatables/dataTables.bootstrap.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/footable/footable.core.css" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/footable/footable.core.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/fullcalendar/fullcalendar.css" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/fullcalendar/fullcalendar.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/fullcalendar/theme.css" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/fullcalendar/theme.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/jquery.min.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/jquery.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/jvectormap/jquery-jvectormap-us-aea-en.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/jvectormap/jquery-jvectormap-us-aea-en.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/jvectormap/jquery-jvectormap-world-mill-en.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/jvectormap/jquery-jvectormap-world-mill-en.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/jvectormap/jquery-jvectormap.css" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/jvectormap/jquery-jvectormap.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/kindeditor-all-min.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/kindeditor-all-min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/kindeditor-all.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/kindeditor-all.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/kindeditor-min.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/kindeditor-min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/kindeditor.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/kindeditor.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/lang/ar.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/lang/ar.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/lang/en.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/lang/en.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/lang/ko.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/lang/ko.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/lang/zh_CN.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/lang/zh_CN.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/lang/zh_TW.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/lang/zh_TW.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/anchor/anchor.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/anchor/anchor.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/autoheight/autoheight.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/autoheight/autoheight.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/baidumap/baidumap.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/baidumap/baidumap.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/baidumap/index.html" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/baidumap/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/baidumap/map.html" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/baidumap/map.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/clearhtml/clearhtml.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/clearhtml/clearhtml.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/code/code.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/code/code.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/code/prettify.css" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/code/prettify.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/code/prettify.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/code/prettify.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/emoticons/emoticons.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/emoticons/emoticons.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/filemanager/filemanager.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/filemanager/filemanager.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/flash/flash.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/flash/flash.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/image/image.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/image/image.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/insertfile/insertfile.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/insertfile/insertfile.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/lineheight/lineheight.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/lineheight/lineheight.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/link/link.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/link/link.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/map/map.html" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/map/map.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/map/map.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/map/map.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/media/media.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/media/media.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/multiimage/multiimage.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/multiimage/multiimage.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/pagebreak/pagebreak.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/pagebreak/pagebreak.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/plainpaste/plainpaste.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/plainpaste/plainpaste.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/preview/preview.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/preview/preview.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/quickformat/quickformat.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/quickformat/quickformat.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/table/table.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/table/table.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/template/html/1.html" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/template/html/1.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/template/html/2.html" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/template/html/2.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/template/html/3.html" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/template/html/3.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/template/template.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/template/template.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/wordpaste/wordpaste.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/plugins/wordpaste/wordpaste.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/themes/default/default.css" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/themes/default/default.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/themes/qq/qq.css" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/themes/qq/qq.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/themes/simple/simple.css" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/kindeditor/themes/simple/simple.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/md5/spark-md5.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/md5/spark-md5.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/nestable/jquery.nestable.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/nestable/jquery.nestable.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/nestable/nestable.css" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/nestable/nestable.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/select2/select2-bootstrap.css" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/select2/select2-bootstrap.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/select2/select2.css" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/select2/select2.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/slider/bootstrap-slider.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/slider/bootstrap-slider.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/slider/slider.css" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/slider/slider.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/sortable/jquery.sortable.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/sortable/jquery.sortable.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/spinner/jquery.bootstrap-touchspin.css" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/spinner/jquery.bootstrap-touchspin.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/wysiwyg/bootstrap-wysiwyg.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/wysiwyg/bootstrap-wysiwyg.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/jquery/wysiwyg/jquery.hotkeys.js" afterPath="$PROJECT_DIR$/source/admin/vendor/jquery/wysiwyg/jquery.hotkeys.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/modules/angular-bootstrap-nav-tree/abn_tree.css" afterPath="$PROJECT_DIR$/source/admin/vendor/modules/angular-bootstrap-nav-tree/abn_tree.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/modules/angular-bootstrap-nav-tree/abn_tree_directive.js" afterPath="$PROJECT_DIR$/source/admin/vendor/modules/angular-bootstrap-nav-tree/abn_tree_directive.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/modules/angular-slider/angular-slider.css" afterPath="$PROJECT_DIR$/source/admin/vendor/modules/angular-slider/angular-slider.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/modules/angular-ui-calendar/calendar.js" afterPath="$PROJECT_DIR$/source/admin/vendor/modules/angular-ui-calendar/calendar.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/modules/angularjs-toaster/toaster.css" afterPath="$PROJECT_DIR$/source/admin/vendor/modules/angularjs-toaster/toaster.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/modules/angularjs-toaster/toaster.js" afterPath="$PROJECT_DIR$/source/admin/vendor/modules/angularjs-toaster/toaster.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/modules/ng-grid/theme.css" afterPath="$PROJECT_DIR$/source/admin/vendor/modules/ng-grid/theme.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/source/admin/vendor/modules/ngImgCrop/ng-img-crop.js" afterPath="$PROJECT_DIR$/source/admin/vendor/modules/ngImgCrop/ng-img-crop.js" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="config.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/source/admin/js/config.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="440">
+              <caret line="20" column="38" lean-forward="false" selection-start-line="20" selection-start-column="37" selection-end-line="20" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sw.service.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/source/admin/js/service/sw.service.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-770">
+              <caret line="65" column="29" lean-forward="true" selection-start-line="65" selection-start-column="29" selection-end-line="65" selection-end-column="41" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/system/database/drivers/mysql/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/source/admin/js/main.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-536">
+              <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="banner.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/source/admin/tpl/index/banner.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="220">
+              <caret line="42" column="53" lean-forward="true" selection-start-line="42" selection-start-column="53" selection-end-line="42" selection-end-column="53" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="commodityCategory.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/source/admin/tpl/commodity/commodityCategory.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="242">
+              <caret line="11" column="35" lean-forward="false" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="config.router.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/source/admin/js/config.router.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="264">
+              <caret line="12" column="29" lean-forward="true" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="banner.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/source/admin/tpl/index/banner.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-646">
+              <caret line="6" column="7" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="login.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/source/admin/js/login.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="968">
+              <caret line="44" column="27" lean-forward="true" selection-start-line="44" selection-start-column="27" selection-end-line="44" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Commodity.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/controllers/Commodity.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="22">
+              <caret line="84" column="31" lean-forward="false" selection-start-line="84" selection-start-column="31" selection-end-line="84" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>searchNextLevel</find>
+      <find>getAdministrativeRegion</find>
+      <find>district</find>
+      <find>levelSub</find>
+      <find>push_shopping_cart_view</find>
+      <find>filter</find>
+      <find>time</find>
+      <find>timefilter</find>
+      <find>person_tab_flag</find>
+      <find>SI</find>
+      <find>SITE</find>
+      <find>paginate</find>
+      <find>$rootScope.SITE_URL</find>
+      <find>SITE_URL</find>
+    </findStrings>
+    <replaceStrings>
+      <replace />
+    </replaceStrings>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/application/hooks/Jys_permission_check.php" />
+        <option value="$PROJECT_DIR$/source/js/personal_info.js" />
+        <option value="$PROJECT_DIR$/application/libraries/Jys_mongo.php" />
+        <option value="$PROJECT_DIR$/application/views/service.php" />
+        <option value="$PROJECT_DIR$/source/js/service.js" />
+        <option value="$PROJECT_DIR$/source/css/view_post.css" />
+        <option value="$PROJECT_DIR$/source/js/my_follow.js" />
+        <option value="$PROJECT_DIR$/source/mobile/js/app.js" />
+        <option value="$PROJECT_DIR$/application/config/config.php" />
+        <option value="$PROJECT_DIR$/source/admin/js/login.js" />
+        <option value="$PROJECT_DIR$/admin/js/config.router.js" />
+        <option value="$PROJECT_DIR$/source/admin/js/config.router.js" />
+        <option value="$PROJECT_DIR$/source/admin/tpl/index/banner.html" />
+        <option value="$PROJECT_DIR$/source/admin/js/service/sw.service.js" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="24" />
+    <option name="y" value="17" />
+    <option name="width" value="1346" />
+    <option name="height" value="726" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="system" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="system" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="database" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="system" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="database" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="drivers" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="admin" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="admin" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tpl" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="admin" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tpl" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="index" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="admin" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="admin" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="service" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jys-web2" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration" cleanupOnStartRun="true">
+    <configuration>C:\Users\extroxe\AppData\Roaming\Subversion</configuration>
+    <supportedVersion>125</supportedVersion>
+  </component>
+  <component name="SvnFileUrlMappingImpl">
+    <option name="myMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\xampp\htdocs\jys-web2" />
+          <option name="myCopyRoot" value="C:\xampp\htdocs\jys-web2" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+    <option name="myMoreRealMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\xampp\htdocs\jys-web2" />
+          <option name="myCopyRoot" value="C:\xampp\htdocs\jys-web2" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bd23fa9f-5f8b-4959-bd83-a95f132baf70" name="Default" comment="" />
+      <created>1483870652878</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1483870652878</updated>
+      <workItem from="1483870660763" duration="2662000" />
+      <workItem from="1484381935470" duration="1639000" />
+      <workItem from="1484383747345" duration="1074000" />
+      <workItem from="1484384986203" duration="23000" />
+      <workItem from="1484385176451" duration="1074000" />
+      <workItem from="1486179097073" duration="317000" />
+      <workItem from="1486382620058" duration="5922000" />
+      <workItem from="1486392093167" duration="874000" />
+      <workItem from="1486644095658" duration="233000" />
+      <workItem from="1486986989932" duration="1152000" />
+      <workItem from="1486988293039" duration="1144000" />
+      <workItem from="1488421133354" duration="917000" />
+      <workItem from="1488799367541" duration="1133000" />
+      <workItem from="1488974897073" duration="634000" />
+      <workItem from="1489670572541" duration="925000" />
+      <workItem from="1489917508916" duration="768000" />
+      <workItem from="1490450427324" duration="2283000" />
+      <workItem from="1491099784095" duration="1281000" />
+      <workItem from="1491487336435" duration="997000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="25052000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="24" y="17" width="1346" height="726" extended-state="0" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2511664" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3288364" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32715008" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="processedProjectFiles" value="true" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/application/hooks/Jys_permission_check.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2002">
+          <caret line="91" column="10" lean-forward="false" selection-start-line="91" selection-start-column="10" selection-end-line="91" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/mobile/js/evaluation_list.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="22" column="42" lean-forward="true" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/config/config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/hooks/Jys_permission_check.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2002">
+          <caret line="91" column="10" lean-forward="true" selection-start-line="91" selection-start-column="10" selection-end-line="91" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/personal_info.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/mobile/js/evaluation_list.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="41">
+          <caret line="22" column="42" lean-forward="false" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/js/personal_info.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="1022" column="30" lean-forward="true" selection-start-line="1022" selection-start-column="30" selection-end-line="1022" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/libraries/Jys_mongo.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="38" column="9" lean-forward="true" selection-start-line="38" selection-start-column="9" selection-end-line="38" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/receiving_info.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="15" column="28" lean-forward="false" selection-start-line="15" selection-start-column="20" selection-end-line="15" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/Index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="12" column="25" lean-forward="false" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/hooks/Jys_permission_check.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="530">
+          <caret line="79" column="25" lean-forward="false" selection-start-line="79" selection-start-column="25" selection-end-line="79" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/User.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="2" lean-forward="false" selection-start-line="11" selection-start-column="2" selection-end-line="11" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/js/header.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3080">
+          <caret line="140" column="35" lean-forward="false" selection-start-line="140" selection-start-column="12" selection-end-line="140" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/js/service.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="462">
+          <caret line="110" column="12" lean-forward="false" selection-start-line="110" selection-start-column="12" selection-end-line="110" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/service.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="19" column="19" lean-forward="true" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/My_city.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2156">
+          <caret line="98" column="45" lean-forward="false" selection-start-line="98" selection-start-column="45" selection-end-line="98" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/my_follow.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="15" column="29" lean-forward="false" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/css/my_follow.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2376">
+          <caret line="156" column="17" lean-forward="false" selection-start-line="156" selection-start-column="17" selection-end-line="156" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/css/home.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="14" column="23" lean-forward="false" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/css/my_collection.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="18" column="1" lean-forward="false" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/css/publish_post.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/css/post_bar.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/css/post.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/css/view_post.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/mobile/js/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="61" column="0" lean-forward="true" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/mobile/js/post.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="14" column="19" lean-forward="false" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/mobile/js/view_post.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4906">
+          <caret line="223" column="0" lean-forward="false" selection-start-line="223" selection-start-column="0" selection-end-line="223" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/mobile/js/visit_others_home.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4312">
+          <caret line="196" column="23" lean-forward="false" selection-start-line="196" selection-start-column="13" selection-end-line="196" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/home.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="6" column="53" lean-forward="false" selection-start-line="6" selection-start-column="53" selection-end-line="6" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/js/my_follow.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="946">
+          <caret line="43" column="27" lean-forward="false" selection-start-line="43" selection-start-column="27" selection-end-line="43" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/mobile/visit_others_home.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1166">
+          <caret line="53" column="45" lean-forward="false" selection-start-line="53" selection-start-column="45" selection-end-line="53" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/mobile/js/post_bar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="13" column="19" lean-forward="false" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/js/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="19" lean-forward="false" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/js/config.lazyload.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/tpl/commodity/commodityCategory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-154">
+          <caret line="15" column="6" lean-forward="false" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/admin/css/animate.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-836">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/config/config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="550">
+          <caret line="25" column="45" lean-forward="false" selection-start-line="25" selection-start-column="45" selection-end-line="25" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/admin/js/config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="20" column="38" lean-forward="false" selection-start-line="20" selection-start-column="37" selection-end-line="20" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/admin/tpl/commodity/commodityCategory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="35" lean-forward="false" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/system/database/DB.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/admin/js/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="19" lean-forward="true" selection-start-line="11" selection-start-column="19" selection-end-line="11" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/Commodity.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="84" column="31" lean-forward="false" selection-start-line="84" selection-start-column="31" selection-end-line="84" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/admin/tpl/index/banner.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-646">
+          <caret line="6" column="7" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/admin/js/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-536">
+          <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/admin/js/login.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="968">
+          <caret line="44" column="27" lean-forward="true" selection-start-line="44" selection-start-column="27" selection-end-line="44" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/admin/tpl/index/banner.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="42" column="53" lean-forward="true" selection-start-line="42" selection-start-column="53" selection-end-line="42" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/js/config.router.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="11" column="29" lean-forward="false" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/admin/js/config.router.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="12" column="29" lean-forward="true" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/admin/js/service/sw.service.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-770">
+          <caret line="65" column="29" lean-forward="true" selection-start-line="65" selection-start-column="29" selection-end-line="65" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/system/database/drivers/mysql/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

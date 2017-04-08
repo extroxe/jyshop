@@ -1,0 +1,54 @@
+<div id="page-content" class="home-page" ng-controller="signUp">
+    <div class="titlebar" style="background-color: #117d94">
+        <a class="titlebar-button" href="javascript:back()"><i class="icon icon-arrowleft"></i></a>
+        <h1 style="color: #eee"><?php echo $title; ?></h1>
+    </div>
+    <article>
+
+        <form>
+            <div class="group">
+                <h2 class="logo">赛安基因城</h2>
+            </div>
+            <div class="group">
+                <div class="inputbox underline">
+                    <label class="inputbox-left">用户名</label>
+                    <div class="inputbox-right inputbox">
+                        <input type="text" ng-model="userInfo.username" class="input-text" placeholder="用户名">
+                    </div>
+                </div>
+                <div class="inputbox underline">
+                    <label class="inputbox-left">密码</label>
+                    <div class="inputbox-right inputbox">
+                        <input type="{{type ? 'text' : 'password'}}" ng-model="userInfo.password" class="input-text" placeholder="密码" name="password"/>
+                        <label for="check_password" class="color-placeholder icon icon-eye"></label>
+                        <input type="checkbox" ng-model="type" id="check_password" style="display: none">
+                    </div>
+                </div>
+                <div class="inputbox underline">
+                    <label class="inputbox-left">确认密码</label>
+                    <div class="inputbox-right inputbox">
+                        <input type="{{type1 ? 'text' : 'password'}}" ng-model="userInfo.password_confirm" class="input-text" placeholder="确认密码" name="reconfirm"/>
+                        <label for="check_confirm_password" class="color-placeholder icon icon-eye"></label>
+                        <input type="checkbox" ng-model="type1" id="check_confirm_password" style="display: none">
+                    </div>
+                </div>
+                <div class="inputbox underline">
+                    <label class="inputbox-left">手机号码</label>
+                    <div class="inputbox-right inputbox">
+                        <input type="text" ng-model="userInfo.phone" class="input-text" placeholder="手机号码" name="reconfirm"/>
+                    </div>
+                </div>
+                <div class="inputbox underline">
+                    <label class="inputbox-left">验证码</label>
+                    <div class="inputbox-right inputbox">
+                        <input type="text" ng-model="userInfo.verification_code" class="input-text" placeholder="验证码">
+                    </div>
+                    <button type="button" class="button radius4 checkcode" ng-disabled="flag == true" ng-click="send_checkcode(userInfo)" >{{send_code_ope}}</button>
+                </div>
+                <div class="sendcode">
+                    <a class="button block radius4" ng-click="submitForm(userInfo)">立即注册</a>
+                </div>
+            </div>
+        </form>
+    </article>
+</div>

@@ -1,0 +1,335 @@
+<?php
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =====================================================================================
+ *
+ *        Filename: Weixin.php
+ *
+ *     Description: 微信控制器
+ *
+ *         Created: 2016-11-23 19:19:08
+ *
+ *          Author: huazhiqiang
+ *
+ * =====================================================================================
+ */
+class Weixin extends CI_Controller {
+
+    public function __construct() {
+        parent::__construct();
+        $this -> load -> library(['Jys_weixin', 'Jys_weixin_pay']);
+        $this -> load -> model(['User_model', 'Order_model', 'Commodity_model']);
+    }
+
+    /**
+     * 接受微信主动消息的接口
+     */
+    public function index() {
+        $signature = $this -> input -> get("signature");
+        $timestamp = $this -> input -> get("timestamp");
+        $nonce = $this -> input -> get("nonce");
+        $echoStr = $this -> input -> get("echostr");
+
+        //file_put_contents(FCPATH."weixin".date('Y-m-d').".log", date('Y-m-d H:i:s')."  日志信息：{$signature}---{$timestamp}---{$nonce}---{$echoStr}\n", FILE_APPEND);
+        if (!empty($echoStr)) {
+            if ($this -> jys_weixin -> check_signature($signature, $timestamp, $nonce)) {
+                // 设置服务器配置时需要返回echoStr参数的内容
+                echo $echoStr;
+                exit ;
+            } else {
+                echo "false";
+            }
+        } else {
+            // 正常的数据
+            $this -> message_router(file_get_contents("php://input"));
+        }
+    }
+
+    /**
+     * 接收消息路由器
+     */
+    private function message_router($message) {
+        if (empty($message)) {
+            echo "";
+            exit ;
+        }
+        //file_put_contents(FCPATH."weixin".date('Y-m-d').".log", date('Y-m-d H:i:s')."  日志信息：{$message}\n", FILE_APPEND);
+        // 以下代码来自微信官方demo
+        libxml_disable_entity_loader(true);
+        $postObj = simplexml_load_string($message, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $fromUsername = $this -> jys_weixin -> object_item_to_string($postObj -> FromUserName);
+        $toUsername = $this -> jys_weixin -> object_item_to_string($postObj -> ToUserName);
+        $msgType = $this -> jys_weixin -> object_item_to_string($postObj -> MsgType);
+
+        switch ($msgType) {
+            case "event" :
+                // 事件推送消息
+                $this -> event_router($message);
+                break;
+            case "text" :
+                // 文本消息
+                $content = '您的留言我们已收到，欢迎留言。';
+                $this -> jys_weixin -> reply_text_message($fromUsername, $toUsername,$content);
+                break;
+            case "image" :
+                // 图片消息
+                break;
+            case "voice" :
+                // 语音消息
+                break;
+            case "video" :
+                // 视频消息
+                break;
+            case "shortvideo" :
+                // 视频消息
+                break;
+            case "location" :
+                // 地理位置消息
+                break;
+            case "link" :
+                // 链接消息
+                break;
+            default :
+                echo "";
+                break;
+        }
+    }
+
+    /**
+     * 接收事件推送消息路由器
+     */
+    private function event_router($message) {
+        if (empty($message)) {
+            echo "";
+            exit ;
+        }
+
+        // 以下代码来自微信官方demo
+        libxml_disable_entity_loader(true);
+        $postObj = simplexml_load_string($message, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $fromUsername = $this -> jys_weixin -> object_item_to_string($postObj -> FromUserName);
+        $toUsername = $this -> jys_weixin -> object_item_to_string($postObj -> ToUserName);
+        $msgType = $this -> jys_weixin -> object_item_to_string($postObj -> MsgType);
+        $event = $this -> jys_weixin -> object_item_to_string($postObj -> Event);
+
+        if ($msgType != "event") {
+            echo "";
+            exit ;
+        }
+
+        switch ($event) {
+            case "subscribe" :
+                // 关注微信号
+                $content = '欢迎关注启程卓越科技服务号，我们将竭诚为您服务。';
+                $this -> jys_weixin -> reply_text_message($fromUsername, $toUsername,$content);
+                break;
+            case "unsubscribe" :
+                // 取消关注微信号
+                break;
+            case "subscribe" :
+                // 扫描带参数二维码事件，用户未关注时，进行关注后的事件推送
+                // 如果用户还未关注公众号，则用户可以关注公众号，关注后微信会将带场景值关注事件推送给开发者。
+                break;
+            case "SCAN" :
+                // 扫描带参数二维码事件，用户已关注时的事件推送
+                // 如果用户已经关注公众号，则微信会将带场景值扫描事件推送给开发者。
+                break;
+            case "LOCATION" :
+                // 上报地理位置事件
+                break;
+            case "CLICK" :
+                // 自定义菜单事件，点击菜单拉取消息时的事件推送
+                break;
+            case "VIEW" :
+                // 自定义菜单事件，点击菜单跳转链接时的事件推送
+                break;
+            default :
+                echo "";
+                break;
+        }
+    }
+
+    /**
+     * 从微信的网页授权接口中接收用户信息并加入session
+     */
+    public function get_userinfo() {
+        $code = $this -> input -> get('code');
+        $state = $this-> input -> get('state');
+        $server_info = $this -> jys_weixin -> get_oauth_access($code);
+        if (!empty($server_info)) {
+            $user_info = $this -> jys_weixin -> get_user_info($server_info['access_token'], $server_info['openid']);
+            if (!empty($user_info)) {
+                if ($state == "user") {
+                    // 普通用户
+                    $result = $this -> User_model -> get_user_from_weixin($user_info);
+                    if ($result) {
+                        // 登录成功
+                    }else {
+                        // 当前系统没有该用户
+                    }
+                    header("Location:" . site_url('weixin'));
+                }
+            } else {
+                //echo "获取用户信息失败";
+                if ($state == "user") {
+                    // 普通用户访问
+                    header("Location:" . site_url('weixin'));
+                }else {
+                    // 其他用户访问
+                }
+            }
+        } else {
+            //echo "获取服务器信息失败";
+            if ($state == "user") {
+                // 普通用户访问
+                header("Location:" . site_url('weixin'));
+            }else {
+                // 其他用户访问
+            }
+        }
+    }
+
+    /**
+     * 微信支付后接收微信支付异步通知回调接口
+     */
+    public function pay_notify() {
+        $xml = file_get_contents("php://input");
+        $result = $this->jys_weixin_pay->FromXml($xml);
+        $log = "";
+        if ($result['return_code'] == 'SUCCESS') {
+            // 支付成功
+            if ($this->jys_weixin_pay->checkNotify($result)) {
+                // 验证成功
+                $total_fee = intval($result['total_fee']) / 100.0;
+                $payment_time = $this->jys_weixin_pay->formatDatetime($result['time_end']);
+                if (!$payment_time) {
+                    // 获取支付时间失败
+                    $log = "支付完成时间不正确:{$result['time_end']}";
+                    $this->jys_weixin_pay->ReplyNotify("FAIL", "支付完成时间不正确");
+                }else {
+                    if ($this->Order_model->get_pay_result_set_status($result['out_trade_no'], $result['transaction_id'], $total_fee, jys_system_code::PAYMENT_WXPAY, $payment_time)) {
+                        // 订单修改成功
+                        $log = "订单修改成功";
+                        // 根据商品类型，做相关判断
+                        $chage_order_info = $this->changeOrderByCommodityType($result['out_trade_no']);
+                        if (empty($chage_order_info) || $chage_order_info['success'] == false) {
+                            if (isset($chage_order_info['msg'])) {
+                                $log = "订单修改成功，".$chage_order_info['msg'];
+                            }else {
+                                $log = "订单修改成功，但根据订单中的商品信息修改订单失败";
+                            }
+                            $this->jys_weixin_pay->ReplyNotify("FAIL", $log);
+                        }else {
+                            $this->jys_weixin_pay->ReplyNotify("SUCCESS", "OK");
+                        }
+                    }else {
+                        // 订单修改失败
+                        $log = "订单修改失败";
+                        $this->jys_weixin_pay->ReplyNotify("FAIL", "订单修改失败");
+                    }
+                }
+            }else {
+                // 验证失败
+                $log = "签名验证失败";
+                $this->jys_weixin_pay->ReplyNotify("FAIL", "签名失败");
+            }
+        }else {
+            // 支付失败
+            $log = "支付失败";
+            $this->jys_weixin_pay->ReplyNotify("FAIL", "参数格式校验错误");
+        }
+        if (!empty($log)) {
+            $data = date("Y-m-d H:i:s")."\n".json_encode($result)."\n".$log."\n\n";
+            file_put_contents(APPPATH."/wxpay_pay_notify_".date("Ymd"), $data, FILE_APPEND);
+        }
+    }
+
+    /**
+     * 根据订单中的商品类型修改订单信息
+     * @param null $order_number 主订单编号
+     */
+    private function changeOrderByCommodityType($order_number = NULL) {
+        $result = array('success'=>FALSE, 'msg'=>'修改订单信息失败');
+        if (empty($order_number)) {
+            $result['msg'] = '订单编号不能为空';
+            return $result;
+        }
+
+        $order = $this->Order_model->get_order_by_condition(array('order.number'=>$order_number));
+        if ($order['success'] && !empty($order['data']) && isset($order['data']['sub_orders']) && is_array($order['data']['sub_orders']) && count($order['data']['sub_orders']) > 0) {
+            $sub_orders = $order['data']['sub_orders'];
+            if ($sub_orders[0]['type_id'] == jys_system_code::COMMODITY_TYPE_MEMBER) {
+                // 会员商品
+                // 修改会员等级，修改订单状态
+                $commodity = $this->Commodity_model->get_commodity_by_condition(array('commodity.id'=>$sub_orders[0]['commodity_id']));
+                if (is_array($commodity) && isset($commodity['level_id']) && intval($commodity['level_id']) > 0) {
+                    if ($this->jys_db_helper->update('user', $order['data']['user_id'], array('level'=>$commodity['level_id']))) {
+                        // 修改用户等级成功，更新订单状态
+                        if ($this->jys_db_helper->update('order', $order['id'], array('status_id'=>jys_system_code::ORDER_STATUS_FINISHED))) {
+                            // 订单状态修改成功
+                            $result['success'] = TRUE;
+                            $result['msg'] = '订单状态修改成功';
+                        }else {
+                            // 订单状态修改失败
+                            $result['msg'] = "会员商品订单状态修改失败";
+                        }
+                    }else {
+                        // 修改用户等级失败
+                        $result['msg'] = "会员商品修改用户等级失败";
+                    }
+                }else {
+                    // 会员商品但未制定对应会员等级
+                    $result['msg'] = "会员商品但未制定对应会员等级";
+                }
+            }else {
+                // 非会员商品
+                $result['success'] = TRUE;
+                $result['msg'] = "非会员商品，无需对订单状态进行修改";
+            }
+        }else {
+            // 未找到相关订单信息
+            $result['msg'] = "未找到相关订单信息";
+        }
+
+        return $result;
+    }
+
+    /**
+     * 设置菜单
+     */
+//	public function test() {
+//
+//        $postarr = array(
+//                "button"=>array(
+//                                array(
+//                                    "name"=>"",
+//                                    "type"=>"view",
+//                                    "url"=>"http://"
+//                                ),
+//                                array(
+//                                    "name"=>"",
+//                                    "type"=>"view",
+//                                    "url"=>"http://"
+//                                )
+//                            )
+//
+//                );
+//		//var_dump($this -> jys_weixin -> create_menu($postarr));
+//      $jibian = array('button'=>array(
+//									array('name'=>'商城', "sub_button"=>array(
+//																			array('type'=>'view', 'name'=>"首页", 'url'=>'http://jibian.softeng.cn/'),
+//																			array('type'=>'view', 'name'=>"我的", 'url'=>'http://jibian.softeng.cn/index/user')
+//																		)
+//										),
+//									array('name'=>'核销', 'sub_button'=>array(
+//																			array('type'=>'view', 'name'=>'核销', 'url'=>'http://jibian.softeng.cn/merchant/index/entrance_module')
+//																		)
+//										)
+//									)
+//					);
+//		//var_dump($this->jys_weixin->create_menu($jibian));
+//		echo json_encode($this -> jys_weixin -> get_menu());
+//		//var_dump($this->my_weixin->get_material_list());
+//	}
+}

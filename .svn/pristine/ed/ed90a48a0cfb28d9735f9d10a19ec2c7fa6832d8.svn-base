@@ -1,0 +1,21 @@
+$(function(){
+    $.ajax({
+        url: SITE_URL + 'my_city/get_my_post',
+        type: 'post',
+        dataType: 'json',
+        success: function (result) {
+            if (result.success) {
+                var tpl = document.getElementById('follow_post_list').innerHTML;
+                $.each(result.data, function(index, item){
+                    result.data[index].create_time = item.create_time.substring(0, 10);
+                });
+                $("#follow_post_content").html(template(tpl, {list: result.data}));
+            }else {
+                console.log(result.msg);
+            }
+        },
+        error: function () {
+            cosole.log("服务器繁忙，获取地址失败");
+        }
+    });
+});

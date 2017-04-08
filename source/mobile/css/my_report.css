@@ -1,0 +1,95 @@
+header .titlebar h1 {
+    margin-right: 40px;
+}
+
+.item:nth-child(1) {
+    margin-top: 0;
+}
+
+.item {
+    margin-top: 20px;
+}
+
+.item > div {
+    padding: 10px 25px;
+    background-color: #FFFFFF;
+}
+
+.item hr {
+    width: 95%;
+    margin: auto;
+}
+
+.item-title {
+    color: #969696;
+}
+
+.item-content {
+    display: flex;
+}
+
+.item-content .item-name {
+    font-size: 18px;
+}
+
+.item-content .item-name span {
+    font-size: 14px;
+    margin-top: 4px;
+    color: #666666;
+}
+
+.item-content p {
+    line-height: 25px;
+}
+
+.item-content img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.item-content > div:nth-child(2) {
+    position: absolute;
+    right: 20px;
+    margin-top: 25px;
+    color: #666666;
+}
+
+.item-footer {
+    font-size: 14px;
+    color: #666666;
+    text-align: right;
+}
+
+@media only screen and (max-width: 320px) {
+    .item-title {
+        font-size: 13px;
+    }
+
+    .item-content .item-name {
+        font-size: 15px;
+    }
+
+    .item-content .item-name span {
+        font-size: 12px;
+    }
+
+    .item-content p {
+        font-size: 14px;
+        line-height: 22px;
+    }
+
+    .item-footer {
+        font-size: 12px;
+    }
+
+    .item-content > div:nth-child(2) {
+        margin-top: 20px;
+        font-size: 18px;
+    }
+
+    .item-content > div:nth-child(2) > i {
+        width: 18px;
+        height: 18px;
+    }
+}

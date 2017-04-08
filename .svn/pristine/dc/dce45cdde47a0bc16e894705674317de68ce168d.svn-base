@@ -1,0 +1,134 @@
+/**
+ * Created by sailwish009 on 2017/2/9.
+ */
+$(function () {
+    var page = 1;
+    var page_size = 6;
+    var view_more = true;
+    var post_bar_list = [];
+
+    /**
+     * 获取用户信息 get_personal_info
+     */
+    $.ajax({
+        type:'get',
+        dataType:'json',
+        url: SITE_URL + 'user/get_personal_info',
+        success:function (response) {
+            if(response.success){
+                $('.head_portrait img').src = 'site_url + response.data.avatar_path';
+                $('.head_portrait span').text(response.data.nickname);
+            }else{
+                alert(response.msg)
+            };
+        },
+        error:function () {
+
+        }
+    })
+
+    /**
+     * 获取关注的贴吧
+     */
+    function init_post_bar(page){
+        $.ajax({
+            type:'get',
+            dataType:'json',
+            url: SITE_URL + 'post_bar/get_focus_post_bar/' + page + '/' + page_size,
+            success:function (response) {
+                if(response.success){
+                    for(var i = 0; i<response.data.length; i++){
+                        $('.focused_bar_box ul').append('<li> <a href="javascript:void(0)">' + response.data[i].name + ' </a></li>');
+                    }
+                }else{
+                    view_more = false;
+                    alert(response.msg)
+                };
+            },
+            error:function () {
+            }
+        });
+    };
+    init_post_bar(page);
+
+    /**
+     * 查看更多吧
+     */
+    $('#look_more').click(function () {
+        page++;
+        if(view_more == true){
+            init_post_bar(page);
+        }
+    });
+
+    /**
+     * 获取推荐的吧
+     */
+    $.ajax({
+        type: 'get',
+        dataType: 'json',
+        url: SITE_URL + 'post_bar/get_recommend_post_bar',
+        success:function (response) {
+            if (response.success){
+                init_post(response.data);
+            }
+        }
+    });
+
+    /**
+     * 搜索贴吧
+     */
+
+    $('#search-btn-post').click(function () {
+        var key_words = $('#key_words').val();
+        $.ajax({
+            type: 'get',
+            dataType: 'json',
+            url: SITE_URL +'post_bar/search_post_bar?key_words='+key_words,
+            success:function (response) {
+                if(response.success){
+                    console.log(response.msg);
+                }else{
+                    alert(response.msg);
+                }
+            },
+            error:function () {
+
+            }
+        });
+    });
+
+    /**
+     * 查看贴吧帖子
+     */
+    $(document).on('click', '.post_head', function () {
+        var post_bar_id = $(this).data('post-bar-id');
+        console.log(post_bar_id);
+        window.location.href = SITE_URL + 'my_city/post/' + post_bar_id;
+    });
+});
+
+//获取推荐的吧的列表
+function init_post(data) {
+    for(var i = 0; i<data.length; i++){
+        $('.hot_post ul').append('<li>\
+                        <span class="number background">'+ parseInt(i+1)+'</span>\
+                        <a href="###" data-post-bar-id = "'+ data[i].id +'" class="text_head">'+ data[i].name +'</a>\
+                        <span class="view_count">3265454</span>\
+                        </li>');
+
+        $('table tbody').append('<tr>\
+                        <td class="head_img">\
+                        <div>\
+                        <img src="<?=site_url("  + source/img/forum_new.gif ); ?">\
+                        </div>\
+                        </td>\
+                        <td class="body_content">\
+                        <a href="###" data-post-bar-id = "'+ data[i].id +'" class="post_head">'+ data[i].name +'</a>\
+                        <span style="">主题：19万， 帖数：264万</span>\
+                    <a href="###">关于会员积分的问题</a>\
+                        </td>\
+                        </tr>');
+    }
+}
+

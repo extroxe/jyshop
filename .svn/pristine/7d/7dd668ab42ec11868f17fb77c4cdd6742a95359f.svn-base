@@ -1,0 +1,125 @@
+<div ng-controller="IntegralIndianaCtrl">
+    <header>
+        <div class="titlebar">
+            <a class="titlebar-button" ng-click="back()"><i class="icon size16 icon-arrowleft back_btn"></i></a>
+            <h1 class="text-center" style="padding-right: 32px"><?php echo $title; ?></h1>
+        </div>
+    </header>
+    <div class="group nav-list">
+        <ul class="grid" data-col="3" data-rowspace="8">
+            <li ng-click="openPage('#my_awards')">
+                <a class="size60 bg-1">
+                    <img ng-src="<?php echo site_url('source/mobile/img/u1564.png'); ?>">
+                </a>
+                <label>我的夺宝</label>
+            </li>
+            <li ng-click="openPage('#new-awards')">
+                <a class="size60 bg-2">
+                    <img ng-src="<?php echo site_url('source/mobile/img/u1568.png'); ?>">
+                </a>
+                <label>最新揭晓</label>
+            </li>
+            <li ng-click="openPage('#help-center')">
+<!--                <a class="button block margin8 bg-2" href="#page_2" data-toggle="page">slideRight</a>-->
+                <a class="size60 bg-3">
+                    <img ng-src="<?php echo site_url('source/mobile/img/u1566.png'); ?>">
+                </a>
+                <label>帮助中心</label>
+            </li>
+        </ul>
+    </div>
+    <div class="group awards-list">
+        <img ng-src="<?php echo site_url('source/mobile/img/u1578.png'); ?>">
+        <div id="oDiv">
+            <ul id="oUl">
+                <li>恭喜184****1523获得赛安基因商品</li>
+                <li>恭喜159****1523获得赛安基因商品</li>
+                <li>恭喜124****1523获得赛安基因商品</li>
+                <li>恭喜028****1523获得赛安基因商品</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="group physical-product">
+        <p>实物产品</p>
+        <span class="more" ng-click="toPage()">更多</span>
+    </div>
+    <div class="group awards" style="padding: 10px 5px; background-color: #eee">
+        <ul class="grid" data-col="2" data-rowspace="8">
+            <li>
+                <div>
+                    <a class="bg-1">
+                        <img ng-src="<?php echo site_url('source/mobile/img/4.jpg'); ?>">
+                    </a>
+                    <p class="publish-icon">已揭晓</p>
+                    <label>我的夺宝我的夺宝我的夺宝我的夺宝我的夺宝我的夺宝</label>
+                    <span>100积分</span>
+                    <div class="progressbox-content">
+                        <div class="progress radius40">
+                            <span class="progress-bar theme-1 radius40" style="width: 100%"></span>
+                        </div>
+                    </div>
+                    <span>总需1000积分</span>
+                    <a href="javascript:void(0)" class="publish-awards">已揭晓</a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <a class="bg-1">
+                        <img ng-src="<?php echo site_url('source/mobile/img/5.jpg'); ?>">
+                    </a>
+                    <p class="publish-icon" style="display: none">已揭晓</p>
+                    <label>我的夺宝我的夺宝我的夺宝我的夺宝我的夺宝我的夺宝</label>
+                    <span>100积分</span>
+                    <div class="progressbox-content">
+                        <div class="progress radius40">
+                            <span class="progress-bar theme-1 radius40" style="width: 35%"></span>
+                        </div>
+                    </div>
+                    <span>总需1000积分</span>
+                    <a href="javascript:void(0)" class="publish-awards">立即夺宝</a>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+</div>
+
+<section id="help-center" data-animation="slideRight" class="page" style="z-index: 100;background-color:#f4f4f4;">
+    <header>
+        <div class="titlebar">
+            <a class="titlebar-button" ng-click="back()"><i class="icon size16 icon-arrowleft back_btn"></i></a>
+            <h1 class="text-center" style="padding-right: 32px">帮助中心</h1>
+        </div>
+    </header>
+    <article>
+        帮助中心：
+        一、玩法说明
+
+        1、用户可根据自己的喜好商品选择要参与的人次并支付一定的礼券参与夺宝。
+
+        5、大陆地区免奖品发货运费，如因用户问题产生额外费用的由用户自行承担；若快递无法配送至收货地址的，由用户自行联系快递进行自提；
+        13、该抽奖活动与苹果公司无关。
+    </article>
+</section>
+
+<section id="new-awards" data-animation="slideRight" class="page" style="z-index:100;background-color:#f4f4f4;">
+    <header>
+        <div class="titlebar">
+            <a class="titlebar-button" ng-click="back()"><i class="icon size16 icon-arrowleft back_btn"></i></a>
+            <h1 class="text-center" style="padding-right: 32px">最新揭晓</h1>
+        </div>
+    </header>
+    <article>
+       <div class="group">
+           <ul class="lists" >
+               <li>158****1221获得基因商品</li>
+               <li>158****1221获得基因商品</li>
+               <li>158****1221获得基因商品</li>
+               <li>158****1221获得基因商品</li>
+               <li>158****1221获得基因商品</li>
+               <li>158****1221获得基因商品</li>
+           </ul>
+       </div>
+    </article>
+</section>

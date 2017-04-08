@@ -1,0 +1,13 @@
+<div id="member_center"  class="model_box">
+    <div class="control-group" style=" border: none">
+        <h5>会员中心</h5>
+    </div>
+    <div class="control-group">
+        <label style="display: inline-block; margin-right: 20px">会员等级：<?php echo $user['level_name']; ?></label>
+        <span style="color: red" class="fa fa-star"></span>
+        <span style="color: red" class="fa fa-star"></span>
+        <span class="fa fa-star" style="color: #aaa"></span>
+        <span class="fa fa-star" style="color: #aaa"></span>
+        <span class="fa fa-star" style="color: #aaa"></span>
+    </div>
+</div>

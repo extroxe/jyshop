@@ -1,0 +1,124 @@
+// /**
+//  * Created by sailwish009 on 2017/2/6.
+//  */
+// $(function () {
+//     var page = 1;
+//     var page_size = 6;
+//     var data = [];
+//     var flag = true;
+//     function init() {
+//         $.ajax({
+//             type: 'get',
+//             dataType: 'json',
+//             url: SITE_URL + 'article/paginate/' + page + '/' + page_size,
+//             success: function (response) {
+//                 if (response.success) {
+//                     if(response.data.length == page_size){
+//                         flag = true;
+//                     }else{
+//                         flag = false;
+//                     }
+//                     for(var i = 0; i<response.data.length; i++){
+//                         data.push(response.data[i]);
+//                     }
+//                     var tpl = document.getElementById('article_list_tpl').innerHTML;
+//                     $("#article_list").html(template(tpl, {data: data}));
+//                 }else{
+//                     flag = false;
+//                 };
+//             }
+//         });
+//     };
+//     init();
+//
+//     $(window).scroll(function() {
+//         if ($(document).scrollTop() >= ($(document).height() - $(window).height() - 500)) {
+//             if(flag == true){
+//                 page++;
+//                 init();
+//             }
+//         }
+//     });
+//
+//     /*$(window).scroll(function () {
+//      var $this =$('.content'),
+//      viewH =$('.content').height(),//可见高度
+//      contentH =$('.content').get(0).scrollHeight,//内容高度
+//      scrollTop =$('.content').scrollTop();//滚动高度
+//      //if(contentH - viewH - scrollTop <= 100) { //到达底部100px时,加载新内容
+//      if(scrollTop/(contentH -viewH)>=0.95){ //到达底部100px时,加载新内容
+//      page++;
+//      alert('daodibula')
+//      init();
+//      }
+//      });*/
+//
+//     //查看文章详情
+//     $(document).on('click', '.item', function () {
+//         var article_id = $(this).data('article-id');
+//         window.location.href = SITE_URL + 'article/detail/' + article_id;
+//     });
+// })
+
+/**
+ * Created by sailwish009 on 2017/2/6.
+ */
+$(function () {
+    var page = 1;
+    var page_size = 6;
+    var data = [];
+    var flag = true;
+    function init() {
+        $.ajax({
+            type: 'get',
+            dataType: 'json',
+            url: SITE_URL + 'article/paginate/' + page + '/' + page_size,
+            success: function (response) {
+                if (response.success) {
+                    if(response.data.length == page_size){
+                        flag = true;
+                        $('.loading').show();
+                        $('.load_done').hide();
+                    }else{
+                        flag = false;
+                        $('.loading').hide();
+                        $('.load_done').show();
+                    }
+                    load(response.data);
+                    $('.no_data').hide();
+                }else{
+                    flag = false;
+                    $('.no_data').hide();
+                };
+            }
+        });
+    };
+    init();
+
+    $(window).scroll(function() {
+        if ($(document).scrollTop() >= ($(document).height() - $(window).height() - 500)) {
+            if(flag == true){
+                 page++;
+                 init();
+            }
+        }
+    });
+
+    function load(article_lists) {
+        $.each(article_lists, function (index, article_list) {
+            $('.content').append('<div class="item" data-article-id=' +article_list['id'] + '>\
+                <img src="'+SITE_URL+article_list['thumbnail_path']+'" alt="">\
+                <div class="item-title">'+article_list['title']+'</div>\
+                <div class="item-description">'+article_list['abstract']+'</div>\
+                <div class="item-date">'+article_list['update_time']+'</div>\
+                </div>');
+        })
+
+    }
+
+    //查看文章详情
+    $(document).on('click', '.item', function () {
+        var article_id = $(this).data('article-id');
+        window.location.href = SITE_URL + 'article/detail/' + article_id;
+    });
+})

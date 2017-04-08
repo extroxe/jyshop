@@ -1,0 +1,88 @@
+angular.module('app')
+    //定义过滤器，返回字符串的第一个字符
+    .filter('namefilter', function () {
+        return function (name) {
+            var names = name.split("");
+            return names[0];
+        } 
+    })
+    .controller('categoryCtrl', ['$scope', 'ajax', function ($scope, ajax) {
+        $scope.first_active_flag = false;
+        //获取一级分类
+        $scope.categorys = [];
+        ajax.req('POST', 'category/get_father_category')
+            .then(function (data) {
+                    if (data.success){
+                        $scope.categorys = data.data;
+                        if ($scope.first_active_flag){
+                            $scope.parent.id = $scope.categorys[0].id;
+                        }
+                    }
+                }
+            );
+        //监视
+        $scope.$watch('parent.id', function (nv, ov) {
+            if (nv){
+                ajax.req('GET', 'category/get_child_category_by_id/' + nv)
+                    .then(function (data) {
+                        if (data.success){
+                            $scope.child_categorys = data.data;
+                            $scope.first_active_flag = false;
+                        }
+                    });
+            }else{
+                $scope.first_active_flag = true;
+            }
+        });
+        //根据一级分类id获取子类分类
+        $scope.child_categorys = [];
+        $scope.get_child_category = function (category_id, $event) {
+            if ($event) {
+                $($event.target).addClass('active').siblings('.tab').removeClass('active');
+            }
+            ajax.req('GET', 'category/get_child_category_by_id/' + category_id)
+                .then(function (data) {
+                    if (data.success) {
+                        $scope.child_categorys = data.data;
+                    }else{
+                        $scope.child_categorys = [];
+                    }
+                });
+        };
+        $scope.recommends = [];
+        ajax.req('POST', 'commodity/get_recommend')
+            .then(function (data) {
+                if (data.success){
+                    $scope.recommends = data.data;
+                }
+            });
+        //分类搜索跳转
+        $scope.search = function(id){
+            ajax.req('POST', 'weixin/index/search', {
+                category : id,
+                page : 1,
+                page_size : 10
+            }).then(function(response){
+                if (response.success){
+                    $scope.commodities = response.data;
+                    //window.location.href = SITE_URL + 'weixin/index/search';
+                }else{
+                    var popToast;
+                    if(!popToast || popToast&&!popToast.toastBox){
+                        popToast=new Toast("没有此类商品",{
+                            "onHid":function(e){
+                                e.destroy();
+                            }
+                        });
+                    }
+                    popToast.show();
+                }
+            })
+        }
+    }]);
+$(function () {
+    $('.tab').click(function () {
+        $(this).addClass('active').siblings('.tab').removeClass('active');
+        $(this).siblings('.tab').addClass('sibborder');
+    })
+});

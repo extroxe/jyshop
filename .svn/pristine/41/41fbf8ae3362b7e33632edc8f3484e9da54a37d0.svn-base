@@ -1,0 +1,456 @@
+<?php
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =========================================================
+ *
+ *      Filename: Order_admin.php
+ *
+ *   Description: 订单管理
+ *
+ *       Created: 2016-11-23 11:19:46
+ *
+ *        Author: sunzuosheng
+ *
+ * =========================================================
+ */
+
+class Order_admin extends CI_Controller{
+    /**
+     * 构造函数
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->helper('form');
+        $this->load->library(['form_validation', 'Jys_kdniao', 'Jys_weixin']);
+        $this->load->model(['Order_model', 'Express_model']);
+    }
+
+    /**
+     * 分页
+     *
+     * @param int $page 页数
+     * @param int $page_size 页大小
+     */
+    public function paginate($page = 1, $page_size = 10){
+        $keyword = $this->input->post('keyword', TRUE);
+        $is_point = $this->input->post('is_point', TRUE) ? intval($this->input->post('is_point', TRUE)) : 0;
+
+        if ($is_point) {
+            // 积分订单
+            $condition = 'payment_id = '.Jys_system_code::PAYMENT_POINTPAY.' or payment_id = '.Jys_system_code::PAYMENT_INTEGRAL_INDIANA.' or payment_id = '.Jys_system_code::PAYMENT_INTEGRAL_SWEEPSTAKES;
+            $data = $this->Order_model->paginate($page, $page_size, $condition, $keyword);
+        }else {
+            // 现金订单
+            $condition = 'payment_id = '.Jys_system_code::PAYMENT_WXPAY.' or payment_id = '.Jys_system_code::PAYMENT_ALIPAY;
+            $data = $this->Order_model->paginate($page, $page_size, $condition, $keyword);
+        }
+
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 修改订单
+     */
+    public function update()
+    {
+        //验证表单信息
+        $this->form_validation->set_rules('id', '订单ID', 'trim|required|numeric');
+        $this->form_validation->set_rules('number', '订单编号', 'trim|required|max_length[100]');
+        $this->form_validation->set_rules('total_price', '订单总价', 'trim|required|numeric');
+        $this->form_validation->set_rules('user_discount_coupon_id', '优惠券ID', 'trim|numeric');
+        $this->form_validation->set_rules('payment_amount', '实际支付金额', 'trim|numeric');
+        $this->form_validation->set_rules('payment_id', '支付方式', 'trim|numeric');
+        $this->form_validation->set_rules('payment_order', '支付单号', 'trim|max_length[100]');
+        $this->form_validation->set_rules('terminal_type', '终端类型', 'trim|required|numeric');
+        $this->form_validation->set_rules('status_id', '订单状态', 'trim|required|numeric');
+        $this->form_validation->set_rules('express_company_id', '快递公司ID', 'trim|numeric');
+        $this->form_validation->set_rules('express_number', '快递单号', 'trim|numeric');
+        $this->form_validation->set_rules('predict_complete_time', '预计完成时间', 'trim|required');
+        $this->form_validation->set_rules('payment_time', '支付时间', 'trim');
+
+        //表单验证是否通过, 若不通过 返回表单错误信息，停止执行
+        $res = $this->Common_model->deal_validation_errors();
+
+        if ($res['success']){
+            //处理数据
+            $id                                 = intval($this->input->post('id', TRUE));
+            $post['number']                     = $this->input->post('number', TRUE);
+            $post['total_price']                = floatval($this->input->post('total_price', TRUE));
+            $user_discount_coupon_id            = intval($this->input->post('user_discount_coupon_id', TRUE));
+            $post['payment_id']                 = intval($this->input->post('payment_id', TRUE));
+            $post['payment_order']              = $this->input->post('payment_order', TRUE);
+            $post['terminal_type']              = intval($this->input->post('terminal_type', TRUE));
+            $post['status_id']                  = intval($this->input->post('status_id', TRUE));
+            $post['express_company_id']         = $this->input->post('express_company_id', TRUE) ? intval($this->input->post('express_company_id', TRUE)) : NULL;
+            $post['express_number']             = $this->input->post('express_number', TRUE);
+            $post['predict_complete_time']      = $this->input->post('predict_complete_time', TRUE);
+
+            if ($user_discount_coupon_id > 0) {
+                $post['user_discount_coupon_id'] = $user_discount_coupon_id;
+            }
+
+            if($post['status_id'] == jys_system_code::ORDER_STATUS_FINISHED) {
+                // 修改订单状态为已完成
+                $data = $this->Order_model->finish_order($post['number']);
+            }else if ($post['status_id'] == jys_system_code::ORDER_STATUS_REFUNDING) {
+                // 修改订单状态为退款中
+                $data['success'] = FALSE;
+                $data['msg'] = '无法直接修改订单状态为退款中，请使用用户账户提交退款申请';
+            }else if ($post['status_id'] == jys_system_code::ORDER_STATUS_REFUNDED) {
+                // 修改订单状态为已退款
+                $data['success'] = FALSE;
+                $data['msg'] = '无法直接修改订单状态为已退款，请在退款管理中进行相关审核操作';
+            }else if ($post['status_id'] == jys_system_code::ORDER_STATUS_UNREFUNDED) {
+                // 修改订单状态为未退款
+                $data['success'] = FALSE;
+                $data['msg'] = '无法直接修改订单状态为未退款，请在退款管理中进行相关审核操作';
+            }else {
+                if ($post['status_id'] == jys_system_code::ORDER_STATUS_DELIVERED){
+                    // 修改订单状态为已发货时，需要检查是否填写了物流公司和物流单号
+                    if (empty($post['express_company_id']) || empty($post['express_number'])){
+                        echo json_encode([
+                            'success' => FALSE,
+                            'msg' => '发货请填写物流公司及物流单号'
+                        ]);
+                        exit;
+                    }else {
+                        // 订阅物流信息
+                        if (!$this->Order_model->subscribe_express_info($post['express_company_id'], $post['express_number'])) {
+                            echo json_encode([
+                                'success' => FALSE,
+                                'msg' => '订阅快递信息失败'
+                            ]);
+                            exit;
+                        }
+                    }
+                }
+
+                // 除已完成之外的其他状态，都直接更新订单表即可
+                if ($this->jys_db_helper->update('order', $id, $post)){
+                    $data['success'] = TRUE;
+                    $data['msg'] = '更新成功';
+                }
+            }
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '输入有错误';
+            $data['error'] = $res['msg'];
+        }
+
+        if ($data['success']){
+            $order = $this->jys_db_helper->get('order', $id);
+            $express_company = $this->jys_db_helper->get('express_company', $order['express_company_id']);
+            $user = $this->jys_db_helper->get('user', $order['user_id']);
+            if ($order['status_id'] == Jys_system_code::ORDER_STATUS_DELIVERED){
+                $url = site_url('weixin/index/logistics_details/'.$order['id']);
+                $tm = $this->config->item('wx_tm_order_delivered');
+                $info = [
+                    'first' => [
+                        'value' => '亲，宝贝已经启程了，好想快点来到你身边',
+                        'color' => '#000000'
+                    ],
+                    'keyword1' => [
+                        'value' => $order['number'],
+                        'color' => '#000000'
+                    ],
+                    'keyword2' => [
+                        'value' => $express_company['name'],
+                        'color' => '#000000'
+                    ],
+                    'keyword3' => [
+                        'value' => $post['express_number'],
+                        'color' => '#000000'
+                    ],
+                    'remark' => [
+                        'value' => '点击查看完整的物流信息 。如有问题请致电XXX或直接在微信里留言，XXX将在第一时间为您服务！',
+                        'color' => '#000000'
+                    ]
+                ];
+            }else if ($order['status_id'] == Jys_system_code::ORDER_STATUS_PAID){
+                $sub_orders = $this->Order_model->show_sub_order($order['id'])['data'];
+                $commodity_name_str = '';
+                if (!empty($sub_orders)){
+                    foreach ($sub_orders as $sub_order) {
+                        $commodity_name_str .= $sub_order['commodity_name'].'*'.$sub_order['amount'].' ';
+                    }
+                }
+
+                $url = site_url('weixin/index/order_detail/'.$order['id']);
+                $tm = $this->config->item('wx_tm_order_payment_success');
+
+                $info = [
+                    'first' => [
+                        'value' => '您的订单已支付成功',
+                        'color' => '#000000'
+                    ],
+                    'keyword1' => [
+                        'value' => $user['username'],
+                        'color' => '#000000'
+                    ],
+                    'keyword2' => [
+                        'value' => $order['number'],
+                        'color' => '#000000'
+                    ],
+                    'keyword3' => [
+                        'value' => '¥'.$order['payment_amount'],
+                        'color' => '#000000'
+                    ],
+                    'keyword4' => [
+                        'value' => $commodity_name_str,
+                        'color' => '#000000'
+                    ],
+                    'remark' => [
+                        'value' => '如有问题请致电xxx客服热线400-8070028或直接在微信留言，客服在线时间为工作日10:00——18:00.客服人员将第一时间为您服务2。',
+                        'color' => '#000000'
+                    ]
+                ];
+            }else if ($order['status_id'] == Jys_system_code::ORDER_STATUS_REFUNDING){
+                $url = site_url('weixin/index/order_detail/'.$order['id']);
+                $tm = $this->config->item('wx_tm_order_refund_request');
+
+                $info = [
+                    'first' => [
+                        'value' => '亲爱的'.$user['username'].'，您有笔订单正在申请退款',
+                        'color' => '#000000'
+                    ],
+                    'keyword1' => [
+                        'value' => $order['number'],
+                        'color' => '#000000'
+                    ],
+                    'keyword2' => [
+                        'value' => '¥'.$order['payment_amount'],
+                        'color' => '#000000'
+                    ],
+                    'keyword3' => [
+                        'value' => '退款',
+                        'color' => '#000000'
+                    ],
+                    'remark' => [
+                        'value' => '如果非自己操作，请及时联系对方核实并协商处理，避免引起不必要的纠纷',
+                        'color' => '#000000'
+                    ]
+                ];
+            }else if ($order['status_id'] == Jys_system_code::ORDER_STATUS_UNREFUNDED){
+                $sub_orders = $this->Order_model->show_sub_order($order['id'])['data'];
+                $commodity_name_str = '';
+                if (!empty($sub_orders)){
+                    foreach ($sub_orders as $sub_order) {
+                        $commodity_name_str .= $sub_order['commodity_name'].' ';
+                    }
+                }
+
+                $url = site_url('weixin/index/order_detail/'.$order['id']);
+                $tm = $this->config->item('wx_tm_order_refund_rejected');
+
+                $info = [
+                    'first' => [
+                        'value' => '亲爱的'.$user['username'].'，您的退款申请被商家驳回，可与商家协商沟通。',
+                        'color' => '#000000'
+                    ],
+                    'keyword1' => [
+                        'value' => '¥'.$order['payment_amount'],
+                        'color' => '#000000'
+                    ],
+                    'keyword2' => [
+                        'value' => $commodity_name_str,
+                        'color' => '#000000'
+                    ],
+                    'keyword3' => [
+                        'value' => $order['number'],
+                        'color' => '#000000'
+                    ],
+                    'remark' => [
+                        'value' => '请及时联系对方核实并协商处理，避免引起不必要的纠纷',
+                        'color' => '#000000'
+                    ]
+                ];
+            }else if ($order['status_id'] == Jys_system_code::ORDER_STATUS_REFUNDED){
+                $url = site_url('weixin/index/order_detail/'.$order['id']);
+                $tm = $this->config->item('wx_tm_order_refund_through');
+
+                $info = [
+                    'first' => [
+                        'value' => '亲爱的'.$user['username'].'，您的退款申请已审核通过，订单金额已退回到账户。',
+                        'color' => '#000000'
+                    ],
+                    'keyword1' => [
+                        'value' => $order['number'],
+                        'color' => '#000000'
+                    ],
+                    'keyword2' => [
+                        'value' => '¥'.$order['payment_amount'],
+                        'color' => '#000000'
+                    ],
+                    'keyword3' => [
+                        'value' =>  '退款',
+                        'color' => '#000000'
+                    ],
+                    'remark' => [
+                        'value' => '点击此处，查看订单退款详情',
+                        'color' => '#000000'
+                    ]
+                ];
+            }else if ($order['status_id'] == Jys_system_code::ORDER_STATUS_FINISHED){
+                $url = site_url('weixin/index/order_detail/'.$order['id']);
+                $tm = $this->config->item('wx_tm_order_finished');
+
+                $info = [
+                    'first' => [
+                        'value' => '亲爱的'.$user['username'].'，您的订单已完成。',
+                        'color' => '#000000'
+                    ],
+                    'keyword1' => [
+                        'value' => $order['number'],
+                        'color' => '#000000'
+                    ],
+                    'keyword2' => [
+                        'value' => substr($order['finnished_time'], 0, 16),
+                        'color' => '#000000'
+                    ],
+                    'remark' => [
+                        'value' => '如有任何疑问，请拨打：4008888888',
+                        'color' => '#000000'
+                    ]
+                ];
+            }
+            $this->jys_weixin->send_template_message($user['openid'], $tm, $info, $url);
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 订阅快递订单信息
+     * @param $express_company_code 快递公司代码
+     * @param $express_number 快递单号
+     * @param string $order_number 订单号
+     * @param string $callback 自定义回调信息
+     * @return 订阅成功返回TRUE，订阅失败返回FALSE
+     */
+    private function _subscribe_express_info($express_company_code, $express_number, $order_number = "", $callback = "") {
+        if (empty($express_company_code) || empty($express_number)) {
+            return FALSE;
+        }
+        $dist_result = $this->jys_kdniao->dist($express_company_code, $express_number, $order_number, $callback);
+        if (!empty($dist_result) && is_array($dist_result) && isset($dist_result['Success']) && $dist_result['Success']) {
+            // 订阅快递信息成功
+            return TRUE;
+        }else {
+            // 订阅快递信息失败
+            return FALSE;
+        }
+    }
+
+    /**
+     * 修改订单状态
+     */
+    public function update_status()
+    {
+        $id        = intval($this->input->post('id', TRUE));
+        $status_id = intval($this->input->post('status_id', true));
+        if ($this->jys_db_helper->update('order', $id, ['status_id'=>$status_id])){
+            $data['success'] = TRUE;
+            $data['msg'] = '更新成功';
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '更新失败';
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 根据订单ID显示子订单
+     */
+    public function show_sub_order(){
+        $order_id = $this->input->post('order_id', TRUE);
+
+        $data = $this->Order_model->show_sub_order($order_id);
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 更新子订单
+     */
+    public function update_sub_order(){
+        //验证表单信息
+        $this->form_validation->set_rules('id', '子订单ID', 'trim|required|is_natural_no_zero');
+        $this->form_validation->set_rules('order_id', '订单ID', 'trim|required|is_natural_no_zero');
+        $this->form_validation->set_rules('number', '订单编号', 'trim|required|max_length[100]');
+        $this->form_validation->set_rules('commodity_id', '商品ID', 'trim|required|is_natural_no_zero');
+        $this->form_validation->set_rules('price', '商品单价', 'trim|required|numeric');
+        $this->form_validation->set_rules('amount', '商品数量', 'trim|required|numeric');
+        $this->form_validation->set_rules('total_price', '订单总价', 'trim|required|numeric');
+        $this->form_validation->set_rules('points', '订单获取积分', 'trim|required|numeric');
+        $this->form_validation->set_rules('express_company_id', '快递公司ID', 'trim|numeric');
+        $this->form_validation->set_rules('express_number', '快递单号', 'trim|numeric');
+
+        //表单验证是否通过, 若不通过 返回表单错误信息，停止执行
+        $res = $this->Common_model->deal_validation_errors();
+
+        if ($res['success']){
+            //处理数据
+            $id                                 = intval($this->input->post('id', TRUE));
+            $post['order_id']                   = intval($this->input->post('order_id', TRUE));
+            $post['number']                     = $this->input->post('number', TRUE);
+            $post['commodity_id']               = intval($this->input->post('commodity_id', TRUE));
+            $post['price']                      = floatval($this->input->post('price', TRUE));
+            $post['amount']                     = intval($this->input->post('amount', TRUE));
+            $post['total_price']                = floatval($this->input->post('total_price', TRUE));
+            $post['points']                     = intval($this->input->post('points', TRUE));
+            $post['express_company_id']         = $this->input->post('express_company_id', TRUE) ? intval($this->input->post('express_company_id', TRUE)) : NULL;
+            $post['express_number']             = $this->input->post('express_number', TRUE);
+
+            if ($this->jys_db_helper->update('order_commodity', $id, $post)){
+                $data['success'] = TRUE;
+                $data['msg'] = '更新成功';
+            }
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '输入有错误';
+            $data['error'] = $res['msg'];
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 根据订单ID查询快递信息
+     */
+    public function show_express_info_by_order_id($order_id) {
+        $result = array('success'=>FALSE, 'msg'=>'此单无物流信息', 'data'=>array());
+
+        if (empty($order_id) || intval($order_id) < 1) {
+            $result['success'] = FALSE;
+            $result['msg'] = '订单ID不正确';
+            echo json_encode($result);
+            exit;
+        }
+
+        $result = $this->Express_model->show_express_info_by_order_id($order_id);
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 根据子订单id获取快递信息
+     */
+    public function show_express_info_by_order_commodity_id($order_commodity_id) {
+        $result = array('success'=>FALSE, 'msg'=>'此单无物流信息', 'data'=>array());
+
+        if (empty($order_commodity_id) || intval($order_commodity_id) < 1) {
+            $result['success'] = FALSE;
+            $result['msg'] = '订单ID不正确';
+            echo json_encode($result);
+            exit;
+        }
+
+        $result = $this->Express_model->show_express_info_by_order_id($order_commodity_id);
+
+        echo json_encode($result);
+    }
+}

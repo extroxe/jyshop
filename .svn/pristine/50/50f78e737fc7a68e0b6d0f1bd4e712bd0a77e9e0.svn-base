@@ -1,0 +1,195 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =====================================================================================
+ *
+ *        Filename: Sweepstakes_commodity_model.php
+ *     Description: 积分抽奖奖品模型
+ *         Created: 2017-03-01 15:12:47
+ *          Author: Tangyu
+ *
+ * =====================================================================================
+ */
+class Sweepstakes_commodity_model extends CI_Model
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * 添加奖品
+     */
+    public function add_sweepstakes_commodity($table = '', $insert = [])
+    {
+        if (empty($table) || empty($insert) || !is_array($insert)){
+            $data = ['success' => FALSE, 'msg' => '参数错误'];
+            return $data;
+        }
+        $this->db->trans_start();
+        //判断活动的奖品数量是否大于10
+        $sweepstakes_commodity = $this->jys_db_helper->get_where_multi($table, ['sweepstakes_id' => $insert['sweepstakes_id'], 'is_show' => 1]);
+        if ($sweepstakes_commodity){
+            $num = count($sweepstakes_commodity);
+        }else{
+            $num = 0;
+        }
+
+        if ($num < 10){
+            $res = $this->jys_db_helper->add($table, $insert);
+            if ($res['success']){
+                $data = ['success' => TRUE, 'msg' => '添加活动奖品成功'];
+            }else{
+                $data = ['success' => FALSE, 'msg' => '添加活动奖品失败'];
+            }
+        }else {
+            $data = ['success' => FALSE, 'msg' => '当前活动奖品已满10，无法继续添加'];
+        }
+
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+        }else{
+            $this->db->trans_commit();
+        }
+
+        return $data;
+    }
+
+    /**
+     * 获取所有当前活动奖品
+     */
+    public function get_sweepstakes_commodity()
+    {
+        $date = date('Y-m-d H:i:s');
+        $this->db->select('commodity.id,
+                           commodity.name as commodity_name,
+                           commodity.introduce,
+                           attachment.path as commodity_path,
+                           sweepstakes.name as sweepstakes_name,
+                           sweepstakes.consume_points,
+                           sweepstakes.start_time,
+                           sweepstakes.end_time,
+                           sweepstakes_commodity.point,
+                           sweepstakes_commodity.total_number,
+                           sweepstakes_commodity.current_number,
+                           sweepstakes_commodity.user_total_point,
+                           sweepstakes_commodity.user_expenditure,
+                           sweepstakes_commodity.register_start_time,
+                           sweepstakes_commodity.register_end_time
+                            ');
+        $this->db->join('commodity', 'commodity.id = sweepstakes_commodity.commodity_id', 'left');
+        $this->db->join('commodity_thumbnail', 'commodity_thumbnail.commodity_id = sweepstakes_commodity.commodity_id', 'left');
+        $this->db->join('attachment', 'attachment.id = commodity_thumbnail.attachment_id', 'left');
+        $this->db->join('sweepstakes', 'sweepstakes.id = sweepstakes_commodity.sweepstakes_id', 'left');
+        $this->db->where('sweepstakes.start_time <=', $date);
+        $this->db->where('sweepstakes.end_time >=', $date);
+        $this->db->where('sweepstakes_commodity.is_show', 1);
+        $this->db->group_by('commodity.id');
+        $result = $this->db->get('sweepstakes_commodity');
+
+        if ($result && $result->num_rows() > 0){
+            $data = ['success' => TRUE, 'msg' => '获取奖品成功', 'data' => $result->result_array()];
+        }else{
+            $data = ['success' => FALSE, 'msg' => '获取奖品失败', 'data' => NULL];
+        }
+
+        return $data;
+    }
+
+    /**
+     * 找出符合当前参与者的奖品
+     */
+    public function find($condition = [])
+    {
+        if (empty($condition) || !is_array($condition)){
+            $data = ['success' => FALSE, 'msg' => '参数错误', 'data' => NULL];
+            return $data;
+        }
+
+        $this->db->select('commodity.id,
+                           commodity.name as commodity_name,
+                           commodity.introduce,
+                           attachment.path as commodity_path,
+                           sweepstakes_commodity.point,
+                           sweepstakes_commodity.total_number,
+                           sweepstakes_commodity.current_number
+                            ');
+        $this->db->join('commodity', 'commodity.id = sweepstakes_commodity.commodity_id', 'left');
+        $this->db->join('commodity_thumbnail', 'commodity_thumbnail.commodity_id = sweepstakes_commodity.commodity_id', 'left');
+        $this->db->join('attachment', 'attachment.id = commodity_thumbnail.attachment_id', 'left');
+        $this->db->where('sweepstakes_commodity.user_total_point <', $condition['current_point']);
+        $this->db->where('sweepstakes_commodity.user_expenditure <', $condition['user_expenditure']);
+        $this->db->where('sweepstakes_commodity.register_start_time <=', $condition['register_time']);
+        $this->db->where('sweepstakes_commodity.register_end_time >=', $condition['register_time']);
+        $this->db->where('sweepstakes_commodity.is_show', 1);
+        $this->db->group_by('commodity.id');
+        $result = $this->db->get('sweepstakes_commodity');
+
+        if ($result && $result->num_rows() > 0){
+            $data = ['success' => TRUE, 'msg' => '获取符合条件奖品成功', 'data' => $result->result_array()];
+        }else{
+            $data = ['success' => FALSE, 'msg' => '没有符合条件奖品', 'data' => NULL];
+        }
+
+        return $data;
+    }
+
+    /**
+     * 获取我的所有奖品
+     */
+    public function get_my_prize($user_id = 0)
+    {
+        if (empty($user_id)){
+            $data = ['success' => FALSE, 'msg' => '参数错误', 'data' => NULL];
+            return $data;
+        }
+
+        $this->db->select('sweepstakes.name,
+                           sweepstakes_commodity.commodity_id,
+                           sweepstakes_commodity.point,
+                           commodity.name
+                            ');
+        $this->db->join('sweepstakes', 'sweepstakes.id = sweepstakes_result.sweepstakes_id', 'left');
+        $this->db->join('sweepstakes_commodity', 'sweepstakes_commodity.commodity_id = sweepstakes_result.sweepstakes_commodity_id', 'left');
+        $this->db->join('commodity', 'sweepstakes_commodity.commodity_id = commodity.id', 'left');
+        $this->db->where('sweepstakes_result.user_id', $user_id);
+        $result = $this->db->get('sweepstakes_result');
+
+        if ($result && $result->num_rows() > 0){
+            $data = ['success' => TRUE, 'msg' => '获取我的奖品成功', 'data' => $result->result_array()];
+        }else{
+            $data = ['success' => FALSE, 'msg' => '奖品列表空空如也，快去抽奖吧', 'data' => NULL];
+        }
+
+        return $data;
+    }
+
+    /**
+     * 获取滚动奖品（最新）
+     */
+    public function get_scroll_prize()
+    {
+        $this->db->select('sweepstakes_commodity.commodity_id,
+                           sweepstakes_commodity.point,
+                           commodity.name,
+                           user.phone
+                            ');
+        $this->db->join('sweepstakes_commodity', 'sweepstakes_commodity.commodity_id = sweepstakes_result.sweepstakes_commodity_id', 'left');
+        $this->db->join('commodity', 'sweepstakes_commodity.commodity_id = commodity.id', 'left');
+        $this->db->join('user', 'sweepstakes_result.user_id = user.id', 'left');
+        $this->db->where('sweepstakes_result.status', 1);
+        $this->db->order_by('sweepstakes_result.create_time', 'DESC');
+        $this->db->limit(10, 0);
+        $result = $this->db->get('sweepstakes_result');
+
+        if ($result && $result->num_rows() > 0){
+            $data = ['success' => TRUE, 'msg' => '获取滚动获奖信息成功', 'data' => $result->result_array()];
+        }else{
+            $data = ['success' => FALSE, 'msg' => '暂无获奖信息', 'data' => NULL];
+        }
+
+        return $data;
+    }
+}

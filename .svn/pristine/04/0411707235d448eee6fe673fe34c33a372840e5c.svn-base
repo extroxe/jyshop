@@ -1,0 +1,66 @@
+<?php
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =====================================================================================
+ *
+ *        Filename: Article_model.php
+ *
+ *     Description: 文章模型
+ *
+ *         Created: 2016-11-22 17:33:40
+ *
+ *          Author: sunzuosheng
+ *
+ * =====================================================================================
+ */
+
+class Article_model extends CI_Model{
+    /**
+     * 构造函数
+     */
+    public function __construct() {
+        parent::__construct();
+    }
+
+    /**
+     * 分页
+     *
+     * @param int $page 页数
+     * @param int $page_size 页大小
+     */
+    public function paginate($page = 1, $page_size = 10){
+        $data = [
+            'success' => FALSE,
+            'msg' => '没有文章数据',
+            'data' => null
+        ];
+
+        if (empty($page) || intval($page) < 1 || empty($page_size) || intval($page_size) < 1) {
+            $data['msg'] = '参数错误';
+            return $data;
+        }
+
+        $this->db->select('article.id,
+                           article.title,
+                           article.abstract,
+                           article.content,
+                           attachment.path as thumbnail_path,
+                           system_code.value as status_value,
+                           system_code.name as status_name');
+        $this->db->join('attachment', 'attachment.id = article.thumbnail_id');
+        $this->db->join('system_code', 'system_code.value = article.status_id and system_code.type = "'.jys_system_code::ARTICLE_STATUS.'"', 'left');
+        $this->db->limit($page_size, ($page - 1) * $page_size);
+        $result = $this->db->get('article');
+
+        if ($result->num_rows() > 0){
+            $data = [
+                'success' => TRUE,
+                'msg' => '',
+                'data' => $result->result_array()
+            ];
+        }
+
+        return $data;
+    }
+}

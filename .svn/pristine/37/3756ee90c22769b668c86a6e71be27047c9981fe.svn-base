@@ -1,0 +1,25 @@
+.titlebar .title{text-align: center;color: #fff;padding-right: 42px;}
+
+.group{
+    margin: 0;
+    padding: 10px;
+}
+
+.title .input-text{
+    border: 1px solid #eee;
+    margin-left: 10px;
+    padding: 6px 12px;
+    border-radius: 3px;
+}
+
+.content span{
+    position: absolute;
+}
+.content textarea{
+    margin-left: 40px;
+    display: block;
+}
+.content a{
+    display: block;
+    text-align: right;
+}

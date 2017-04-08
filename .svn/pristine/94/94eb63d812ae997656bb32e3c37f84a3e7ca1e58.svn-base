@@ -1,0 +1,14 @@
+<div id="person_info_shange" style=" width: 202px; margin-left: 0; float: left">
+    <div class="personal_list">
+        <p ><span class="fa fa-user" style="color: #777"></span>账户管理</p>
+        <ul id="_menu">
+            <li><a href="<?php echo site_url('user/user_center/personal_info'); ?>">编辑个人信息</a></li>
+            <li><a href="<?php echo site_url('user/user_center/change_password'); ?>">修改密码</a></li>
+            <li><a href="<?php echo site_url('user/user_center/account_contact'); ?>">账户关联</a></li>
+            <li><a href="<?php echo site_url('user/user_center/receiving_info'); ?>">收货信息</a></li>
+            <li><a href="<?php echo site_url('user/user_center/integral_detail'); ?>">积分详情</a></li>
+            <li><a href="<?php echo site_url('user/user_center/member_center'); ?>">会员中心</a></li>
+            <li ><a id="get_family_info" href="<?php echo site_url('user/user_center/my_family'); ?>">我的家族</a></li>
+        </ul>
+    </div>
+</div>

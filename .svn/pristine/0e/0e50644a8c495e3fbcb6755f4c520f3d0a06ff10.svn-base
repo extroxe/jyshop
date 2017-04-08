@@ -1,0 +1,572 @@
+<?php
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =====================================================================================
+ *
+ *        Filename: Order.php
+ *
+ *     Description: 用户订单中心
+ *
+ *         Created: 2016-11-24 19:19:48
+ *
+ *          Author: huazhiqiang
+ *
+ * =====================================================================================
+ */
+class Order extends CI_Controller{
+    /**
+     * 构造函数
+     */
+    public function __construct(){
+        parent::__construct();
+        $this->load->helper('form');
+        $this->load->library(['form_validation','Jys_qrcode']);
+        $this->load->model(['Order_model', 'User_model', 'Commodity_model', 'Discount_coupon_model', 'Express_model', 'Category_model']);
+    }
+
+    /**
+     * 订单结算页面
+     */
+    public function settlement($ids = NULL, $is_point = 0){
+        if (empty($ids)){
+            return FALSE;
+        }
+
+        $shopping_cart_ids = explode('-', $ids);
+        $user_id = $_SESSION['user_id'];
+
+        $data['title'] = "塞安生物-订单结算";
+        $data['js'] = array('template', 'order_settlement');
+        $data['need_gaode_api'] = TRUE;
+        $data['css'] = array('order_settlement');
+        $data['main_content'] = 'order_settlement';
+        if ($is_point == 1){
+            $data['settlement'] = $this->Commodity_model->get_commodity_by_condition(['commodity.id'=>$shopping_cart_ids[0]], TRUE, TRUE)['data'];
+        }else{
+            $data['settlement'] = $this->Order_model->get_order_settlement($shopping_cart_ids, $user_id );
+        }
+
+        if (empty($data['settlement'])){
+            show_404();
+        }
+
+        $data['discount'] = $this->Discount_coupon_model->get_user_discount_coupon_list_by_user_id($_SESSION['user_id'], jys_system_code::USER_DISCOUNT_COUPON_STATUS_UNUSED)['data'];
+        $data['payments'] = $this->jys_db_helper->get_where_multi('system_code', ['type'=>'payment']);
+        $data['isset_search'] = FALSE;
+        $data['isset_nav'] = FALSE;
+        $this->load->view('includes/template_view', $data);
+    }
+
+    /**
+     * 订单状态页面
+     */
+    public function status($is_point_flag = 0){
+        $data['title'] = "塞安生物-订单状态";
+        $data['js'] = array('order_status');
+        $data['css'] = array('order_status', 'sign_up');
+        $data['main_content'] = 'order_status';
+        $data['isset_nav'] = FALSE;
+        $data['simple_footer'] = TRUE;
+        $data['is_point_flag'] = $is_point_flag;
+        $this->load->view('includes/template_view', $data);
+    }
+
+    /**
+     * 订单列表
+     */
+    public function order_list(){
+        $data['title'] = "塞安生物-订单列表";
+        $data['js'] = array('template','order_list');
+        $data['css'] = array('order_list');
+        $data['main_content'] = 'order_list';
+        $data['isset_search'] = TRUE;
+        $data['isset_nav'] = TRUE;
+        $data['collection'] = $this->Category_model->get_category();
+        $this->load->view('includes/template_view', $data);
+    }
+
+    /**
+     * 订单详情
+     */
+    public function detail($order_id = 0){
+        if (empty($order_id) || intval($order_id) < 1){
+            show_404();
+            return;
+        }
+        
+        $data['title'] = "塞安生物-订单详情";
+        $data['js'] = array('order_detail');
+        $data['css'] = array('order_detail');
+        $data['main_content'] = 'order_detail';
+        $data['isset_nav'] = TRUE;
+        $data['collection'] = $this->Category_model->get_category();
+        $data['order'] = $this->Order_model->get_order_by_condition(array('order.id'=>$order_id, 'order.user_id'=>$_SESSION['user_id']))['data'];
+
+        if (empty($data['order'])) {
+            show_404();
+            return;
+        }
+        $this->load->view('includes/template_view', $data);
+    }
+
+    /**
+     * 用户发表评价
+     */
+    public function evaluation(){
+        $data['title'] = "塞安生物-用户评价";
+        $data['js'] = array('template','evaluation');
+        $data['css'] = array('evaluation');
+        $data['main_content'] = 'evaluation';
+        $data['isset_search'] = TRUE;
+        $data['isset_nav'] = FALSE;
+        $this->load->view('includes/template_view', $data);
+    }
+
+    /**
+     * 浏览PDF视图
+     */
+    public function pdf_view($attachment_id = NULL){
+        if (empty($attachment_id) || intval($attachment_id) < 1){
+            return FALSE;
+        }
+
+        $data['pdf_url'] = $this->Order_model->get_pdf_url($attachment_id);
+        $this->load->view('pdf_view', $data);
+    }
+
+    /**
+     * 分页获取用户订单信息
+     */
+    public function get_order_by_page($order_status = NULL){
+        $user_id['user_id'] = $this->session->user_id;
+        $page       = intval($this->input->post('page', TRUE));
+        $page_size  = $this->input->post('page_size', TRUE) ? intval($this->input->post('page_size', TRUE)) : 10;
+        $order_status = explode("-", $order_status);
+
+        if (!is_array($order_status) || count($order_status) < 1) {
+            $data['success'] = FALSE;
+            $data['msg'] = '参数错误';
+            $data['data'] = array();
+            $data['total_page'] = 0;
+        }else {
+            $data = $this->Order_model->paginate_for_user($page, $page_size, $user_id['user_id'], $order_status);
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 根据订单ID显示子订单
+     */
+    public function show_sub_order_for_user(){
+        $order_id = $this->input->post('order_id', TRUE);
+
+        $data = $this->Order_model->show_sub_order($order_id);
+
+        echo json_encode($data);
+    }
+    
+    public function get_sub_order_by_id(){
+        $order_commodity_id = $this->input->post('order_commodity_id');
+        
+        $result = $this->Order_model->get_sub_order_by_id($order_commodity_id);
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 根据订单ID查询快递信息
+     */
+    public function show_express_info_by_order_id($order_id) {
+        $result = array('success'=>FALSE, 'msg'=>'此单无物流信息', 'data'=>array());
+
+        if (empty($order_id) || intval($order_id) < 1) {
+            $result['success'] = FALSE;
+            $result['msg'] = '订单ID不正确';
+            echo json_encode($result);
+            exit;
+        }
+
+        $result = $this->Express_model->show_express_info_by_order_id($order_id, $_SESSION['user_id']);
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 用户修改订单完成状态
+     */
+    public function update_status(){
+        //验证表单信息
+        $this->form_validation->set_rules('status_id', '订单状态', 'trim|required|numeric');
+
+        //表单验证是否通过, 若不通过 返回表单错误信息，停止执行
+        $res = $this->Common_model->deal_validation_errors();
+
+        if ($res['success']){
+            //处理数据
+            $id                                 = intval($this->input->post('id', TRUE));
+            $post['status_id']                  = intval($this->input->post('status_id', TRUE));
+
+            if ($this->jys_db_helper->update('order', $id, $post)){
+                $data['success'] = TRUE;
+                $data['msg'] = '更新订单成功';
+            }
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '输入有错误';
+            $data['error'] = $res['msg'];
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 添加订单
+     */
+    public function add(){
+        //验证表单信息
+        $this->form_validation->set_rules('address_id', '地址ID', 'trim|required|numeric');
+        $this->form_validation->set_rules('user_discount_coupon_id', '用户优惠券ID', 'trim');
+        $this->form_validation->set_rules('message', '买家留言', 'trim|max_length[100]');
+
+        //表单验证是否通过, 若不通过 返回表单错误信息，停止执行
+        $res = $this->Common_model->deal_validation_errors();
+
+        if ($res['success']){
+            //处理数据
+            $shopping_cart_ids          = explode('-', $this->input->post('ids', TRUE));
+            $is_point_flag              = intval($this->input->post('is_point_flag', TRUE));
+            $user_id                    = $_SESSION['user_id'];
+            $user_discount_coupon_id    = $this->input->post('user_discount_coupon_id', TRUE) ? intval($this->input->post('user_discount_coupon_id', TRUE)) : NULL;
+            $address_id                 = $this->input->post('address_id', TRUE);
+            $message                    = $this->input->post('message', TRUE);
+            $terminal_type              = jys_system_code::TERMINAL_TYPE_PC;
+            $payment_id                 = $is_point_flag ? jys_system_code::PAYMENT_POINTPAY : $this->input->post('payment_id', TRUE);
+            $user_info = $this->User_model->get_user_detail_by_condition(array('user.id' => $user_id));
+
+            $this->db->trans_begin();
+            if (intval($user_discount_coupon_id) > 0) {
+                // 使用了优惠券
+                $user_discount_coupon = $this->Discount_coupon_model->get_user_discount_coupon_by_id($user_discount_coupon_id);
+                if (isset($user_discount_coupon['success']) && $user_discount_coupon['success']) {
+                    $user_discount_coupon = $user_discount_coupon['data'][0];
+                }else {
+                    $user_discount_coupon = NULL;
+                }
+            }else{
+                $user_discount_coupon = NULL;
+            }
+
+            $data = $this->Order_model->add($user_id, $shopping_cart_ids, $is_point_flag, $address_id, $payment_id, $terminal_type, $user_discount_coupon, $message, $user_info);
+
+            if ($this->db->trans_status() === FALSE){
+                $data['insert_id'] = NULL;
+                $data['success'] = FALSE;
+                $data['msg'] = '添加失败，事务回滚';
+                $this->db->trans_rollback();
+            }else{
+                $this->db->trans_commit();
+            }
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '输入有错误';
+            $data['error'] = $res['msg'];
+        }
+        echo json_encode($data);
+    }
+
+    /**
+     * 获取订单列表nav
+     */
+    public function get_order_list_nav(){
+        $user_id = $_SESSION['user_id'];
+
+        $orders = $this->jys_db_helper->get_where_multi('order', ['user_id'=>$user_id]);
+        $data = $this->Order_model->get_order_list_nav($orders, $_SESSION['user_id']);
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 更新子订单快递信息
+     */
+    public function update_sub_order(){
+        //验证表单信息
+        $this->form_validation->set_rules('id', '子订单ID', 'trim|required|numeric');
+        $this->form_validation->set_rules('express_company_id', '快递公司ID', 'trim|required|numeric');
+        $this->form_validation->set_rules('express_number', '快递单号', 'trim|required|max_length[50]');
+
+        //表单验证是否通过, 若不通过 返回表单错误信息，停止执行
+        $res = $this->Common_model->deal_validation_errors();
+
+        if ($res['success']){
+            //处理数据
+            $id                         = intval($this->input->post('id', TRUE));
+            $post['express_company_id'] = intval($this->input->post('express_company_id', TRUE));
+            $post['express_number']     = $this->input->post('express_number', TRUE);
+
+
+            // 订阅物流信息
+            if (!$this->Order_model->subscribe_express_info($post['express_company_id'], $post['express_number'])) {
+                echo json_encode([
+                    'success' => FALSE,
+                    'msg' => '订阅快递信息失败'
+                ]);
+                exit;
+            }
+
+
+            if ($this->jys_db_helper->update('order_commodity', $id, $post)){
+                $data['success'] = TRUE;
+                $data['msg'] = '修改成功';
+            }else{
+                $data['success'] = FALSE;
+                $data['msg'] = '修改失败';
+            }
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '输入有错误';
+            $data['error'] = $res['msg'];
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 微信支付页面控制器
+     */
+    public function wechat_pay($order_id) {
+        if (intval($order_id) < 1) {
+            show_404();
+        }
+        $order = $this->Order_model->get_order_by_condition(array('order.id'=>$order_id));
+        if (empty($order) || $order['success']  == false || empty($order['data'])) {
+            show_404();
+        }
+        $url = site_url().'order/detail/'.$order_id;
+        if ($order['data']['status_id'] != 10){
+            //已支付状态，跳转订单详情页面
+            redirect($url, 'location', 303);
+        }else {
+            $wx_code_url = $this->Order_model->wechat_pay_unified_order($order_id);
+            if (!$wx_code_url['success']){
+                redirect($url, 'location', 303);
+            }else {
+                $order['data']['wx_code_url'] = $wx_code_url['code_url'];
+                $order['data']['wx_code_url_time'] = $wx_code_url['wx_code_url_time'];
+            }
+        }
+
+        $data['title'] = "塞安生物-微信支付";
+        $data['js'] = array('wechat_pay');
+        $data['css'] = array('wechat_pay','sign_up');
+        $data['main_content'] = 'wechat_pay';
+        $data['isset_nav'] = FALSE;
+        $data['simple_footer'] = TRUE;
+        $data['order'] = $order['data'];
+        $this->load->view('includes/template_view', $data);
+    }
+
+    /**
+     * 展示微信支付二维码
+     * @param $order_id 订单ID
+     */
+    public function show_wechat_pay_qrcode($order_id) {
+        $result = $this->Order_model->wechat_pay_unified_order($order_id);
+        if($result['success']){
+            $this->jys_qrcode->create_qrcode($result['code_url']);
+        }else{
+            show_error("错误", "请检查参数是否错误");
+        }
+    }
+
+    /**
+     * 获取微信支付（公众号）JSAPI页面调用的支付参数
+     */
+    public function get_wechat_pay_js_api_parameters() {
+        $order_id = $this->input->post('order_id');
+        $result = array('success'=>FALSE, 'msg'=>'');
+        if (intval($order_id) < 1) {
+            $result['msg'] = '订单信息不正确';
+            echo json_encode($result);
+            exit;
+        }
+
+        $openid = $_SESSION['openid'];
+        $result = $this->Order_model->wechat_pay_unified_order($order_id, "JSAPI", $openid);
+
+        echo json_encode($result);
+    }
+
+    /**
+     *  微信支付测试函数
+     */
+    public function test(){
+//        $this->load->library('Jys_kdniao');
+//        $result = $this->jys_kdniao->ebusiness_order_handle('HHTT', '589707398027');
+//        $result = $this->jys_kdniao->ebusiness_order_handle('STO', '3320792054688');
+//        $result = $this->Express_model->show_express_info_by_order_id(37);
+//
+//        echo json_encode($result);
+        $this->Order_model->auto_cancel_not_paid_order();
+    }
+
+    /**
+     *物流详情页根据订单ID获取订单详情
+     */
+    public function get_order_by_id()
+    {
+        $id = $this->input->post('id', TRUE);
+        $data = [
+            'success' => FALSE,
+            'msg' => '获取订单详情失败',
+            'data' => NULL
+        ];
+        if (empty($id) || intval($id) < 1){
+            $data['msg'] = '订单ID不正确';
+            echo json_encode($data);
+            exit;
+        }
+        $order_info = $this->Order_model->get_order_by_condition(array('order.id' => $id, 'order.user_id'=>$_SESSION['user_id']))['data'];
+
+        if (!empty($order_info)){
+            $data = [
+                'success' => TRUE,
+                'msg' => '获取订单详情成功',
+                'data' => $order_info
+            ];
+        }
+
+        echo json_encode($data);
+    }
+
+    
+    /**
+     * 分页获取待评价列表
+     */
+    public function get_can_evaluate_order_by_page() {
+        $page = $this->input->post('page', TRUE);
+        $page_size = $this->input->post('page_size', TRUE);
+
+        $result = array('success'=>FALSE, 'msg'=>'获取可评价列表失败', 'data'=>array(), 'total_page'=>0);
+        if (intval($page) < 1 || intval($page_size) < 1) {
+            $result['msg'] = '参数错误';
+            echo json_encode($result);
+            exit;
+        }
+
+        $result = $this->Order_model->get_can_evaluate_order($page, $page_size, $_SESSION['user_id']);
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 根据订单ID获取订单评价信息
+     */
+    function get_evaluation_by_order_id() {
+        $id = $this->input->post('id', TRUE);
+        $data = [
+            'success' => FALSE,
+            'msg' => '获取订单详情失败',
+            'data' => NULL
+        ];
+        if (empty($id) || intval($id) < 1){
+            $data['msg'] = '订单ID不正确';
+            echo json_encode($data);
+            exit;
+        }
+        $evaluation = $this->Order_model->get_evaluation_by_order_id($id);
+
+        echo json_encode($evaluation);
+    }
+
+    /**
+     * 用户发表评价
+     */
+    public function evaluate_order() {
+        //验证表单信息
+        $this->form_validation->set_rules('commodity_id', '商品ID', 'trim|required|is_natural_no_zero');
+        $this->form_validation->set_rules('order_id', '订单ID', 'trim|required|is_natural_no_zero');
+        $this->form_validation->set_rules('order_commodity_id', '子订单ID', 'trim|required|is_natural_no_zero');
+        $this->form_validation->set_rules('score', '分数', 'trim|required|less_than[6]|greater_than[0]');
+        $this->form_validation->set_rules('content', '评价内容', 'trim|required');
+
+        //表单验证是否通过, 若不通过 返回表单错误信息，停止执行
+        $res = $this->Common_model->deal_validation_errors();
+
+        $result = array('success'=>FALSE, 'msg'=>'发表评价失败');
+        if ($res['success']) {
+            //处理数据
+            $insert['commodity_id'] = $this->input->post('commodity_id', TRUE);
+            $insert['order_id'] = $this->input->post('order_id', TRUE);
+            $insert['order_commodity_id'] = $this->input->post('order_commodity_id', TRUE);
+            $insert['score'] = $this->input->post('score', TRUE);
+            $insert['content'] = $this->input->post('content', TRUE);
+
+            $attachment_ids = $this->input->post('attachment_ids', TRUE);
+            if (!empty($attachment_ids)) {
+                $attachment_ids = explode('-', $attachment_ids);
+            }else {
+                $attachment_ids = array();
+            }
+
+            $result = $this->Order_model->evaluate_order($insert, $_SESSION['user_id'], $attachment_ids);
+        }else {
+            $result['error'] = $res['msg'];
+        }
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 添加奖品订单
+     */
+    public function add_prize_order(){
+        $user_id = $_SESSION['user_id'];
+        $commodity_id = $this->input->post('commodity_id', TRUE);
+        $is_indiana = $this->input->post('is_indiana', TRUE);
+        $address_id = $this->input->post('address_id', TRUE);
+
+        if ($is_indiana == 1){
+            $integral_indiana_id = $this->input->post('id', TRUE);
+            $result = $this->Order_model->add_prize_order($user_id, $commodity_id, $address_id, Jys_system_code::TERMINAL_TYPE_PC, TRUE, $integral_indiana_id);
+        }else{
+            $sweepstakes_commodity_id = $this->input->post('id', TRUE);
+            $result = $this->Order_model->add_prize_order($user_id, $commodity_id, $address_id, Jys_system_code::TERMINAL_TYPE_PC, FALSE, $sweepstakes_commodity_id);
+        }
+
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 去领奖
+     */
+    public function receive_prize($id = 0, $insert_id = 0, $is_indiana = 1){
+        if (empty($id) || intval($id) < 0 || empty($insert_id) || intval($insert_id) < 0 || !$this->Order_model->exist_prize_places($_SESSION['user_id'], $id, $is_indiana)){
+            show_404();
+        }
+
+        $data['title'] = "塞安生物-订单结算";
+        $data['js'] = array('template', 'receive_prize');
+        $data['need_gaode_api'] = TRUE;
+        $data['css'] = array('receive_prize');
+        $data['main_content'] = 'receive_prize';
+        if ($is_indiana == 1){
+            $integral_indiana = $this->jys_db_helper->get('integral_indiana', $id);
+            $data['commodity'] =  $this->Commodity_model->get_commodity_list_by_condition(['commodity.id'=>$integral_indiana['commodity_id']], FALSE);
+            $data['id'] = $insert_id;
+            $data['is_indiana'] = TRUE;
+        }else{
+            $sweepstakes_commodity = $this->jys_db_helper->get('sweepstakes_commodity', $id);
+            $data['commodity'] =  $this->Commodity_model->get_commodity_list_by_condition(['commodity.id'=>$sweepstakes_commodity['commodity_id']], FALSE);
+            $data['id'] = $insert_id;
+            $data['is_indiana'] = FALSE;
+        }
+
+        $data['isset_search'] = FALSE;
+        $data['isset_nav'] = FALSE;
+        $this->load->view('includes/template_view', $data);
+    }
+}

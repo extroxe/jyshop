@@ -1,0 +1,103 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    <h4 class="modal-title">{{title}}</h4>
+</div>
+<div class="modal-body">
+    <form id="userForm" name="userForm" class="form-horizontal" method="POST">
+        <div class="form-group">
+            <label class="col-lg-2 control-label redstar" ng-if="ael == 'add'">密码</label>
+            <div class="col-lg-4" ng-if="ael == 'add'">
+                <input type="text" class="form-control" ng-model="infoList.password" placeholder="密码(6-16位)" ng-required="true">
+            </div>
+            <label class="col-lg-2 control-label">用户微信openid</label>
+            <div class="col-lg-4">
+                <input type="text" class="form-control" ng-model="infoList.openId" placeholder="用户微信openid" ng-required="true" ng-disabled="ael == 'edit'">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 control-label redstar">用户名</label>
+            <div class="col-lg-4">
+                <input type="text" class="form-control" ng-model="infoList.username" placeholder="用户名" ng-required="true" ng-disabled="ael == 'edit'">
+            </div>
+            <label class="col-lg-2 control-label">性别</label>
+            <div class="col-lg-4">
+                <select class="form-control" ng-model="infoList.gender">
+                    <option value="">--请选择--</option>
+                    <option value="1">男</option>
+                    <option value="0">女</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 control-label">姓名</label>
+            <div class="col-lg-4">
+                <input type="text" class="form-control" ng-model="infoList.name" placeholder="姓名" ng-required="true">
+            </div>
+            <label class="col-lg-2 control-label">用户论坛昵称</label>
+            <div class="col-lg-4">
+                <input type="text" class="form-control" ng-model="infoList.nickname" placeholder="用户论坛昵称" ng-required="true">
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-lg-2 control-label" ng-if="ael == 'edit'">头像</label>
+            <div class="col-lg-4" ng-if="ael == 'edit'">
+                <img ng-src="/{{infoList.path}}" style="height: 50px; width: 50px">
+            </div>
+            <label class="col-lg-2 control-label">出生日期</label>
+            <div class="col-lg-4">
+                <input type="text" class="form-control" ng-model="infoList.birthday" ui-date="date" placeholder="出生日期" ng-required="true">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 control-label redstar">手机号</label>
+            <div class="col-lg-4">
+                <input type="text" class="form-control" ng-model="infoList.phone" placeholder="手机号" ng-required="true" >
+            </div>
+            <label class="col-lg-2 control-label">邮箱</label>
+            <div class="col-lg-4">
+                <input type="email" class="form-control" ng-model="infoList.email" placeholder="邮箱" ng-required="true">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 control-label redstar">当前积分</label>
+            <div class="col-lg-4">
+                <input type="text" class="form-control" ng-model="infoList.current_point" placeholder="当前积分">
+            </div>
+            <label class="col-lg-2 control-label redstar">总积分</label>
+            <div class="col-lg-4">
+                <input type="text" class="form-control" ng-model="infoList.total_point" placeholder="总积分">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 control-label redstar">角色</label>
+            <div class="col-lg-4">
+                <select class="form-control m-b" ng-model="infoList.role_id" ng-options="data.value as data.name for data in roleList" required>
+                    <option value="">--请选择--</option>
+                </select>
+            </div>
+            <label class="col-lg-2 control-label">会员等级</label>
+            <div class="col-lg-4">
+                <select class="form-control m-b" ng-model="infoList.level" ng-options="data.id as data.name for data in levelList" required>
+                    <option value="">--请选择--</option>
+                </select>
+            </div>
+        </div>
+       <!-- <div class="form-group">
+            <label class="col-lg-2 control-label">是否显示</label>
+            <div class="col-lg-10">
+                <label class="i-switch m-t-xs m-r">
+                    <input type="checkbox" ng-model="infoList.is_show" value="{{showFlag}}">
+                    <i></i>
+                </label>
+            </div>
+        </div>-->
+        <div class="form-group" ng-controller="FileUploadCtrl" uploader="uploader" filters="queueLimit, customFilter">
+            <label for="name" class="col-sm-2 control-label no-padding-right must">上传头像(可选)</label>
+            <div data-ng-include=" '/source/admin/tpl/uploader.html' "></div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" ng-click="cancel()">关闭</button>
+    <button type="button" class="btn btn-primary" ng-click="ok()">保存</button>
+</div>

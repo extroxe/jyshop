@@ -1,0 +1,6 @@
+/**
+ * Created by sailwish009 on 2017/2/10.
+ */
+$(function () {
+    var editor = UE.getEditor('myEditor');
+})

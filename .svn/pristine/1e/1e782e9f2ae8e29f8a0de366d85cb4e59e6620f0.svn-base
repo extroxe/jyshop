@@ -1,0 +1,54 @@
+<div ng-controller="evaluateCtrl">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n font-thin h3">商品评价</h1>
+    </div>
+    <div class="wrapper-md">
+        <div class="row">
+            <div class="col-md-2">
+                <div>
+                    <a class="btn m-b-xs btn-sm btn-success btn-addon" style="margin-left: 35px;width: 140px" ng-if="flag == true" href="#/app/commodityClass"><i class="fa fa-angle-double-left"></i>返回商品页</a>
+                    <a class="btn m-b-xs btn-sm btn-success btn-addon" style="margin-left: 35px;width: 140px" ng-if="flag == false" href="#/app/integralCommodity"><i class="fa fa-angle-double-left"></i>返回商品页</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="padder">
+        <div class="streamline b-l b-info m-l-lg m-b padder-v">
+            <div ng-repeat="data in evaluateList">
+                <a class="pull-left thumb-sm avatar m-l-n-md">
+                    <img ng-src="/{{data.user_avatar_path}}" alt="...">
+                </a>
+                <div class="m-l-lg panel b-a">
+                    <div class="panel-heading pos-rlt b-b b-light">
+                        <span class="arrow left"></span>
+                        <a href>{{data.user_username}}</a>&nbsp;&nbsp;
+                        <label class="label bg-light m-l-xs">{{data.level_name}}</label>&nbsp;&nbsp;
+                        <label>
+                            <div class="m-b text-lg">
+                                <rating ng-model="data.score" max="5" state-on="'fa fa-star text-warning'" state-off="'fa fa-star-o'" readonly="true"></rating><b>{{data.score}}星</b>
+                            </div>
+                        </label>
+                        <span class="text-muted m-l-sm pull-right">
+                        {{data.create_time}}
+                    </span>
+                    </div>
+                    <div class="panel-body">
+                        <div>{{data.content}}</div>
+                        <label ng-repeat="pics in data.evaluation_pic" style="margin-right: 10px; margin-top: 5px">
+                            <img ng-src="/{{pics.path}}" style="width: 100px; height: 100px;" class="b b-a wrapper-xs bg-white img-responsive">
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <ul class="pager">
+                <li><a ng-click="firstPage()">第一页</a></li>
+                <li><a ng-click="previousPage()">上一页</a></li>
+                <li> 当 前 第 <input type="text" style="padding: 5px; width: 50px; text-align: center" ng-model="inputPage" ng-change="selectPage(inputPage)"> 页 / 共 {{totalPage}} 页 </li>
+                <li><a ng-click="nextPage()">下一页</a></li>
+                <li><a ng-click="lastPage()">最后一页</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>

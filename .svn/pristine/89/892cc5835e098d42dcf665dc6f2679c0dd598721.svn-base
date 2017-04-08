@@ -1,0 +1,77 @@
+<div ng-controller="drawCtrl">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n font-thin h3">积分抽奖管理</h1>
+    </div>
+    <div class="wrapper-md">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                积分抽奖管理表
+            </div>
+            <div class="panel-body b-b b-light">
+                <button class="btn m-b-xs  btn-primary" ng-click="addInfo()"><i class="fa fa-plus"></i> 增加</button>
+                <span class="pull-right">
+                    Search: <input id="filter" type="text" class="form-control input-sm w-sm inline m-r"/>
+                </span>
+
+            </div>
+            <div>
+                <table class="table table-striped m-b-none" ui-footable="footable" data-filter="#filter">
+                    <thead>
+                    <tr>
+                        <th>
+                            活动名称
+                        </th>
+                        <th>
+                            中奖率(0-1之间)
+                        </th>
+                        <th>
+                            开始时间
+                        </th>
+                        <th>
+                            结束时间
+                        </th>
+                        <th>
+                            创建时间
+                        </th>
+                        <th>
+                            更新时间
+                        </th>
+                        <th>
+                            操作
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Isidra</td>
+                        <td><a href>Boudreaux</a></td>
+                        <td>Traffic Court Referee</td>
+                        <td data-value="78025368997">22 Jun 1972</td>
+                        <td data-value="1"><span class="label bg-success" title="Active">Active</span></td>
+                        <td>Traffic Court Referee</td>
+                        <td>Traffic Court Referee</td>
+                    </tr>
+                    <tr>
+                        <td>Shona</td>
+                        <td>Woldt</td>
+                        <td><a href>Airline Transport Pilot</a></td>
+                        <td data-value="370961043292">3 Oct 1981</td>
+                        <td data-value="2"><span class="label bg-light" title="Disabled">Disabled</span></td>
+                        <td>Traffic Court Referee</td>
+                        <td>Traffic Court Referee</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <nav>
+                <ul class="pager">
+                    <li><a ng-click="firstPage()">第一页</a></li>
+                    <li><a ng-click="previousPage()">上一页</a></li>
+                    <li> 当 前 第 <input type="text" style="padding: 5px; width: 50px; text-align: center" ng-model="inputPage" ng-change="selectPage(inputPage)"> 页 / 共 {{totalPage}} 页 </li>
+                    <li><a ng-click="nextPage()">下一页</a></li>
+                    <li><a ng-click="lastPage()">最后一页</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

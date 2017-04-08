@@ -1,0 +1,21 @@
+#page-content ul{padding:20px 0 10px 10px; margin: 10px auto 20px auto;}
+#page-content ul{padding-bottom: 0;border-bottom: 1px solid #eee;padding-bottom: 0}
+#page-content .title li{color:#117d94;margin-left: -10px; padding-bottom: 10px;width:65px; text-align:center;border-bottom: 1px solid #117d94}
+
+.cart_title td{ text-align: left; vertical-align: middle}
+
+.cart_table th{font-family: "微软雅黑"; font-weight: normal; font-size: 16px;}
+.cart_table tbody tr{border-bottom: 1px dashed #117d94}
+.cart_table td{ text-align: center; vertical-align: middle}
+.cart_table td:nth-child(1){text-align: left}
+.cart_table .operation .delt, .cart_table .operation .add{cursor: pointer}
+.cart_table .operation .delt{opacity: 0.5; cursor: default}
+
+
+.cart_img{display: inline-block; width: 60px;height: 60px;border: 1px solid #bfbfc8;background: white;margin: 4px;margin-left: 0;margin: 15px 0;}
+.cart_img img{width: 60px; height:60px}
+
+.input-append, .input-prepend{font-size: 20px}
+input[type*=checkbox]{margin: 0}
+.appendedPrependedInput{width:30px; text-align: center; margin: 0}
+/*.jian{background: url("../img/购物车/jian.png")}*/

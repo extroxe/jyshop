@@ -1,0 +1,119 @@
+<div class="follow-wrapper">
+    <div class="nav">
+        <ul>
+            <li class="nav-item">
+                <a href="#follow_person" data-toggle="tab">关注的人</a>
+            </li>
+            <li class="nav-item">
+                <a href="#follow_post" data-toggle="tab">关注的帖子</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane active" id="follow_person">
+            <div class="follow-item">
+                <div class="follow-avatar">
+                    <img src="<?=site_url('source/img/05.jpg'); ?>" alt="" width="50" height="50">
+                </div>
+                <div>
+                    <ul>
+                        <li class="name">
+                            <span>不可描述的名字</span>
+                        </li>
+                        <li class="autograph">
+                            <span>签名：</span>
+                            <span>这个人很懒什么也没有留下...</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="follow-item">
+                <div class="follow-avatar">
+                    <img src="<?=site_url('source/img/05.jpg'); ?>" alt="" width="50" height="50">
+                </div>
+                <div>
+                    <ul>
+                        <li class="name">
+                            <span>不可描述的名字</span>
+                        </li>
+                        <li class="autograph">
+                            <span>签名：</span>
+                            <span>这个人很懒什么也没有留下...</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="follow-item">
+                <div class="follow-avatar">
+                    <img src="<?=site_url('source/img/05.jpg'); ?>" alt="" width="50" height="50">
+                </div>
+                <div>
+                    <ul>
+                        <li class="name">
+                            <span>不可描述的名字</span>
+                        </li>
+                        <li class="autograph">
+                            <span>签名：</span>
+                            <span>这个人很懒什么也没有留下...</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="follow-item">
+                <div class="follow-avatar">
+                    <img src="<?=site_url('source/img/05.jpg'); ?>" alt="" width="50" height="50">
+                </div>
+                <div>
+                    <ul>
+                        <li class="name">
+                            <span>不可描述的名字</span>
+                        </li>
+                        <li class="autograph">
+                            <span>签名：</span>
+                            <span>这个人很懒什么也没有留下...</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="follow-item">
+                <div class="follow-avatar">
+                    <img src="<?=site_url('source/img/05.jpg'); ?>" alt="" width="50" height="50">
+                </div>
+                <div>
+                    <ul>
+                        <li class="name">
+                            <span>不可描述的名字</span>
+                        </li>
+                        <li class="autograph">
+                            <span>签名：</span>
+                            <span>这个人很懒什么也没有留下...</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="follow_post">
+            <ul id="follow_post_content"></ul>
+        </div>
+    </div>
+    <div class="post-page">
+        <div class="page-wrapper">
+            <div class="home">首页</div>
+            <div class="prev-page"><上一页</div>
+            <div class="next-page">下一页></div>
+        </div>
+    </div>
+</div>
+
+<script id="follow_post_list" type="text/html">
+    <% for(var i = 0; i < 2; i++){ %>
+    <li>
+        <div class="follow-post-item">
+            关注了帖子
+            <a><%:=list[0].title%></a>
+            <div class="operated">取消关注</div>
+            <div class="item-date"><%:=list[0].create_time%></div>
+        </div>
+    </li>
+    <% } %>
+</script>

@@ -1,0 +1,128 @@
+<?php
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =========================================================
+ *
+ *      Filename: Post_bar_admin.php
+ *
+ *   Description: 贴吧前台控制器
+ *
+ *       Created: 2017-02-09 11:50:46
+ *
+ *        Author: Tangyu
+ *
+ * =========================================================
+ */
+class Post_bar extends CI_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model(['Post_bar_model']);
+    }
+
+    /**
+     * 搜索贴吧
+     */
+    public function search_post_bar()
+    {
+        $key_words = $this->input->get('key_words', TRUE);
+        if (empty($key_words)){
+            show_404();
+        }
+
+        $result = $this->Post_bar_model->paginate(1, 10, $key_words);
+        if ($result && $result['success']){
+            $data = [
+                'success' => TRUE,
+                'total_page' => $result['total_page'],
+                'data' => $result['data'],
+                'msg' => '搜索贴吧列表成功'
+            ];
+        }else{
+            $data = [
+                'success' => FALSE,
+                'msg' => $result['msg']
+            ];
+        }
+
+        echo json_encode($data);
+    }
+    /**
+     * 获取推荐贴吧
+     */
+    public function get_recommend_post_bar()
+    {
+        $data = ['success' => FALSE, 'msg' => '获取失败', 'data' => NULL];
+        $num = $this->input->post('num') ? $this->input->post('num', TRUE) : 5;
+        if (intval($num) < 1){
+            $data['msg'] = '参数错误';
+            echo json_encode($data);
+            exit();
+        }
+
+        $result = $this->Post_bar_model->get_recommend_post_bar($num);
+        if ($result){
+            $data = ['success' => TRUE, 'msg' => '获取成功', 'data' => $result];
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 获取关注贴吧
+     */
+    public function get_focus_post_bar($page = 1, $page_size = 10)
+    {
+        $data = ['success' => FALSE, 'msg' => '获取失败', 'total_page' => 0, 'data' => array()];
+        if (intval($page_size) < 1 || intval($page) < 1){
+            $data['msg'] = '参数错误';
+            echo json_encode($data);
+            exit();
+        }
+
+        $result = $this->Post_bar_model->get_focus_post_bar_paginate($page, $page_size, $_SESSION['user_id']);
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 关注贴吧
+     */
+    public function focus_post_bar($post_bar_id = 0)
+    {
+        $data = ['success' => FALSE, 'msg' => '关注失败'];
+        if (intval($post_bar_id) < 1){
+            $data['msg'] = '参数错误';
+            echo json_encode($data);
+            exit;
+        }
+
+        if ($this->Post_bar_model->focus_post_bar($_SESSION['user_id'], $post_bar_id)){
+            $data = ['success' => TRUE, 'msg' => '关注成功'];
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 取消关注
+     */
+    public function cancel_focus_post_bar($post_bar_id = 0)
+    {
+        $data = ['success' => FALSE, 'msg' => '取消关注失败'];
+        if (intval($post_bar_id) < 1){
+            $data['msg'] = '参数错误';
+            echo json_encode($data);
+            exit;
+        }
+
+        $condition = ['user_id' => $_SESSION['user_id'], 'post_bar_id' => $post_bar_id];
+        if ($this->Post_bar_model->cancel_focus_post_bar($condition)){
+            $data = ['success' => TRUE, 'msg' => '取消关注成功'];
+        }
+
+        echo json_encode($data);
+    }
+}

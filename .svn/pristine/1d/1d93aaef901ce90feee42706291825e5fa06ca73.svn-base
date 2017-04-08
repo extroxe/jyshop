@@ -1,0 +1,13 @@
+/*header*/
+header #logo{
+    margin-left: 70px
+}
+header #logo img{
+
+}
+header .input_search{
+    width: 672px;margin: 16px 0 0 36px
+}
+header #search-btn{
+    border-radius: 0;position: absolute;
+}

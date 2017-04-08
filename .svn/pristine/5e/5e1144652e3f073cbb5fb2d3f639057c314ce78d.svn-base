@@ -1,0 +1,121 @@
+/**
+ * Created by sailwish001 on 2016/11/18.
+ */
+'use strict';
+
+app.controller('modalBannerCtrl', ['$scope', '$modalInstance', '_jiyin', 'params', 'FileUploader', 'dataToURL',
+    function ($scope, $modalInstance, _jiyin, params, FileUploader, dataToURL) {
+        $scope.infoList = params.infoList;
+        $scope.title = params.title;
+        $scope.ael = params.ael;
+        /**
+         * 获取位置
+         */
+        $scope.getPosition = function () {
+            _jiyin.dataPost('admin/system_code_admin/get_by_type/banner_position')
+                .then(function (result) {
+                    $scope.positionList = result;
+            })
+        };
+        $scope.getPosition();
+        /**
+         * 删除图片
+         */
+        $scope.removePic = function (id) {
+            if(comfirm('确定删除该图片吗?')){
+                _jiyin.dataPost('',dataToURL({id : id}))
+                    .then(function (result) {
+                        if (result.success) {
+                            var data = $scope.rowData.pic;
+                            for (var i = 0; i < data.length; i++) {
+                                if (picId === data[i].id) {
+                                    $scope.rowData.pic.splice(i, 1);
+                                }
+                            }
+                        }
+                    });
+            }
+        };
+        $scope.$on('attachment_id', function(event, attachment_id) {
+            $scope.infoList.attachment_id = attachment_id;
+        });
+        /**
+         * 取消关闭
+         */
+        $scope.cancel = function() {
+            $modalInstance.dismiss('cancel');
+        };
+        $scope.ok = function () {
+            if(!$scope.infoList.position_id){
+                _jiyin.msg('e','位置不能为空');
+                return ;
+            }
+            /*if(!$scope.infoList.url){
+                _jiyin.msg('e','对应链接不能为空');
+                return ;
+            }*/
+            if(!$scope.infoList.attachment_id){
+                _jiyin.msg('e','还没有上传图片');
+                return ;
+            }
+            $modalInstance.close($scope.infoList);
+
+        }
+}]);
+app.controller('FileUploadCtrl', ['$scope', 'FileUploader', '_jiyin', 'dataToURL', function($scope, FileUploader, _jiyin, dataToURL) {
+    var uploader = $scope.uploader = new FileUploader({
+        url: SITE_URL + 'attachment/up_attachment'
+    });
+    // FILTERS
+    uploader.filters.push({
+        name: 'customFilter',
+        fn: function(item /*{File|FileLikeObject}*/ , options) {
+            return this.queue.length < 2;
+        }
+    });
+    $scope.upload = function(item){
+        _jiyin.fileMd5(item._file).then(function (result) {
+            _jiyin.dataPost('attachment/check_md5', dataToURL({md5_code: result.md5Code}))
+                .then(function (result) {
+                    if(result.exist == true){
+                        $scope.$emit('attachment_id', result.attachment_id);
+                        item.file.size = item._file.size;
+                        item.progress = 100;
+                        item.isSuccess = true;
+                        item.isUploaded = true;
+                        item.uploader.progress += 100/uploader.queue.length;
+                        uploader.clearQueue();
+                    }else{
+                        item.upload();
+                    }
+                });
+        });
+    };
+    $scope.uploadAll = function () {
+        angular.forEach(uploader.queue, function (data, index) {
+            _jiyin.fileMd5(data._file).then(function (result) {
+                _jiyin.dataPost('attachment/check_md5', dataToURL({md5_code: result.md5Code}))
+                    .then(function (result) {
+                        if(result.exist == true){
+                            $scope.$emit('attachment_id', result.attachment_id);
+                            data.file.size = data._file.size;
+                            data.progress = 100;
+                            data.isSuccess = true;
+                            data.isUploaded = true;
+                            uploader.progress += 100/uploader.queue.length;
+                            uploader.clearQueue();
+                        }else{
+                            data.upload();
+                        }
+                    });
+            });
+        });
+    };
+    uploader.onSuccessItem = function(fileItem, response, status, headers) {
+        $scope.$emit('attachment_id', response.attachment_id);
+        uploader.clearQueue();
+    };
+    $scope.$on('clearQueue', function() {
+        uploader.clearQueue();
+    });
+}]);

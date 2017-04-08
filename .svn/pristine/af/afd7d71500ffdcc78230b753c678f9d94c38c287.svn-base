@@ -1,0 +1,151 @@
+angular.module('app')
+    .controller('myCityCtrl', ['$scope', 'ajax', function ($scope, ajax) {
+        window.addEventListener("load",function(e){
+            [].slice.call(document.querySelectorAll('.tabbar')).forEach(function(tabbar){
+                tabbar.onclick=function(e){
+                    [].slice.call(tabbar.querySelectorAll('.tab')).forEach(function(tab) {
+                        tab.classList.remove("active");
+                    });
+                    e.target.classList.add("active");
+                }
+            });
+        },false);
+        //popToast弹窗函数
+        var popToast;
+        $scope.show_popToast = function (msg) {
+            if(!popToast || popToast&&!popToast.toastBox){
+                popToast=new Toast(msg,{
+                    "onHid":function(e){
+                        e.destroy();
+                    }
+                });
+            }
+            popToast.show();
+        };
+        /*获取关注贴吧*/
+        ajax.req('POST', 'post_bar/get_focus_post_bar/1/4')
+            .then(function (data) {
+                if (data.success){
+                    $scope.focus_bars = data.data;
+                }else{
+                    $scope.focus_bars = null;
+                }
+            });
+        /*获取推荐贴吧*/
+        ajax.req('POST', 'post_bar/get_recommend_post_bar')
+            .then(function (data) {
+                if (data.success){
+                    $scope.recommend_bars = data.data;
+                }else{
+                    $scope.show_popToast(data.msg);
+                }
+            });
+        /*关注*/
+        $scope.focus_bar = function ($event, recommend_bar) {
+            ajax.req('POST', 'post_bar/focus_post_bar', {post_bar_id : recommend_bar.id})
+                .then(function (data) {
+                    if (data.success){
+                        if ($scope.focus_bars == null){
+                            var arr = new Array();
+                            arr[0] = recommend_bar;
+                            $scope.focus_bars = arr;
+                        }else {
+                            $scope.focus_bars.push(recommend_bar);
+                        }
+                        recommend_bar.is_focused = true;
+                        $scope.show_popToast(data.msg);
+                    }else{
+                        $scope.show_popToast(data.msg);
+                    }
+                })
+        };
+        /*取消关注*/
+        $scope.cancel_focus_bar = function ($event, recommend_bar) {
+            ajax.req('POST', 'post_bar/cancel_focus_post_bar', {post_bar_id : recommend_bar.id})
+                .then(function (data) {
+                    if (data.success){
+                        $scope.focus_bars.pop(recommend_bar);
+                        if ($scope.focus_bars.length == 0){
+                            $scope.focus_bars = null;
+                        }
+                        recommend_bar.is_focused = false;
+                        $scope.show_popToast(data.msg);
+                    }else{
+                        $scope.show_popToast(data.msg);
+                    }
+                })
+        };
+        /*换一换*/
+        $scope.change = function () {
+            ajax.req('POST', 'post_bar/get_recommend_post_bar')
+                .then(function (data) {
+                    if (data.success){
+                        $scope.recommend_bars = data.data;
+                    }
+                })
+        };
+        /*获取帖子*/
+        ajax.req('POST', 'my_city/get_my_post')
+            .then(function (data) {
+                if (data.success){
+                    $scope.post_infos = data.data;
+                }
+            });
+        /*获取关注用户*/
+        ajax.req('POST', 'user/paginate_focus_user')
+            .then(function (data) {
+                if (data.success){
+                    $scope.focus_infos = data.data;
+                }
+            });
+        /*获取粉丝*/
+        ajax.req('POST', 'user/paginate_fans')
+            .then(function (data) {
+                if (data.success){
+                    $scope.fans_infos = data.data;
+                }
+            });
+        /*获取收藏*/
+        ajax.req('POST', 'post/paginate_collect_post')
+            .then(function (data) {
+                if (data.success){
+                    $scope.collect_infos = data.data;
+                }
+            });
+        /*获取站内信发发信*/
+        ajax.req('POST', 'user/paginate_send_message')
+            .then(function (data) {
+                if (data.success){
+                    $scope.send_message_infos = data.data;
+                }
+            });
+        /*获取站内信收信*/
+        ajax.req('POST', 'user/paginate_receive_message')
+            .then(function (data) {
+                if (data.success){
+                    $scope.receive_message_infos = data.data;
+                }
+            });
+        /*查看信息*/
+        $scope.readMsg = function(id){
+            window.location.href = SITE_URL + 'weixin/user/read_message/' + id;
+        };
+        //查看贴吧
+        $scope.post = function (post_bar_id) {
+            window.location.href = SITE_URL + 'weixin/user/post/' + post_bar_id;
+        };
+        //查看其它用户主页
+        $scope.visit = function(user_id){
+            window.location.href = SITE_URL + 'weixin/user/visit/' + user_id;
+        };
+
+        $scope.block = 'post';
+        $scope.selectTab = function(block) {
+            $scope.block = block;
+        };
+    }])
+    .filter('timefilter', function () {
+        return function (time) {
+            return time.substring(0, 10);
+        }
+    });

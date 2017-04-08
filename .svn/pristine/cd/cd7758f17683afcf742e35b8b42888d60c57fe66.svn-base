@@ -1,0 +1,27 @@
+<div class="post-wrapper">
+    <div class="content">
+        <ul id="post_content">
+        </ul>
+    </div>
+    <div class="post-page">
+        <div class="page-wrapper">
+            <div class="home">首页</div>
+            <div class="prev-page"><上一页</div>
+            <div class="next-page">下一页></div>
+        </div>
+    </div>
+</div>
+
+<script id="post_list" type="text/html">
+    <% for(var i = 0; i < list.length; i++){ %>
+    <li>
+        <div class="post-item">
+            在
+            <a><%:=list[i].post_bar_name%></a>
+            发帖
+            <a><%:=list[i].title%></a>
+            <div class="item-date"><%:=list[i].create_time%></div>
+        </div>
+    </li>
+    <% } %>
+</script>

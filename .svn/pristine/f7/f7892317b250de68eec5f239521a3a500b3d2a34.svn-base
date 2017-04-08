@@ -1,0 +1,193 @@
+/**
+ * Created by sailwish009 on 2017/2/7.
+ */
+$(function () {
+
+    var url = window.location.href;
+    var order_id = url.substring(url.lastIndexOf('/') + 1);
+    var score = 0;
+    var order_data = [];
+    var attachment_ids = [];
+
+    //评价打分
+    $(document).on('click', '.star', function () {
+        score = $(this).index();
+        $('.star').removeClass('active');
+        $(this).addClass('active');
+        $(this).prevAll('.star').addClass('active');
+    })
+
+    //获取订单信息
+    $.ajax({
+        type: 'post',
+        dataType: 'json',
+        url: SITE_URL + 'order/get_evaluation_by_order_id',
+        data:{
+            id: order_id
+        },
+        success:function (response) {
+            if(response.success){
+                order_data = response.data[0];
+                var order_number = response.data[0].order_number;
+                $('#order_number a').text(order_number);
+                var tpl = document.getElementById('evaluation_list_tpl').innerHTML;
+                $('#all_product_box').html(template(tpl, {data: response.data}))
+            }else{
+                alert(response.msg);
+            }
+        },
+        error:function () {
+
+        }
+    });
+
+    //删除图片
+    $(document).on('click', '.delete', function () {
+        $(this).each(function () {
+            $(this).parent().remove();
+            up_num();
+        })
+    });
+
+    up_num();
+
+
+    //图片上传预览
+
+    $(document).on('change', '#previewImg', function () {
+        var file = this;
+        var md5 = check_md5(file);
+
+        var img = $('#imghead');
+        var file_reader = new FileReader();
+        file_reader.onload = (function(e){
+            image_url = e.target.result;
+            img.before('<div class="img_detail">\
+                   <img src=' + image_url+ '>\
+                    <span class="delete fa fa-times"></span>\
+                    </div>');
+            up_num();
+        });
+        file_reader.readAsDataURL(file.files[0]);
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: SITE_URL + 'attachment/check_md5',
+            data:{
+                md5_code: md5
+            },
+            success:function (response) {
+                if(response.exist == false){
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'json',
+                        url: SITE_URL + 'attachment/up_attachment',
+                        data:{
+                            str:image_url
+                        },
+                        success:function (response) {
+                            if(response){
+                                alert('上传成功')
+                            }else {
+                                attachment_ids.push(response.attachment_id);
+                            }
+
+                        }
+                    });
+                }else{
+
+                }
+            }
+        });
+    });
+
+//提交评价
+    $('#submit_btn').click(function () {
+        var content = $('.content').val();
+        attachment_ids = attachment_ids.splice(',').join('-');
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: SITE_URL + 'order/evaluate_order',
+
+            data:{
+                commodity_id: order_data.commodity_id,
+                order_id: order_id,
+                order_commodity_id: order_data.order_commodity_id,
+                score: score,
+                content: content,
+                attachment_ids: attachment_ids
+            },
+            success:function (response) {
+                if(response.success){
+                    alert(response.msg);
+                }else{
+                    alert(response.msg);
+                }
+            },
+            error:function () {
+
+            }
+        });
+    });
+
+});
+
+var image_url;
+var md5_code;
+var attachment_ids = [];
+
+function check_md5(file) {
+    var fileReader = new FileReader(),
+        blobSlice = File.prototype.mozSlice || File.prototype.webkitSlice || File.prototype.slice,
+        file = file.files[0],
+        chunkSize = 2097152,
+        chunks = Math.ceil(file.size / chunkSize),
+        currentChunk = 0,
+        spark = new SparkMD5();
+
+    fileReader.onload = function(e) {
+        spark.appendBinary(e.target.result); // append binary string
+        currentChunk++;
+
+        if (currentChunk < chunks) {
+            loadNext();
+        }
+        else {
+            console.log("finished loading");
+            md5_code = spark.end();
+        };
+    };
+    function loadNext() {
+        var start = currentChunk * chunkSize,
+            end = start + chunkSize >= file.size ? file.size : start + chunkSize;
+        fileReader.readAsBinaryString(blobSlice.call(file, start, end));
+    };
+    loadNext();
+
+    return md5_code;
+}
+
+//上传图片数量显示
+var lost;
+function up_num() {
+    var num = 0;
+
+    $('.img_detail').each(function () {
+        num ++;
+    });
+    lost = 5 - num;
+    $('.upload_img_num').html(num);
+    $('.all_img_num').html(lost);
+    if(lost <= 0){
+        $('#imghead').css('display', 'none');
+        $('.img_detail').css('top', '0');
+        $('.describle').css('display', 'none');
+    }else{
+        $('#imghead').css('display', 'inline-block');
+        $('.img_detail').css('top', '-20px');
+        $('.describle').css('display', 'inline-block');
+
+    }
+}

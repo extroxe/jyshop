@@ -1,0 +1,84 @@
+<div ng-controller="integralDrawCtrl">
+    <header>
+        <div class="titlebar">
+            <a class="titlebar-button" ng-click="back()"><i class="icon size16 icon-arrowleft back_btn"></i></a>
+            <h1 class="text-center" style="padding-right: 32px"><?php echo $title; ?></h1>
+        </div>
+    </header>
+    
+    <div class="slider-container" id="carousel1" style="height: 188px;">
+        <div class="slider-wrapper" style="position:relative;">
+            <div class="slider-slide" style="width: 414px;">
+                <img class="slide-banner" ng-src="<?php echo site_url('source/mobile/img/1.jpg'); ?>"/>
+                <div class="slide-title">新闻标题1</div>
+            </div>
+            <div class="slider-slide">
+                <img class="slide-banner" ng-src="<?php echo site_url('source/mobile/img/1.jpg'); ?>"/>
+                <div class="slide-title">新闻标题2</div>
+            </div>
+            <div class="slider-slide" style="background-color: yellow;">
+            </div>
+        </div>
+        <div class="slider-pagination"></div>
+    </div>
+
+    <div style="margin-top: 15px">
+        <span class="my-integral">我的积分：2500</span>
+        <img ng-src="<?php echo site_url('source/mobile/img/1.png'); ?>" id="shan-img" style="display:none;" />
+        <img src="<?php echo site_url('source/mobile/img/2.png'); ?>" id="sorry-img" style="display:none;" />
+        <div class="banner">
+            <div class="turnplate" style="background-image:url(<?php echo site_url('source/mobile/img/turnplate-bg.png'); ?>);background-size:100% 100%;">
+                <canvas class="item" id="wheelcanvas" width="422px" height="422px"></canvas>
+                <img class="pointer" ng-src="<?php echo site_url('source/mobile/img/turnplate-pointer.png'); ?>"/>
+            </div>
+        </div>
+        <span class="my-award" ng-click="openPage('#my-awards')">我的奖品</span>
+    </div>
+    <div class="group awards-list" >
+        <div id="oDiv">
+            <ul id="oUl">
+                <li>恭喜184****1523获得赛安基因商品</li>
+                <li>恭喜159****1523获得赛安基因商品</li>
+                <li>恭喜124****1523获得赛安基因商品</li>
+                <li>恭喜028****1523获得赛安基因商品</li>
+            </ul>
+        </div>
+    </div>
+    <a class="activity-rules-btn" href="#rules">活动规则<i class="icon icon-arrowdown"></i></a>
+    <p id="rules">
+        2.活动时间：<br>
+        （1）每天00:00:00至23:59:59礼券、红包会即时发放到抽奖用户的账户，本次活动发放的礼券、红包不可转让，不可折现，使用规则以赛安基因科技公布的规则为准；<br>
+        （2）红包有效期为抽中之日起60个自然日，过期未使用红包做失效处理，使用时间以系统中记录的用户支付时间为准；<br>
+        （3）红包仅限在赛安基因科技购物使用，不同面额红包使用条件不同，以领取到的红包说明为准；<br>
+        （4）若用户成功下单，并使用红包付款后，则视为红包已被使用，若发生退款等售后问题，红包不予退回；<br>
+        （5）红包可以同限时折扣、满减优惠、礼券抵扣等优惠类型叠加使用，优惠顺序为限时折扣、APP专享折扣、满减优惠、红包、礼券抵扣；<br>
+        （6）实物礼品会在抽中后7工作日内，根据用户填写的收货信息进行发货，运费由赛安基因科技承担。用户需及时填写收货信息，若未在中奖后24小时内填写收货信息或信息填写有误，则视为用户放弃中奖资格；<br>
+        （7）实物礼品不可退换，若遇到售后问题可联系每天惠处理；礼品图片仅供参考，以实物为准；<br>
+        （8）同一每天惠账号/同一收货地址/同一联系方式均视为同一用户。<br>
+        （9）该抽奖活动与苹果公司无关。<br>
+        （10）如您存在违规行为（包括但不限于机器作弊、恶意注册账户），赛安基因科技将取消您的中奖资格，并依照每天惠相关规则进行处罚！<br>
+        （11）如出现不可抗力或情势变更的情况（包括但不限于重大灾害事件、活动遭受严重网络攻击或因系统故障需要暂停举办的、活动受政府机关相关指令需要停止举办或调整的），则赛安基因科技可依相关法律法规的规定主张免责。<br>
+        （12）赛安基因科技可以根据本活动的实际举办情况在法律允许的范围内对活动规则进行变动或调整，相关变动或调整将公布在活动页面上，并于公布时即时生效。<br>
+        <img class="back-top" ng-click="back_top()" ng-src="<?php echo site_url('source/mobile/img/top.png'); ?>">
+    </p>
+
+</div>
+<section id="my-awards" data-animation="slideRight" class="page" style="z-index:100;background-color:#f4f4f4;">
+    <header>
+        <div class="titlebar">
+            <a class="titlebar-button" ng-click="back()"><i class="icon size16 icon-arrowleft back_btn"></i></a>
+            <h1 class="text-center" style="padding-right: 32px">我的奖品</h1>
+        </div>
+    </header>
+    <article>
+        <div class="group">
+            <ul class="lists" >
+                <li>2017-12-12 获得基因商品</li>
+                <li>2017-12-12 获得基因商品</li>
+                <li>2017-12-12 获得基因商品</li>
+                <li>2017-12-12 获得基因商品</li>
+                <li>2017-12-12 获得基因商品</li>
+            </ul>
+        </div>
+    </article>
+</section>

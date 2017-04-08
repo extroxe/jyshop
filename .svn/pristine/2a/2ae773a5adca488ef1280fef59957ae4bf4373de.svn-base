@@ -1,0 +1,488 @@
+<?php
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =========================================================
+ *
+ *      Filename: Commodity_admin.php
+ *
+ *   Description: 商品管理
+ *
+ *       Created: 2016-11-21 10:49:41
+ *
+ *        Author: sunzuosheng
+ *
+ * =========================================================
+ */
+
+class Commodity_admin extends CI_Controller{
+    /**
+     * 构造函数
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->helper('form');
+        $this->load->library(['form_validation', 'Jys_db_helper']);
+        $this->load->model(['Commodity_model', 'Common_model']);
+    }
+
+    /**
+     * 分页
+     *
+     * @param int $page 页数
+     * @param int $page_size 页大小
+     */
+    public function paginate($page = 1, $page_size = 10){
+        $keyword = $this->input->post('keyword', TRUE);
+        $is_point = $this->input->post('is_point', TRUE) ? intval($this->input->post('is_point', TRUE)) : 0;
+
+        $data = $this->Commodity_model->paginate($page, $page_size, ['commodity.is_point'=>$is_point], $keyword);
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 获取全部现金商品或全部积分商品
+     */
+    public function get_all_commodity_by_is_point() {
+        $is_point = $this->input->post('is_point', TRUE) ? intval($this->input->post('is_point', TRUE)) : 0;
+        $result = array('success'=>FALSE, 'msg'=>'获取商品列表失败', 'data'=>array());
+
+        $data = $this->Commodity_model->get_commodity_list_by_condition(['commodity.is_point'=>$is_point, 'commodity.status_id !='=>jys_system_code::COMMODITY_STATUS_DELETE]);
+
+        if (!empty($data) && is_array($data)) {
+            $commodity_list = array();
+            foreach ($data as $item) {
+                if (isset($item['category_name']) && !empty($item['category_name'])) {
+                    $commodity_list[$item['category_name']][] = $item;
+                }
+            }
+            if (!empty($commodity_list)) {
+                $result['success'] = TRUE;
+                $result['msg'] = '获取商品列表成功';
+                $result['data'] = $commodity_list;
+            }
+        }
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 添加商品
+     */
+    public function add()
+    {
+        //验证表单信息
+        $this->form_validation->set_rules('name', '商品名称', 'trim|required|min_length[1]|max_length[100]');
+        $this->form_validation->set_rules('number', '商品编号', 'trim|required|min_length[1]|max_length[50]');
+        $this->form_validation->set_rules('price', '商品价格', 'trim|required|numeric');
+        $this->form_validation->set_rules('points', '商品购买获得积分', 'trim|numeric');
+        $this->form_validation->set_rules('category_id', '商品分类ID', 'trim|required|numeric');
+        $this->form_validation->set_rules('introduce', '商品介绍', 'trim|required|max_length[200]');
+        $this->form_validation->set_rules('detail', '商品详情', 'trim|required|max_length[65535]');
+        $this->form_validation->set_rules('sales_volume', '商品销量', 'trim|required|numeric');
+        $this->form_validation->set_rules('recommend_commodity', '推荐商品ID', 'trim|numeric');
+        $this->form_validation->set_rules('status_id', '商品状态', 'trim|required|numeric');
+        $this->form_validation->set_rules('type_id', '商品类型', 'trim|required|numeric');
+        $this->form_validation->set_rules('is_point', '是否积分商品', 'trim|in_list[0,1]');
+        $this->form_validation->set_rules('level_id', '等级ID', 'trim|numeric');
+
+
+        //表单验证是否通过, 若不通过 返回表单错误信息，停止执行
+        $res = $this->Common_model->deal_validation_errors();
+
+        if ($res['success']){
+            //处理数据
+            $post['name']                   = $this->input->post('name', TRUE);
+            $post['number']                 = $this->input->post('number', TRUE);
+            $post['price']                  = floatval($this->input->post('price', TRUE));
+            $post['points']                 = intval($this->input->post('points', TRUE));
+            $post['category_id']            = intval($this->input->post('category_id', TRUE));
+            $post['introduce']              = htmlspecialchars($this->input->post('introduce', TRUE));
+            $post['detail']                 = htmlspecialchars($this->input->post('detail', TRUE));
+            $post['sales_volume']           = intval($this->input->post('sales_volume', TRUE));
+            $post['recommend_commodity']    = $this->input->post('recommend_commodity', TRUE) ? intval($this->input->post('recommend_commodity', TRUE)) : NULL;
+            $post['status_id']              = intval($this->input->post('status_id', TRUE));
+            $post['type_id']                = intval($this->input->post('type_id', TRUE));
+            $is_point                       = intval($this->input->post('is_point', TRUE));
+            $level_id                       = intval($this->input->post('level_id', TRUE));
+
+            if ($this->Commodity_model->check_number_is_exists($post['number'])){
+                $data['success'] = FALSE;
+                $data['msg'] = '商品编号已存在';
+            }else{
+                if ($is_point >= 0 && $is_point <= 1) {
+                    $post['is_point'] = $is_point;
+                }else {
+                    $post['is_point'] = 0;
+                }
+
+                if (!empty($level_id)){
+                    $post['level_id'] = $level_id;
+                }
+
+                $post['create_time'] = date('Y-m-d H:i:s');
+
+                //缩略图
+                $attachment_ids = explode(',', $this->input->post('attachment_ids', TRUE));
+
+                $data = $this->Commodity_model->add($post, $attachment_ids);
+            }
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '输入有错误';
+            $data['error'] = $res['msg'];
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 修改商品
+     */
+    public function update()
+    {
+        //验证表单信息
+        $this->form_validation->set_rules('id', '商品ID', 'trim|required|numeric');
+        $this->form_validation->set_rules('name', '商品名称', 'trim|required|min_length[1]|max_length[100]');
+        $this->form_validation->set_rules('number', '商品编号', 'trim|required|min_length[1]|max_length[50]');
+        $this->form_validation->set_rules('price', '商品价格', 'trim|required|numeric');
+        $this->form_validation->set_rules('points', '商品购买获得积分', 'trim|numeric');
+        $this->form_validation->set_rules('category_id', '商品分类ID', 'trim|required|numeric');
+        $this->form_validation->set_rules('introduce', '商品介绍', 'trim|required|max_length[200]');
+        $this->form_validation->set_rules('detail', '商品详情', 'trim|required|max_length[65535]');
+        $this->form_validation->set_rules('sales_volume', '商品销量', 'trim|required|numeric');
+        $this->form_validation->set_rules('recommend_commodity', '推荐商品ID', 'trim|numeric');
+        $this->form_validation->set_rules('status_id', '商品状态', 'trim|required|numeric');
+        $this->form_validation->set_rules('type_id', '商品类型', 'trim|required|numeric');
+        $this->form_validation->set_rules('level_id', '等级ID', 'trim|numeric');
+
+        //表单验证是否通过, 若不通过 返回表单错误信息，停止执行
+        $res = $this->Common_model->deal_validation_errors();
+
+        if ($res['success']){
+            //处理数据
+            $id                             = intval($this->input->post('id', TRUE));
+            $post['name']                   = $this->input->post('name', TRUE);
+            $post['number']                 = $this->input->post('number', TRUE);
+            $post['price']                  = floatval($this->input->post('price', TRUE));
+            $post['points']                 = intval($this->input->post('points', TRUE));
+            $post['category_id']            = intval($this->input->post('category_id', TRUE));
+            $post['introduce']              = htmlspecialchars($this->input->post('introduce', TRUE));
+            $post['detail']                 = htmlspecialchars($this->input->post('detail', TRUE));
+            $post['sales_volume']           = intval($this->input->post('sales_volume', TRUE));
+            $post['recommend_commodity']    = $this->input->post('recommend_commodity', TRUE) ? intval($this->input->post('recommend_commodity', TRUE)) : NULL;
+            $post['status_id']              = intval($this->input->post('status_id', TRUE));
+            $post['type_id']                = intval($this->input->post('type_id', TRUE));
+            $post['update_time']            = date('Y-m-d H:i:s');
+            $level_id                       = intval($this->input->post('level_id', TRUE));
+
+            if (!empty($level_id)){
+                $post['level_id'] = $level_id;
+            }
+
+            //缩略图
+            $attachment_ids = $this->input->post('attachment_ids', TRUE) ? explode(',', $this->input->post('attachment_ids', TRUE)) : NULL;
+
+            $data = $this->Commodity_model->update($id, $post, $attachment_ids);
+
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '输入有错误';
+            $data['error'] = $res['msg'];
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 删除商品(软删除，商品下架)
+     */
+    public function delete()
+    {
+        $id = intval($this->input->post('id', true));
+        $modify['status_id'] = 0;
+
+        $data = $this->jys_db_helper->soft_delete('commodity', ['id'=>$id], $modify);
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 根据商品ID获取商品剩余数据(缩略图)
+     */
+    public function show_thumbnail(){
+        $commodity_id = intval($this->input->post('commodity_id', TRUE));
+
+        $data = $this->Commodity_model->show_thumbnail($commodity_id);
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 删除商品缩略图
+     */
+    public function delete_thumbnail(){
+        $id = $this->input->post('id', TRUE);
+
+        $data = $this->jys_db_helper->delete('commodity_thumbnail', $id);
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 评价分页
+     *
+     * @param int $page 页数
+     * @param int $page_size 页大小
+     */
+    public function evaluation_paginate($page = 1, $page_size = 10, $commodity_id = 0){
+        $data = $this->Commodity_model->evaluation_paginate($page, $page_size, $commodity_id);
+        $data['total_page'] = $this->jys_db_helper->get_total_page('commodity_evaluation', 10, ['commodity_id'=>$commodity_id]);
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 推荐商品分页
+     *
+     * @param int $page 页数
+     * @param int $page_size 页大小
+     */
+    public function recommend_paginate($page = 1, $page_size = 10){
+        $is_point = $this->input->post('is_point', TRUE) ? intval($this->input->post('is_point', TRUE)) : 0;
+
+        $data = $this->Commodity_model->recommend_paginate($page, $page_size, $is_point);
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 获取推荐商品
+     */
+    public function get_recommend(){
+        $data = $this->Commodity_model->get_recommend();
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 添加推荐商品
+     */
+    public function add_recommend(){
+        //验证表单信息
+        $this->form_validation->set_rules('commodity_id', '商品ID', 'trim|required|numeric');
+        $this->form_validation->set_rules('start_time', '开始时间', 'trim|required');
+        $this->form_validation->set_rules('end_time', '结束时间', 'trim|required');
+        $this->form_validation->set_rules('type_id', '类型', 'trim|required');
+
+        //表单验证是否通过, 若不通过 返回表单错误信息，停止执行
+        $res = $this->Common_model->deal_validation_errors();
+
+        if ($res['success']){
+            //处理数据
+            $post['commodity_id']   = intval($this->input->post('commodity_id', TRUE));
+            $post['start_time']     = $this->input->post('start_time', TRUE);
+            $post['end_time']       = $this->input->post('end_time', TRUE);
+            $post['type_id']        = intval($this->input->post('type_id', TRUE));
+            $post['create_time']    = date('Y-m-d H:i:s');
+
+            $data = $this->jys_db_helper->add('recommend_commodity', $post);
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '输入有错误';
+            $data['error'] = $res['msg'];
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 更新推荐商品
+     */
+    public function update_recommend(){
+        //验证表单信息
+        $this->form_validation->set_rules('id', '推荐商品ID', 'trim|required|numeric');
+        $this->form_validation->set_rules('commodity_id', '商品ID', 'trim|required|numeric');
+        $this->form_validation->set_rules('start_time', '开始时间', 'trim|required');
+        $this->form_validation->set_rules('end_time', '结束时间', 'trim|required');
+        $this->form_validation->set_rules('type_id', '类型', 'trim|required');
+
+        //表单验证是否通过, 若不通过 返回表单错误信息，停止执行
+        $res = $this->Common_model->deal_validation_errors();
+
+        if ($res['success']){
+            //处理数据
+            $id                     = intval($this->input->post('id', TRUE));
+            $post['commodity_id']   = intval($this->input->post('commodity_id', TRUE));
+            $post['start_time']     = $this->input->post('start_time', TRUE);
+            $post['end_time']       = $this->input->post('end_time', TRUE);
+            $post['type_id']        = intval($this->input->post('type_id', TRUE));
+
+            if ($this->jys_db_helper->update('recommend_commodity', $id, $post)){
+                $data['success'] = TRUE;
+                $data['msg'] = '更新成功';
+            }
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '输入有错误';
+            $data['error'] = $res['msg'];
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 删除推荐商品
+     */
+    public function delete_recommend(){
+        $id = $this->input->post('id', TRUE);
+
+        $data = $this->jys_db_helper->delete('recommend_commodity', $id);
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 限时折扣商品分页
+     *
+     * @param int $page 页数
+     * @param int $page_size 页大小
+     */
+    public function flash_sale_paginate($page = 1, $page_size = 10){
+        $data = $this->Commodity_model->flash_sale_paginate($page, $page_size);
+        $data['total_page'] = $this->jys_db_helper->get_total_page('flash_sale');
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 添加限时折扣商品
+     */
+    public function add_flash_sale(){
+        //验证表单信息
+        $this->form_validation->set_rules('commodity_id', '商品ID', 'trim|required|numeric');
+        $this->form_validation->set_rules('price', '商品价格', 'trim|required|numeric');
+        $this->form_validation->set_rules('start_time', '开始时间', 'trim|required');
+        $this->form_validation->set_rules('end_time', '结束时间', 'trim|required');
+
+        //表单验证是否通过, 若不通过 返回表单错误信息，停止执行
+        $res = $this->Common_model->deal_validation_errors();
+
+        if ($res['success']){
+            //处理数据
+            $post['commodity_id']   = intval($this->input->post('commodity_id', TRUE));
+            $post['price']          = floatval($this->input->post('price', TRUE));
+            $post['start_time']     = $this->input->post('start_time', TRUE);
+            $post['end_time']       = $this->input->post('end_time', TRUE);
+            $post['create_time']    = date('Y-m-d H:i:s');
+
+            $data = $this->jys_db_helper->add('flash_sale', $post);
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '输入有错误';
+            $data['error'] = $res['msg'];
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 更新限时折扣商品
+     */
+    public function update_flash_sale(){
+        //验证表单信息
+        $this->form_validation->set_rules('id', '限时折扣商品ID', 'trim|required|numeric');
+        $this->form_validation->set_rules('commodity_id', '商品ID', 'trim|required|numeric');
+        $this->form_validation->set_rules('price', '商品价格', 'trim|required|numeric');
+        $this->form_validation->set_rules('start_time', '开始时间', 'trim|required');
+        $this->form_validation->set_rules('end_time', '结束时间', 'trim|required');
+
+        //表单验证是否通过, 若不通过 返回表单错误信息，停止执行
+        $res = $this->Common_model->deal_validation_errors();
+
+        if ($res['success']){
+            //处理数据
+            $id                     = intval($this->input->post('id', TRUE));
+            $post['commodity_id']   = intval($this->input->post('commodity_id', TRUE));
+            $post['price']          = floatval($this->input->post('price', TRUE));
+            $post['start_time']     = $this->input->post('start_time', TRUE);
+            $post['end_time']       = $this->input->post('end_time', TRUE);
+
+            if ($this->jys_db_helper->update('flash_sale', $id, $post)){
+                $data['success'] = TRUE;
+                $data['msg'] = '更新成功';
+            }
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '输入有错误';
+            $data['error'] = $res['msg'];
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 删除限制折扣商品
+     */
+    public function delete_flash_sale(){
+        $id = $this->input->post('id', TRUE);
+
+        $data = $this->jys_db_helper->delete('flash_sale', $id);
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 添加商品推荐商品
+     */
+    public function add_commodity_recommend_commodity()
+    {
+        $this->form_validation->set_rules('commodity_id', '商品ID', 'trim|required|numeric');
+        $this->form_validation->set_rules('recommend_commodity_id', '推荐商品ID', 'trim|required|numeric');
+
+        $res = $this->Common_model->deal_validation_errors();
+        if ($res['success']){
+            $post['commodity_id'] = $this->input->POST('commodity_id', TRUE);
+            $post['recommend_commodity_id'] = $this->input->POST('recommend_commodity_id', TRUE);
+            $post['create_time'] = date('Y-m-d H:i:s');
+
+            if (!$this->jys_db_helper->get_where('managing_suggestions', array('recommmend_commodity_id' => $post['recommmend_commodity_id']))){
+                if ($this->jys_db_helper->add('managing_suggestions', $post)){
+                    $data['success'] = TRUE;
+                    $data['msg'] = '添加商品推荐商品成功';
+                }else{
+                    $data['success'] = FALSE;
+                    $data['msg'] = '添加商品推荐商品失败';
+                }
+            }else{
+                $data['success'] = FALSE;
+                $data['msg'] = '该商品已经添加为推荐商品，无法再次添加';
+            }
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = $res['msg'];
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 删除商品推荐商品
+     */
+    public function delete_commodity_recommend_commodity()
+    {
+        $id = $this->input->POST('id', TRUE);
+
+        if ($this->jys_db_helper->delete('managing_suggestions', $id)){
+            $data['success'] = TRUE;
+            $data['msg'] = '删除商品推荐商品成功';
+        }else{
+            $data['success'] = FALSE;
+            $data['msg'] = '删除商品推荐商品失败';
+        }
+
+        echo json_encode($data);
+    }
+}

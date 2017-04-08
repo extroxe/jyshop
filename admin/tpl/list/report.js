@@ -1,0 +1,242 @@
+/**
+ * Created by sailwish001 on 2017/1/12.
+ */
+app.controller('reportCtrl', ['$scope', '_jiyin', 'dataToURL', '$state', '$stateParams',  function ($scope, _jiyin, dataToURL, $state, $stateParams) {
+    $scope.reportList = {};
+    $scope.inputPage = 1;
+    $scope.list = {};
+    $scope.open = false;
+
+    $scope.back = function () {
+        window.history.go(-1);
+    };
+
+    $scope.download = function (data) {
+        if (data.id) {
+            window.open(SITE_URL + 'attachment/report_download/' + data.id);
+        }else {
+            _jiyin.msg('e', '请选择要下载的报告');
+        }
+
+    };
+
+    $scope.$on('attachment_id', function(event, attachment_id) {
+        $scope.list.attachment_id = attachment_id;
+    });
+
+    $scope.add = function () {
+        $scope.list = {};
+        $scope.flag = true;
+        $scope.open = true;
+        $("#reportModal").modal('show');
+        $scope.$broadcast('open', {
+            open: $scope.open
+        });
+    };
+
+    $scope.edit = function (data) {
+        $scope.list = data;
+        $scope.flag = false;
+        $scope.open = true;
+        $("#reportModal").modal('show');
+        $scope.$broadcast('open', {
+            open: $scope.open
+        });
+    };
+
+    $scope.delete = function (data) {
+        if(confirm('确定删除此报告吗?')){
+            _jiyin.dataPost('admin/report_admin/delete', dataToURL({id: data.id}))
+                .then(function (result) {
+                    if(result.success == true){
+                        _jiyin.msg('s', '删除成功');
+                        $scope.getData();
+                    }else {
+                        _jiyin.msg('e', '删除失败');
+                    }
+                });
+        }
+    };
+
+    $scope.ok = function () {
+        var url;
+        if(!$scope.list.number){
+            _jiyin.msg('e','报告编号不能为空');
+            return ;
+        }
+        if(!$scope.list.name){
+            _jiyin.msg('e','名字不能为空');
+            return ;
+        }
+        if(!$scope.list.gender){
+            _jiyin.msg('e','性别不能为空');
+            return ;
+        }
+        if(!$scope.list.age){
+            _jiyin.msg('e','年龄不能为空');
+            return ;
+        }
+        if(!$scope.list.phone){
+            _jiyin.msg('e','电话不能为空');
+            return ;
+        }
+        if(!$scope.list.identity_card){
+            _jiyin.msg('e','身份证号不能为空');
+            return ;
+        }
+        if(!$scope.list.attachment_id){
+            _jiyin.msg('e','还没有上传报告');
+            return ;
+        }
+        var regPhone = /^1(3|4|5|7|8)\d{9}$/;
+        var regIdentity = /^(\d{6})(\d{4})(\d{2})(\d{2})(\d{3})([0-9]|X|x)$/;
+        if($scope.list.phone && regPhone.test($scope.list.phone) == false){
+            _jiyin.msg('e','手机号不符合规则');
+            return ;
+        }
+        if($scope.list.identity_card && regIdentity.test($scope.list.identity_card) == false){
+            _jiyin.msg('e','身份证号不符合规则');
+            return ;
+        }
+        if($scope.flag == true){
+            url = 'admin/report_admin/add';
+        }else{
+            url = 'admin/report_admin/update'
+        }
+        $scope.list.order_commodity_id = $stateParams.id;
+        _jiyin.dataPost(url, dataToURL($scope.list))
+            .then(function (result) {
+                if(result.success == true){
+                    _jiyin.msg('s',result.msg);
+                    $scope.getData();
+                    $("#reportModal").modal('hide');
+                    $scope.open = false;
+                }else {
+                    _jiyin.msg('e', result.msg);
+                }
+            });
+    };
+    /**
+     * 获取数据
+     */
+    $scope.getData = function(){
+        _jiyin.dataPost('admin/report_admin/get_report_list_by_order_commodity_id', dataToURL({
+            order_commodity_id: $stateParams.id
+        }))
+        .then(function(result){
+            $scope.reportList = result.data;
+            $scope.totalPage = result.total_page;
+        });
+    };
+    $scope.getData();
+
+
+    /**
+     * 下一页
+     */
+    $scope.nextPage = function(){
+        if($scope.inputPage < $scope.totalPage){
+            $scope.inputPage ++;
+            $scope.getData();
+        }else{
+            _jiyin.msg('e', '当前是最后一页');
+        }
+    };
+    /**
+     * 上一页
+     */
+    $scope.previousPage = function(){
+        if($scope.inputPage > 1){
+            $scope.inputPage --;
+            $scope.getData();
+        }else{
+            _jiyin.msg('e', '当前是第一页');
+        }
+    };
+    /**
+     * 第一页
+     */
+    $scope.firstPage = function () {
+        $scope.inputPage = 1;
+        $scope.getData();
+    };
+    /**
+     * 最后一页
+     */
+    $scope.lastPage = function () {
+        $scope.inputPage = $scope.totalPage;
+        $scope.getData();
+    };
+    $scope.selectPage = function (page) {
+        $scope.inputPage = page;
+        $scope.getData();
+    }
+}]);
+
+app.controller('reportFileUploadCtrl', ['$scope', 'FileUploader', '_jiyin', 'dataToURL', function($scope, FileUploader, _jiyin, dataToURL) {
+    var uploader = $scope.uploader = new FileUploader({
+        url: SITE_URL + 'attachment/upload_report'
+    });
+    $scope.$on('open', function (event, args) {
+       if(args.open == true){
+           uploader.clearQueue();
+       }
+    });
+    // FILTERS
+    uploader.filters.push({
+        name: 'customFilter',
+        fn: function(item /*{File|FileLikeObject}*/ , options) {
+            return this.queue.length < 2;
+        }
+    });
+    $scope.upload = function(item){
+        if(uploader.queue.length > 1){
+            _jiyin.msg('e', '只能上传一个文件');
+            return;
+        }
+        _jiyin.fileMd5(item._file).then(function (result) {
+            _jiyin.dataPost('attachment/check_md5', dataToURL({md5_code: result.md5Code}))
+                .then(function (result) {
+                    if(result.exist == true){
+                        $scope.$emit('attachment_id', result.attachment_id);
+                        item.file.size = item._file.size;
+                        item.progress = 100;
+                        item.isSuccess = true;
+                        item.isUploaded = true;
+                        item.uploader.progress += 100/uploader.queue.length;
+                    }else{
+                        item.upload();
+                    }
+                });
+        });
+    };
+    $scope.uploadAll = function () {
+        if(uploader.queue.length > 1){
+            _jiyin.msg('e', '只能上传一个文件');
+            return;
+        }
+        angular.forEach(uploader.queue, function (data, index) {
+            _jiyin.fileMd5(data._file).then(function (result) {
+                _jiyin.dataPost('attachment/check_md5', dataToURL({md5_code: result.md5Code}))
+                    .then(function (result) {
+                        if(result.exist == true){
+                            $scope.$emit('attachment_id', result.attachment_id);
+                            data.file.size = data._file.size;
+                            data.progress = 100;
+                            data.isSuccess = true;
+                            data.isUploaded = true;
+                            uploader.progress += 100/uploader.queue.length;
+                        }else{
+                            data.upload();
+                        }
+                    });
+            });
+        });
+    };
+    uploader.onSuccessItem = function(fileItem, response, status, headers) {
+        $scope.$emit('attachment_id', response.attachment_id);
+    };
+    $scope.$on('clearQueue', function() {
+        uploader.clearQueue();
+    });
+}]);

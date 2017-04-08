@@ -1,0 +1,43 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =====================================================================================
+ *
+ *        Filename: Sweepstakes_model.php
+ *     Description: 积分抽奖后台模型
+ *         Created: 2017-03-01 12:02:47
+ *          Author: Tangyu
+ *
+ * =====================================================================================
+ */
+class Sweepstakes_model extends CI_Model
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * 默认查询当前时间段内是否有抽奖活动
+     * 传入ID时，为判断该ID活动是否已经开始
+     */
+    public function judge_sweepstakes($id = 0)
+    {
+        $date = date('Y-m-d H:i:s');
+
+        $this->db->select('id');
+        if (empty($id)){
+            $this->db->where('id', $id);
+        }
+        $this->db->where('start_time <=', $date);
+        $this->db->where('end_time >=', $date);
+        $result = $this->db->get('sweepstakes');
+        if ($result && $result->num_rows() > 0){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+}

@@ -1,0 +1,99 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =====================================================================================
+ *
+ *        Filename: Sweepstakes_commodity.php
+ *     Description: 积分抽奖商品控制器
+ *         Created: 2017-03-01 15:01:47
+ *          Author: Tangyu
+ *
+ * =====================================================================================
+ */
+class Sweepstakes_commodity extends CI_Controller
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->library(['Jys_db_helper', 'form_validation']);
+        $this->load->model(['Post_bar_model', 'Sweepstakes_commodity_model', 'Order_model']);
+    }
+
+    /**
+     * 获取当前活动抽奖奖品
+     */
+    public function get_sweepstakes_commodity()
+    {
+        $data = $this->Sweepstakes_commodity_model->get_sweepstakes_commodity();
+        echo json_encode($data);
+    }
+
+    /**
+     * 选取符合抽奖者条件的奖品
+     */
+    public function find()
+    {
+        $user_info = $this->jys_db_helper->get('user', $_SESSION['user_id']);
+        //获取已完成订单情况，计算消费总额
+        $user_expenditure = 0;
+        $user_order_info = $this->Order_model->get_user_expenditure($_SESSION['user_id']);
+        if ($user_order_info['success']){
+            for ($i = 0; $i < count($user_order_info['data']); $i++){
+                $user_expenditure += $user_order_info['data'][$i]['total_price'];
+            }
+        }
+        $condition = [
+            'current_point' => $user_info['current_point'],
+            'user_expenditure' => $user_expenditure,
+            'register_time' => $user_info['create_time']
+        ];
+
+        $data = $this->Sweepstakes_commodity_model->find($condition);
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 领取奖品，即把result表中status字段改为1
+     * @param $id
+     */
+    public function receive($id = 0)
+    {
+        if (empty($id) || intval($id) < 1){
+            $data = ['success' => FALSE, 'msg' => '参数错误'];
+            echo json_encode($data);
+            exit;
+        }
+
+        $result = $this->jys_db_helper->update_by_condition('sweepstakes_result', ['sweepstakes_commodity_id' => $id], ['status' => 1]);
+        if ($result){
+            $data = ['success' => TRUE, 'msg' => '领取成功，请查看'];
+        }else{
+            $data = ['success' => FALSE, 'msg' => '网络异常，请点击我的奖品查看领取情况'];
+        }
+
+        echo json_encode($data);
+    }
+    
+    /**
+     * 获取所有奖品
+     */
+    public function get_my_prize()
+    {
+        $result = $this->Sweepstakes_commodity_model->get_my_prize($_SESSION['user_id']);
+
+        echo json_encode($result);
+    }
+
+    /**
+     * 获取滚动奖品
+     */
+    public function get_scroll_prize()
+    {
+        $result = $this->Sweepstakes_commodity_model->get_my_prize();
+
+        echo json_encode($result);
+    }
+}

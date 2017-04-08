@@ -1,0 +1,101 @@
+<?php
+if (!defined('BASEPATH'))
+ exit('No direct script access allowed');
+/**
+ * =========================================================
+ *
+ *      Filename: My_city.php
+ *
+ *   Description: 查询报告管理
+ *
+ *       Created: 2016-11-24 21:14:23
+ *
+ *        Author: zourui
+ *
+ * =========================================================
+ */
+
+class My_city extends CI_Controller {
+ /**
+     * 构造函数
+     */
+    public function __construct(){
+        parent::__construct();
+        $this->load->library(['form_validation']);
+        $this->load->model(['Report_model', 'Common_model']);
+    }
+
+    /**
+     * 查询报告接口
+     */
+    public function get_report() {
+        $this->form_validation->set_rules('phone', '手机号', 'regex_match[/^1(3|4|5|7|8)\d{9}$/]');
+        $this->form_validation->set_rules('identity_card', '身份证号', 'regex_match[/^\d{5}[0-9xX]$/]');
+
+        $res = $this->Common_model->deal_validation_errors();
+        
+        if ($res['success']) {
+            $identity_card = strtoupper($this->input->post('identity_card'));
+            $phone = $this->input->post('phone');
+            $data = $this->Report_model->get_report_by_phone($identity_card, $phone);
+            if (empty($data)) {
+                $res['success'] = FALSE;
+                $res['msg'] = '未查询到相关用户的报告';
+            }else {
+                $res['success'] = TRUE;
+                $res['msg'] = '查询成功！';
+                $this->session->phone = $phone;
+                $this->session->identity_card = $identity_card;
+
+            }
+        }
+        echo json_encode($res);
+    }
+    
+    /**
+     * 若提交的数据正确，则直接执行查询并输出
+     */
+    public function get_report_again() {
+        $identity_card = $this->session->identity_card;
+        $phone = $this->session->phone;
+        $data['result'] = $this->Report_model->get_report_by_phone($identity_card, $phone);
+        if (empty($data)) {
+            $res['success'] = FALSE;
+            $res['msg'] = '未查询到相关用户的报告';
+        	echo json_encode($res);
+        }else {
+            $res['success'] = TRUE;
+            $res['msg'] = '查询成功！';
+            echo json_encode($res);
+        }
+    }
+
+    /**
+     * 获取用户报告
+     */
+    public function get_report_by_user_id()
+    {
+        $data = ['success' => FALSE, 'msg' => '获取检测报告失败', 'data' => NULL];
+        $user_id = $_SESSION['user_id'];
+
+        $result = $this->Report_model->get_report_by_user_id($user_id);
+        if (!empty($result)){
+            $data = ['success' => TRUE, 'msg' => '获取检测报告成功', 'data' => $result];
+        }
+
+        echo json_encode($data);
+    }
+
+    /**
+     * 分页获取报告
+     */
+    public function get_report_by_page() {
+        $user_id = $this->session->user_id;
+        $page       = intval($this->input->post('page', TRUE)) ? intval($this->input->post('page', TRUE)) : 1;
+        $page_size  = $this->input->post('page_size', TRUE) ? intval($this->input->post('page_size', TRUE)) : 10;
+
+        $data = $this->Report_model->paginate_for_report($page, $page_size, $user_id);
+
+        echo json_encode($data);
+    }
+}

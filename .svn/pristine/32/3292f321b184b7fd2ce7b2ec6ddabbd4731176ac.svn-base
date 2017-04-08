@@ -1,0 +1,61 @@
+/**
+ * Created by sailwish009 on 2017/2/10.
+ */
+$(function () {
+    var editor = UE.getEditor('myEditor');
+    var url = window.location.href;
+    var post_bar_id = url.substring(url.lastIndexOf('/') + 1);
+
+    /**
+     * 根据post_bar_id 获取 贴吧信息
+     */
+    $.ajax({
+        type: 'post',
+        dataType: 'json',
+        url: SITE_URL + 'post_bar/get_post_bar_by_id',
+        data:{
+            id: post_bar_id
+        },
+        success:function (response) {
+            if(response.success){
+                $('.breadcrumb .post_bar_name').text(response.data.name);
+            }else{
+                alert(response.msg)
+            }
+        }
+    });
+    
+    $('.post_bar_name').click(function () {
+        window.location.href = SITE_URL + 'my_city/post/' + post_bar_id;
+    })
+
+    /**
+     * 发帖
+     */
+    $('.publish_post_btn').click(function () {
+        var title = $('.post_title').val();
+        // var content = $('#myEditor').val();
+        var content=editor.getPlainTxt();
+        var status_id = 2;
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: SITE_URL + 'post/add',
+            data:{
+                post_bar_id: post_bar_id,
+                title: title,
+                content: content,
+                status_id: status_id
+            },
+            success:function (response) {
+                if(response.success){
+                    alert(response.msg);
+                    window.location.href = SITE_URL + 'my_city/post/' + post_bar_id;
+                }else{
+                    alert(response.msg)
+                }
+            }
+        })
+    })
+
+})

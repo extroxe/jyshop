@@ -1,0 +1,54 @@
+<div class="titlebar top_title" >
+    <h1><?php echo $title; ?></h1>
+</div>
+
+<div id="page-content" class="home-page" ng-controller="categoryCtrl" style="padding-top: 50px" ng-init="parent.id = '<?php echo isset($parent_id) && intval($parent_id) > 0 ? $parent_id : ''; ?>'">
+    <div class="group">
+        <div class="tab_nav grid" data-col="2">
+            <ul class="slidebar nav_lists">
+                <li class="tab {{ (categorys[$index].id == parent.id || $index == 0) ? 'active' : '' }}" ng-repeat="category in categorys" ng-click="get_child_category(category.id, $event)">
+                    <label class="tab-label">{{category.name}}</label>
+                </li>
+            </ul>
+            <div class="category_container">
+                <ul class="grid" data-col="3">
+                    <li ng-repeat="child_category in child_categorys">
+                        <a href="{{ SITE_URL + 'weixin/index/search_result?category=' + child_category.id }}">
+                            <div class="product_box">
+                                <div>
+                                    <h5 class="title">{{child_category.name | namefilter}}</h5>
+                                </div>
+                                <p class="desc">{{child_category.name}}</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--    热门推荐-->
+    <div class="discount">
+        <div class="sliver underline">
+            <img ng-src="{{ SITE_URL + 'source/mobile/img/icon/hot2.png' }}">
+            <p style="margin-left: 15px;" class="sliver-title">热门推荐</p>
+        </div>
+        <div class="group hot" style="margin-top: 0; padding-bottom: 60px;">
+            <ul class="grid" data-col="2" data-rowspace="8">
+                <li ng-repeat="recommend in recommends">
+                    <div class="product_desc" style="position: relative; background-color: #f9f9f9; padding-bottom: 8px">
+                        <a href="{{ SITE_URL + 'weixin/index/commodity_detail/' + recommend.commodity_id }}">
+                            <div style="height: 199px">
+                                <img ng-src="{{ SITE_URL + 'source/mobile/img/icon/hot.png' }}">
+                                <img  ng-if="recommend.path !== null" ng-src="{{ SITE_URL + recommend.path }}">
+                                <img  ng-if="recommend.path === null" ng-src="{{ SITE_URL + 'source/mobile/img/photo.jpg' }}">
+                            </div>
+                        </a>
+                        <p >{{recommend.name}}</p>
+                        <span class="price" >¥{{recommend.price}}</span>
+                        <span class="sale" >{{recommend.sales_volume}}件已售</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

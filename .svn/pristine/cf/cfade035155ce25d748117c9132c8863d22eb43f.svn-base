@@ -1,0 +1,325 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+/**
+ * =====================================================================================
+ *
+ *        Filename: Integral_indiana_model.php
+ *     Description: 积分夺宝模型
+ *         Created: 2017-03-03 10:23:47
+ *          Author: Tangyu
+ *
+ * =====================================================================================
+ */
+class Integral_indiana_model extends CI_Model
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * 分页获取夺宝活动信息
+     */
+    public function get_all_indiana_info($page = 1, $page_size = 10)
+    {
+        $this->db->select('commodity.name,
+                           commodity.id as commodity_id,
+                           commodity_thumbnail.attachment_id,
+                           attachment.path,
+                           integral_indiana.id,
+                           integral_indiana.total_points,
+                           integral_indiana.amount_bet,
+                           integral_indiana.current_bet,
+                           integral_indiana.user_total_point,
+                           integral_indiana.user_expenditure,
+                           integral_indiana.register_start_time,
+                           integral_indiana.register_end_time,
+                           integral_indiana.status as integral_indiana_status
+                           ');
+        $this->db->join('commodity', 'commodity.id = integral_indiana.commodity_id', 'left');
+        $this->db->join('commodity_thumbnail', 'commodity_thumbnail.commodity_id = commodity.id', 'left');
+        $this->db->join('attachment', 'attachment.id = commodity_thumbnail.attachment_id', 'left');
+        $this->db->where('commodity.status_id != ', jys_system_code::COMMODITY_STATUS_DELETE);
+        $this->db->where('commodity.is_point', '1');
+        $this->db->where('integral_indiana.status != ', jys_system_code::INTEGRAL_INDIANA_STATUS_DELETED);
+        $this->db->group_by('integral_indiana.id');
+        $this->db->limit($page_size, ($page - 1) * $page_size);
+        $result = $this->db->get('integral_indiana');
+
+        if ($result && $result->num_rows() > 0){
+            $data = ['success' => TRUE, 'msg' => '获取夺宝活动成功'];
+            $data['data'] = $result->result_array();
+
+            //分页
+            $this->db->select('integral_indiana.id');
+            $this->db->join('commodity', 'commodity.id = integral_indiana.commodity_id', 'left');
+            $this->db->join('commodity_thumbnail', 'commodity_thumbnail.commodity_id = commodity.id', 'left');
+            $this->db->join('attachment', 'attachment.id = commodity_thumbnail.attachment_id', 'left');
+            $this->db->where('commodity.status_id != ', jys_system_code::COMMODITY_STATUS_DELETE);
+            $this->db->where('commodity.is_point', '1');
+            $this->db->where('integral_indiana.status != ', jys_system_code::INTEGRAL_INDIANA_STATUS_DELETED);
+            $this->db->group_by('integral_indiana.id');
+            $page_result = $this->db->get('integral_indiana');
+            if ($page_result->num_rows() > 0){
+                $data['total_page'] = ceil($page_result->num_rows() / $page_size * 1.0);
+            }else{
+                $data['total_page'] = 1;
+            }
+        }else{
+            $data = ['success' => FALSE, 'msg' => '获取夺宝活动失败', 'data' => NULL];
+        }
+
+        return $data;
+    }
+
+    /**
+     * 获取单个id夺宝活动信息
+     */
+    public function get_indiana_info($id = 0)
+    {
+        $this->db->select('commodity.name,
+                           commodity.id as commodity_id,
+                           commodity_thumbnail.attachment_id,
+                           attachment.path,
+                           integral_indiana.id,
+                           integral_indiana.total_points,
+                           integral_indiana.amount_bet,
+                           integral_indiana.current_bet,
+                           integral_indiana.user_total_point,
+                           integral_indiana.user_expenditure,
+                           integral_indiana.register_start_time,
+                           integral_indiana.register_end_time,
+                           integral_indiana.status as integral_indiana_status
+                           ');
+        $this->db->join('commodity', 'commodity.id = integral_indiana.commodity_id', 'left');
+        $this->db->join('commodity_thumbnail', 'commodity_thumbnail.commodity_id = commodity.id', 'left');
+        $this->db->join('attachment', 'attachment.id = commodity_thumbnail.attachment_id', 'left');
+        $this->db->where('commodity.status_id != ', jys_system_code::COMMODITY_STATUS_DELETE);
+        $this->db->where('commodity.is_point', '1');
+        $this->db->where('integral_indiana.status != ', jys_system_code::INTEGRAL_INDIANA_STATUS_DELETED);
+        $this->db->where('integral_indiana.id', $id);
+        $this->db->group_by('commodity.id');
+        $this->db->limit(1);
+        $result = $this->db->get('integral_indiana');
+
+        if ($result && $result->num_rows() > 0){
+            $data = ['success' => TRUE, 'msg' => '获取夺宝活动成功', 'data' => $result->row_array()];
+        }else{
+            $data = ['success' => FALSE, 'msg' => '获取夺宝活动失败', 'data' => NULL];
+        }
+
+        return $data;
+    }
+    
+    /**
+     * 参与夺宝
+     */
+    public function join_integral_indiana($id = 0, $insert_info = array())
+    {
+        if (empty($id) || intval($id) < 1 || empty($insert_info) || !is_array($insert_info)){
+            $data = ['success' => FALSE, 'msg' => '参数错误'];
+            return $data;
+        }
+
+        $point = $insert_info['point'];
+        $user_id = $insert_info['user_id'];
+
+        $this->db->trans_start();
+        $add_res = $this->jys_db_helper->add('integral_indiana_bet', $insert_info);
+        $update_current_bet_res = $this->jys_db_helper->set_update('integral_indiana', $id, ['current_bet' => 'current_bet + 1'], FALSE);
+        $update_user_current_points = $this->jys_db_helper->set_update('user', $user_id, ['current_point' => 'current_point - '.$point], FALSE);
+
+        if ($add_res['success'] && $update_current_bet_res && $update_user_current_points){
+            $data = ['success' => TRUE, 'msg' => '参与活动成功，请等待活动结果'];
+            $this->db->trans_commit();
+        }else{
+            $data = ['success' => FALSE, 'msg' => '系统繁忙，参与活动失败'];
+            $this->db->trans_rollback();
+        }
+
+        if ($this->db->trans_status() === FALSE){
+            $data = ['success' => FALSE, 'msg' => '数据库事务执行失败'];
+            $this->db->trans_rollback();
+        }
+
+        return $data;
+    }
+
+    /**
+     * 随机生成结果
+     */
+    public function rand_result($id = 0, $rand = 0)
+    {
+        if (intval($rand) < 0 || empty($id) || intval($id) < 1){
+            $data = ['success' => FALSE, 'msg' => '参数错误'];
+            return $data;
+        }
+
+        $this->db->select('id, integral_indiana_id, user_id');
+        $this->db->where('integral_indiana_id', $id);
+        $this->db->limit(1, $rand);
+        $result = $this->db->get('integral_indiana_bet');
+        if ($result && $result->num_rows() > 0){
+            $data = ['success' => TRUE, 'msg' => '生成结果成功', 'data' => $result->row_array()];
+        }else{
+            $data = ['success' => FALSE, 'msg' => '生成结果失败', 'data' => NULL];
+        }
+
+        return $data;
+    }
+
+    /**
+     * 将生成结果插入数据库，并改变夺宝活动状态
+     */
+    public function add_data($insert = array())
+    {
+        if (empty($insert) || !is_array($insert)){
+            return FALSE;
+        }
+        $this->db->trans_start();
+        $add_res = $this->jys_db_helper->add('integral_indiana_result', $insert);
+        $update_res = $this->jys_db_helper->update('integral_indiana', $insert['integral_indiana_id'], ['status' => 2]);
+
+        if ($add_res['success'] && $update_res){
+            $this->db->trans_commit();
+            return TRUE;
+        }else{
+            $this->db->trans_rollback();
+            return FALSE;
+        }
+    }
+
+    /**
+     * 查询夺宝结果
+     */
+    public function get_result_info($page = 1, $page_size = 10)
+    {
+        if (empty($page_size) || empty($page) || intval($page) < 1 || intval($page_size) < 1){
+            $data = ['success' => FALSE, 'msg' => '参数错误', 'data' => NULL];
+            return $data;
+        }
+
+        $this->db->select('integral_indiana_result.user_id,
+                           user.username,
+                           user.nickname,
+                           integral_indiana_result.integral_indiana_bet_id as user_bet_id,
+                           integral_indiana.total_points,
+                           integral_indiana.amount_bet,
+                           integral_indiana.commodity_id,
+                           commodity.name,
+                           commodity_thumbnail.attachment_id,
+                           attachment.path
+                            ');
+        $this->db->join('integral_indiana', 'integral_indiana.id = integral_indiana_result.integral_indiana_id', 'left');
+        $this->db->join('commodity', 'commodity.id = integral_indiana.commodity_id', 'left');
+        $this->db->join('commodity_thumbnail', 'commodity_thumbnail.commodity_id = commodity.id', 'left');
+        $this->db->join('attachment', 'attachment.id = commodity_thumbnail.attachment_id', 'left');
+        $this->db->join('user', 'user.id = integral_indiana_result.user_id', 'left');
+        $this->db->group_by('integral_indiana.commodity_id');
+        $this->db->limit($page_size, ($page - 1) * $page_size);
+        $result = $this->db->get('integral_indiana_result');
+
+        if ($result && $result->result_array() > 0){
+            $data = ['success' => TRUE, 'msg' => '查询夺宝结果成功', 'data' => $result->result_array()];
+
+            //分页
+            $this->db->select('integral_indiana_result.id');
+            $page_result = $this->db->get('integral_indiana_result');
+            if ($page_result->num_rows() > 0){
+                $data['total_page'] = ceil($page_result->num_rows() / $page_size * 1.0);
+            }else{
+                $data['total_page'] = 1;
+            }
+        }else{
+            $data = ['success' => FALSE, 'msg' => '查询夺宝结果失败', 'data' => NULL];
+        }
+
+        return $data;
+    }
+
+    /**
+     * 我的夺宝
+     */
+    public function my_indiana($user_id = 0)
+    {
+        if (empty($user_id) || intval($user_id) < 1){
+            $data = ['success' => FALSE, 'msg' => '参数错误', 'data' => NULL];
+            return $data;
+        }
+
+        $this->db->select('
+                           integral_indiana.id as integral_indiana_id,
+                           integral_indiana.amount_bet,
+                           integral_indiana.total_points,
+                           integral_indiana.current_bet,
+                           integral_indiana.status as integral_indiana_status,
+                           integral_indiana_bet.id as integral_indiana_bet_id,
+                           integral_indiana_bet.create_time,
+                           integral_indiana_result.status as integral_indiana_result_status,
+                           count(integral_indiana_bet.id) as count_bet,
+                           commodity.id as commodity_id,
+                           commodity.name as commodity_name,
+                           commodity_thumbnail.attachment_id,
+                           attachment.path
+                           ');
+        $this->db->join('integral_indiana', 'integral_indiana.id = integral_indiana_bet.integral_indiana_id', 'left');
+        $this->db->join('integral_indiana_result', 'integral_indiana_result.integral_indiana_bet_id = integral_indiana_bet.id', 'left');
+        $this->db->join('commodity', 'commodity.id = integral_indiana.commodity_id', 'left');
+        $this->db->join('commodity_thumbnail', 'commodity_thumbnail.commodity_id = commodity.id', 'left');
+        $this->db->join('attachment', 'attachment.id = commodity_thumbnail.attachment_id', 'left');
+        $this->db->where('integral_indiana_bet.user_id', $user_id);
+        $this->db->group_by('integral_indiana_bet.integral_indiana_id');
+        $result = $this->db->get('integral_indiana_bet');
+
+        if ($result && $result->num_rows() > 0){
+            $data = ['success' => TRUE, 'msg' => '获取我的夺宝信息成功', 'data' => $result->result_array()];
+        }else{
+            $data = ['success' => FALSE, 'msg' => '获取我的夺宝信息失败', 'data' => NULL];
+        }
+
+        return $data;
+    }
+
+    /**
+     * 获取当前夺宝活动中，夺宝者信息
+     * $id  => integral_indiana_id
+     * @param $id
+     */
+    public function get_user_info_by_id($id = 0)
+    {
+        if (empty($id) || intval($id) < 1){
+            $data = ['success' => FALSE, 'msg' => '参数错误', 'data' => NULL];
+            echo json_encode($data);
+            exit;
+        }
+
+        $this->db->select('integral_indiana.commodity_id,
+                           integral_indiana.status as integral_indiana_status,
+                           commodity.name as commodity_name,
+                           commodity_thumbnail.attachment_id,
+                           attachment.path,
+                           integral_indiana_result.user_id,
+                           user.username,
+                           user.nickname,
+                           integral_indiana_result.id,
+                           integral_indiana_result.status
+                           ');
+        $this->db->join('integral_indiana', 'integral_indiana.id = integral_indiana_result.integral_indiana_id', 'left');
+        $this->db->join('commodity', 'commodity.id = integral_indiana.commodity_id', 'left');
+        $this->db->join('commodity_thumbnail', 'commodity_thumbnail.commodity_id = commodity.id', 'left');
+        $this->db->join('attachment', 'attachment.id = commodity_thumbnail.attachment_id', 'left');
+        $this->db->join('user', 'user.id = integral_indiana_result.user_id', 'left');
+        $this->db->where('integral_indiana_result.integral_indiana_id', $id);
+        $result = $this->db->get('integral_indiana_result');
+
+        if ($result && $result->num_rows() > 0){
+            $data = ['success' => TRUE, 'msg' => '获取成功', 'data' => $result->row_array()];
+        }else{
+            $data = ['success' => FALSE, 'msg' => '获取失败', 'data' => NULL];
+        }
+
+        return $data;
+    }
+}

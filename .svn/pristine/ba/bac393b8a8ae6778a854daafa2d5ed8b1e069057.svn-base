@@ -1,0 +1,19 @@
+$(document).ready(function(){
+    //轮播
+    $('.carousel').carousel({
+        interval: 3000
+    });
+
+    $('#page-content .box').hover(function(){
+        $('.box .img_detail').animate({left:'-150px'},500);
+    },function(){
+        $('.box .img_detail').animate({left:'0px'},500);
+    });
+
+    $('.category').on('click', function(){
+        var category_id = $(this).attr('data-id') || 0;
+        var category_name = $(this).text();
+        window.location.href = SITE_URL+'index/search?category='+category_id+'&result='+category_name;
+    });
+
+});

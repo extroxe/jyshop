@@ -1,0 +1,59 @@
+/**
+ * Created by sailwish001 on 2016/11/23.
+ */
+app.controller('modalCouponCtrl', ['$scope', '$modalInstance', '_jiyin', 'params', 'FileUploader', 'dataToURL',
+    function ($scope, $modalInstance, _jiyin, params, FileUploader, dataToURL) {
+        $scope.infoList = params.infoList;
+        $scope.title = params.title;
+        $scope.ael = params.ael;
+        $scope.infoList.privilege = parseInt($scope.infoList.privilege);
+
+        /**
+         * 获取状态
+         */
+        $scope.getStatus = function () {
+            _jiyin.dataPost('admin/system_code_admin/get_by_type/discount_coupon_status')
+                .then(function (result) {
+                    $scope.statusList = result;
+                })
+        };
+        $scope.getStatus();
+        /**
+         * 取消关闭
+         */
+        $scope.cancel = function() {
+            $modalInstance.dismiss('cancel');
+        };
+        $scope.ok = function () {
+            if(!$scope.infoList.name){
+                _jiyin.msg('e','名称不能为空');
+                return ;
+            }
+            if(!$scope.infoList.condition){
+                _jiyin.msg('e','满足条件不能为空');
+                return ;
+            }
+            if(!$scope.infoList.privilege){
+                _jiyin.msg('e','减免金额不能为空');
+                return ;
+            }
+            if(!$scope.infoList.start_time){
+                _jiyin.msg('e','生效起始时间不能为空');
+                return ;
+            }
+            if(!$scope.infoList.end_time){
+                _jiyin.msg('e','生效结束时间不能为空');
+                return ;
+            }
+            if(!$scope.infoList.useful_life){
+                _jiyin.msg('e','有效期不能为空');
+                return ;
+            }
+            if(!$scope.infoList.status_id){
+                _jiyin.msg('e','状态不能为空');
+                return ;
+            }
+            $modalInstance.close($scope.infoList);
+
+        }
+    }]);
