@@ -23,7 +23,7 @@ $(function(){
                     success : function(response){
                         if(response.success){
                             send_code_flag = true;
-                            get_verification_code_timer(60);
+                            get_verification_code_timer(3);
                             temp.attr('disabled', true);
                         }else{
                             set_time_flag = true;
@@ -96,14 +96,13 @@ function get_verification_code_timer(second) {
     second = parseInt(second);
     second--;
     $('#send_code_btn').text('('+second+'s) 重新获取');
-
-    if (second > 0){
+    $('#send_code_btn').attr('disabled',true);
+    if (second >0){
         setTimeout(function(){
             get_verification_code_timer(second);
-            $('#send_code_btn').prop('disabled',true);
         }, 1000);
     }else {
         // set_time_flag = true;
-        $('#send_code_btn').text('发送验证码').prop('disabled', false);
+        $('#send_code_btn').text('发送验证码').attr('disabled',false);
     }
 }
