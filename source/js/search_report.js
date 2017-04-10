@@ -10,7 +10,7 @@ $(function(){
         if (phone == ''){
             alert('请填写手机号！');
         }else{
-            if (set_time_flag){
+            // if (set_time_flag){
                 set_time_flag = false;
                 $.ajax({
                     type : 'post',
@@ -35,7 +35,7 @@ $(function(){
                     }
                 });
             }
-        }
+        // }
     });
 
     //查询
@@ -100,9 +100,10 @@ function get_verification_code_timer(second) {
     if (second > 0){
         setTimeout(function(){
             get_verification_code_timer(second);
+            $('#send_code_btn').prop('disabled',true);
         }, 1000);
     }else {
-        set_time_flag = true;
-        $('#send_code_btn').text('发送验证码').removeAttr('disabled');
+        // set_time_flag = true;
+        $('#send_code_btn').text('发送验证码').prop('disabled', false);
     }
 }
