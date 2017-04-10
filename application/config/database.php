@@ -75,9 +75,9 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => '120.27.54.13',
-	'username' => 'jiyin',
-	'password' => 'jiyinmysqladmin',
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => '',
 	'database' => 'sw-shines-shop',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
