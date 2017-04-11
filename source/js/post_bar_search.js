@@ -113,7 +113,7 @@ function get_search_par(key_words) {
             }else{
                 $('table tbody').html('');
                 $('table tbody').html('<div class="no-post-info">\
-                                            <img style="width: 135px" src="' +SITE_URL+ 'source/img/warning.png">\
+                                            <img style="width: 100px" src="' +SITE_URL+ 'source/img/warning.png">\
                                             没有此贴吧信息`~`</div>')
             }
         },
