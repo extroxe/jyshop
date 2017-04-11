@@ -37,4 +37,76 @@ class Jys_tool{
         return $str;
     }
 
+    /**
+     * 对发给太平的数据进行签名
+     * @param $data 要签名的json字符串
+     * @return string
+     */
+    public function taiping_sign($data) {
+        $taiping_key_path = APPPATH.'libraries/taiping_private_key.pem';
+        $key = openssl_pkey_get_private(file_get_contents($taiping_key_path));
+        if (!is_string($data)) {
+            $data = json_encode($data);
+        }
+        $sign = "";
+        openssl_sign($data, $sign, $key, OPENSSL_ALGO_SHA1);
+        $sign = base64_encode($sign);
+        return $sign;
+    }
+
+    /**
+     * 发起httpPOST请求
+     * @param $url 请求的URL
+     * @param $parameters 请求的参数，以数组形式传递
+     */
+    public function http_post_request($url, $parameters = array()) {
+        if (empty($url)) {
+            return FALSE;
+        }
+        // 初始化CURL
+        $ch = curl_init();
+        // 设置要请求的URL
+        curl_setopt($ch, CURLOPT_URL, $url);
+        // 设置不显示头部信息
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        // 设置不将请求结果直接输出在标准输出里，而是返回
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        // 设置本地不检测SSL证书
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        //设置post方式提交
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        // 设置请求参数
+        if (!empty($parameters)) {
+            if (is_array($parameters) || is_object($parameters)) {
+                $parameters = $this -> json_encode_ex($parameters);
+            }
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $parameters);
+        }
+        // 执行请求动作，并获取结果
+        $result = curl_exec($ch);
+        if ($error = curl_error($ch)) {
+            die($error);
+        }
+        // 关闭CURL
+        curl_close($ch);
+        return $result;
+    }
+
+    /**
+     * 对内容进行json编码，并且保持汉字不会被编码
+     * @param $value 被编码的对象
+     * @return 编码结果字符串
+     */
+    public function json_encode_ex($value) {
+        if (version_compare(PHP_VERSION, '5.4.0', '<')) {
+            $str = json_encode($value);
+            $str = preg_replace_callback("#\\\u([0-9a-f]{4})#i", function($matchs) {
+                return iconv('UCS-2BE', 'UTF-8', pack('H4', $matchs[1]));
+            }, $str);
+            return $str;
+        } else {
+            return json_encode($value, JSON_UNESCAPED_UNICODE);
+        }
+    }
 }

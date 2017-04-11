@@ -259,7 +259,7 @@ class Order_model extends CI_Model{
     }
 
     /**
-     * 根据订单ID获取子订单数据
+     * 根据订
      *
      * @param int $order_id 订单ID
      * @return array 子订单数据
@@ -1734,5 +1734,78 @@ class Order_model extends CI_Model{
         $this->jys_db_helper->update_by_condition('integral_indiana_result', ['user_id'=>$user_id, 'id'=>$id, 'status'=>Jys_system_code::INTEGRAL_INDIANA_RESULT_STATUS_PASS], ['status'=>Jys_system_code::INTEGRAL_INDIANA_RESULT_STATUS_RECEIVED, 'order_id'=>$order_id]);
 
         return TRUE;
+    }
+
+    /**
+     * 向外部系统发送订单信息的异步通知
+     */
+    public function notify_inform_order_info($order_id = 0, $order_number = "") {
+        if (intval($order_id) > 0) {
+            $condition['order.id'] = intval($order_id);
+        }else if (!empty($order_number)) {
+            $condition['order.number'] = $order_number;
+        }else {
+            return array('success'=>FALSE, 'msg'=>'请输入订单查询条件');
+        }
+
+        $auto_cancel_order = $this->auto_cancel_not_paid_order();
+        $data = array(
+            'success' => FALSE,
+            'msg' => '查询条件不能为空',
+            'data' => NULL
+        );
+        if (empty($condition) || count($condition) < 1){
+            return $data;
+        }
+
+        $this->db->select('order.*,
+                           user_agent.uid as openid,
+                           express_company.name as express_company_name,
+                           payment_type.name as payment_type_name,
+                           terminal_type.name as terminal_type_name,
+                           order_status.name as order_status_name');
+
+        $this->db->join('user_agent', 'user_agent.user_id = order.user_id', 'left');
+        $this->db->join('express_company', 'express_company.id = order.express_company_id', 'left');
+        $this->db->join('system_code as payment_type', 'payment_type.value = order.payment_id and payment_type.type = "'.jys_system_code::PAYMENT.'"', 'left');
+        $this->db->join('system_code as terminal_type', 'terminal_type.value = order.terminal_type and terminal_type.type = "'.jys_system_code::TERMINAL_TYPE.'"', 'left');
+        $this->db->join('system_code as order_status', 'order_status.value = order.status_id and order_status.type = "'.jys_system_code::ORDER_STATUS.'"', 'left');
+        $this->db->where($condition);
+        $this->db->where('user_agent.uid IS NOT NULL');
+        $result = $this->db->get('order');
+
+        if ($result && $result->num_rows() > 0){
+            $order = $result->row_array();
+            $order['address'] = json_decode($order['address'], TRUE);
+            $order['sub_orders'] = $this->push_sub_order($order['id']);
+            if (floatval($order['payment_amount']) < 0.01) {
+                if (floatval($order['discount_coupon_privilege']) >= 0.01) {
+                    $order['payment_amount'] = floatval($order['total_price']) - floatval($order['discount_coupon_privilege']);
+                }else {
+                    $order['payment_amount'] = floatval($order['total_price']);
+                }
+            }
+
+            $data = [
+                'success' => TRUE,
+                'msg' => '获取成功',
+                'data' => $order
+            ];
+        }else{
+            $data = [
+                'success' => FALSE,
+                'msg' => '没有数据',
+                'data' => NULL
+            ];
+        }
+
+
+        if ($data['success'] && !empty($data['data'])) {
+            $url = "http://www.baidu.com/";
+            $result = $this->jys_weixin->httpPostRequest($url, ['orderData'=>$data['data']]);
+            return TRUE;
+        }else {
+            return FALSE;
+        }
     }
 }

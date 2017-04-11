@@ -599,9 +599,9 @@ class Commodity_model extends CI_Model{
         $this->db->trans_start();
         $commodity = $this->jys_db_helper->get('commodity', $commodity_id);
         if (!empty($commodity) && isset($commodity['status_id']) && intval($commodity['status_id']) > 0) {
-            $recommend = $this->jys_db_helper->get_where('recommend_commodity', ['end_time >'=>$start_time, 'type_id'=>$type_id]);
+            $recommend = $this->jys_db_helper->get_where('recommend_commodity', ['end_time >'=>$start_time, 'type_id'=>$type_id, 'commodity_id'=>$commodity_id]);
             if (!empty($recommend)) {
-                $result['msg'] = '当前活动未结束，请重新选择时间开始时间';
+                $result['msg'] = '当前商品在当前时间已有推荐，请不要重复添加';
             }else {
                 $insert['commodity_id'] = $commodity_id;
                 $insert['start_time'] = $start_time;
