@@ -181,7 +181,10 @@ tr:last-child{
 .no-post-info{
     text-align: center;
     padding: 20px 0;
-    color: red;
+    color: #555;
+    font-family: '微软雅黑';
+    font-weight: bold;
+    font-size: 20px;
 }
 
 

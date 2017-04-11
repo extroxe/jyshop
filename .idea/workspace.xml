@@ -972,26 +972,30 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="post_bar_search.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="post_bar_search.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/source/js/post_bar_search.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="460">
-              <caret line="61" column="38" selection-start-line="61" selection-start-column="38" selection-end-line="61" selection-end-column="38" />
+            <state relative-caret-position="572">
+              <caret line="116" column="53" selection-start-line="116" selection-start-column="53" selection-end-line="116" selection-end-column="53" />
               <folding>
-                <marker date="1491875384008" expanded="true" signature="2301:3003" ph="..." />
-                <marker date="1491875384008" expanded="true" signature="2348:2526" ph="..." />
-                <marker date="1491875384008" expanded="true" signature="2379:2495" ph="..." />
-                <marker date="1491875384008" expanded="true" signature="2577:2972" ph="..." />
+                <marker date="1491877821642" expanded="true" signature="2301:3003" ph="..." />
+                <marker date="1491877821642" expanded="true" signature="2348:2526" ph="..." />
+                <marker date="1491877821642" expanded="true" signature="2379:2495" ph="..." />
+                <marker date="1491877821642" expanded="true" signature="2577:2972" ph="..." />
+                <marker date="1491877821642" expanded="true" signature="3479:3556" ph="..." />
+                <marker date="1491877821642" expanded="true" signature="3479:3594" ph="..." />
+                <marker date="1491877821642" expanded="true" signature="3479:3656" ph="..." />
+                <marker date="1491877821642" expanded="true" signature="3538:3550" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="post_bar_search.css" pinned="false" current-in-tab="false">
+      <file leaf-file-name="post_bar_search.css" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/source/css/post_bar_search.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="722">
-              <caret line="181" column="23" selection-start-line="181" selection-start-column="23" selection-end-line="181" selection-end-column="23" />
+            <state relative-caret-position="806">
+              <caret line="186" column="20" selection-start-line="186" selection-start-column="20" selection-end-line="186" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -1071,8 +1075,8 @@
         <option value="$PROJECT_DIR$/source/js/header.js" />
         <option value="$PROJECT_DIR$/source/js/search_report.js" />
         <option value="$PROJECT_DIR$/application/views/service.php" />
-        <option value="$PROJECT_DIR$/source/css/post_bar_search.css" />
         <option value="$PROJECT_DIR$/source/js/post_bar_search.js" />
+        <option value="$PROJECT_DIR$/source/css/post_bar_search.css" />
       </list>
     </option>
   </component>
@@ -1247,12 +1251,12 @@
       <workItem from="1491487336435" duration="997000" />
       <workItem from="1491792709987" duration="11050000" />
       <workItem from="1491820557919" duration="8759000" />
-      <workItem from="1491874484349" duration="1135000" />
+      <workItem from="1491874484349" duration="2482000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45996000" />
+    <option name="totallyTimeSpent" value="47343000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -1635,14 +1639,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/source/css/post_bar_search.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="722">
-          <caret line="181" column="23" selection-start-line="181" selection-start-column="23" selection-end-line="181" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/source/js/post_bar.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="250">
@@ -1653,14 +1649,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/source/js/post_bar_search.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="61" column="38" selection-start-line="61" selection-start-column="38" selection-end-line="61" selection-end-column="38" />
+        <state relative-caret-position="572">
+          <caret line="116" column="53" selection-start-line="116" selection-start-column="53" selection-end-line="116" selection-end-column="53" />
           <folding>
-            <marker date="1491875384008" expanded="true" signature="2301:3003" ph="..." />
-            <marker date="1491875384008" expanded="true" signature="2348:2526" ph="..." />
-            <marker date="1491875384008" expanded="true" signature="2379:2495" ph="..." />
-            <marker date="1491875384008" expanded="true" signature="2577:2972" ph="..." />
+            <marker date="1491877821642" expanded="true" signature="2301:3003" ph="..." />
+            <marker date="1491877821642" expanded="true" signature="2348:2526" ph="..." />
+            <marker date="1491877821642" expanded="true" signature="2379:2495" ph="..." />
+            <marker date="1491877821642" expanded="true" signature="2577:2972" ph="..." />
+            <marker date="1491877821642" expanded="true" signature="3479:3556" ph="..." />
+            <marker date="1491877821642" expanded="true" signature="3479:3594" ph="..." />
+            <marker date="1491877821642" expanded="true" signature="3479:3656" ph="..." />
+            <marker date="1491877821642" expanded="true" signature="3538:3550" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/css/post_bar_search.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="806">
+          <caret line="186" column="20" selection-start-line="186" selection-start-column="20" selection-end-line="186" selection-end-column="20" />
+          <folding />
         </state>
       </provider>
     </entry>

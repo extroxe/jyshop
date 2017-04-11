@@ -111,8 +111,10 @@ function get_search_par(key_words) {
                 init_post(response.data);
                 console.log(response.msg);
             }else{
-                $('table').html('');
-                $('.post_list_box').append('<div class="no-post-info">无相关信息</div>')
+                $('table tbody').html('');
+                $('table tbody').html('<div class="no-post-info">\
+                                            <img style="width: 135px" src="' +SITE_URL+ 'source/img/warning.png">\
+                                            没有此贴吧信息`~`</div>')
             }
         },
         error:function () {
