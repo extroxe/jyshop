@@ -57,9 +57,14 @@ $(function () {
      */
 
     $('#search-btn-post').click(function(){
+        key_words = $('#key_words').val();
         if (key_words != '' && key_words != null){
             get_search_par(key_words);
         }
+    });
+    $('#key_words').bind('keypress',function(event){
+        key_words = $(this).val();
+        get_search_par(key_words);
     });
 
     /**
@@ -106,7 +111,8 @@ function get_search_par(key_words) {
                 init_post(response.data);
                 console.log(response.msg);
             }else{
-
+                $('table').html('');
+                $('.post_list_box').append('<div class="no-post-info">无相关信息</div>')
             }
         },
         error:function () {

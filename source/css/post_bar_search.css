@@ -177,4 +177,11 @@ tr:last-child{
     display: inline-block;
 }
 
+/*无贴吧信息*/
+.no-post-info{
+    text-align: center;
+    padding: 20px 0;
+    color: red;
+}
+
 
