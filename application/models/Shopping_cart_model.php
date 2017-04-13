@@ -48,8 +48,8 @@ class Shopping_cart_model extends CI_Model{
                            flash_sale.price as flash_sale_price,
                            shopping_cart.amount,
                            shopping_cart.create_time');
-
-        $this->db->join('flash_sale', 'flash_sale.commodity_id = shopping_cart.commodity_id', 'left');
+        $current_time = date('Y-m-d H:i:s');
+        $this->db->join('flash_sale', "flash_sale.commodity_id = shopping_cart.commodity_id AND `flash_sale`.`start_time` <= '{$current_time}' AND `flash_sale`.`end_time` >= '{$current_time}'", 'left');
         $this->db->join('commodity', 'commodity.id = shopping_cart.commodity_id', 'left');
         $this->db->join('commodity_thumbnail', 'commodity_thumbnail.commodity_id = commodity.id', 'left');
         $this->db->join('attachment', 'attachment.id = commodity_thumbnail.attachment_id', 'left');
