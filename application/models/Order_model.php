@@ -453,9 +453,10 @@ class Order_model extends CI_Model{
      * 根据购物车获取订单所需要的数据
      *
      * @param array $shopping_cart_ids 购物车ids
+     * @param array $user_info 用户信息
      * @return array|bool
      */
-    public function get_order_by_shopping_cart($shopping_cart_ids = []){
+    public function get_order_by_shopping_cart($shopping_cart_ids = [], $user_info = []){
         if (empty($shopping_cart_ids) || !is_array($shopping_cart_ids)){
             return FALSE;
         }
@@ -488,7 +489,20 @@ class Order_model extends CI_Model{
         $result = $this->db->get('shopping_cart');
 
         if ($result && $result->num_rows() > 0){
-            return $result->result_array();
+            $result_data = $result->result_array();
+            if (!empty($user_info) && is_array($user_info)) {
+                for ($i = 0; $i < count($result_data); $i++) {
+                    if (isset($user_info['price_discount']) && floatval($user_info['price_discount']) > 0) {
+                        $result_data[$i]['price'] = floatval($user_info['price_discount']) * floatval($result_data[$i]['price']);
+                        $result_data[$i]['total_price'] = floatval($user_info['price_discount']) * floatval($result_data[$i]['total_price']);
+                    }
+                    if (isset($user_info['points_coefficient']) && floatval($user_info['points_coefficient']) > 0) {
+                        $result_data[$i]['points'] = intval(floatval($user_info['points_coefficient']) * intval($result_data[$i]['points']));
+                    }
+                }
+            }
+
+            return $result_data;
         }else{
             return [];
         }
@@ -939,7 +953,7 @@ class Order_model extends CI_Model{
         if ($is_point_flag){
             $orders = $this->jys_db_helper->get('commodity', $shopping_cart_ids[0]);
         }else{
-            $orders = $this->get_order_by_shopping_cart($shopping_cart_ids);
+            $orders = $this->get_order_by_shopping_cart($shopping_cart_ids, $user_info);
         }
         $add['number'] = $this->generate_order_number();
         $add['total_price'] = $is_point_flag ? $orders['price'] : $this->calculation_total_price($orders);
@@ -949,7 +963,7 @@ class Order_model extends CI_Model{
         $add['terminal_type']              = $terminal_type;
         $add['payment_id']                 = $payment_id;
         $add['status_id']                  = Jys_system_code::ORDER_STATUS_NOT_PAID;
-        
+
         if ($is_point_flag){
             $add['payment_amount'] = $add['total_price'];
             $add['status_id'] = Jys_system_code::ORDER_STATUS_PAID;
@@ -983,7 +997,7 @@ class Order_model extends CI_Model{
 
         $data = $this->jys_db_helper->add('order', $add, TRUE);
         if ($data['success']){
-            if (isset($orders['type_id']) && $orders['type_id'] == 3 && !empty($orders['level_id'])){
+            if (isset($orders['type_id']) && $orders['type_id'] == jys_system_code::COMMODITY_TYPE_MEMBER && !empty($orders['level_id'])){
                 $user_level = $this->jys_db_helper->get('level', $user_info['level']);
                 $order_level = $this->jys_db_helper->get('level', $orders['level_id']);
                 if ($user_level['rank'] > $order_level['rank']){
@@ -1224,6 +1238,7 @@ class Order_model extends CI_Model{
                         }else {
                             $result['success'] = TRUE;
                             $result['msg'] = '操作成功';
+                            $this->Order_model->notify_inform_order_info($refund['order_id']);
                         }
                     }else {
                         // 退款失败
@@ -1244,6 +1259,7 @@ class Order_model extends CI_Model{
                 }else {
                     $result['success'] = TRUE;
                     $result['msg'] = '操作成功';
+                    $this->Order_model->notify_inform_order_info($refund['order_id']);
                 }
             }
         }else {
@@ -1483,7 +1499,10 @@ class Order_model extends CI_Model{
             // 事务失败
             $result['success'] = FALSE;
             $result['msg'] = '修改失败，事务提交失败';
+        }else {
+            $this->notify_inform_order_info(0, $order_number);
         }
+
         return $result;
     }
 
@@ -1771,7 +1790,7 @@ class Order_model extends CI_Model{
         $this->db->join('system_code as terminal_type', 'terminal_type.value = order.terminal_type and terminal_type.type = "'.jys_system_code::TERMINAL_TYPE.'"', 'left');
         $this->db->join('system_code as order_status', 'order_status.value = order.status_id and order_status.type = "'.jys_system_code::ORDER_STATUS.'"', 'left');
         $this->db->where($condition);
-        $this->db->where('user_agent.uid IS NOT NULL');
+        //$this->db->where('user_agent.uid IS NOT NULL');
         $result = $this->db->get('order');
 
         if ($result && $result->num_rows() > 0){
@@ -1801,11 +1820,49 @@ class Order_model extends CI_Model{
 
 
         if ($data['success'] && !empty($data['data'])) {
-            $url = "http://www.baidu.com/";
-            $result = $this->jys_weixin->httpPostRequest($url, ['orderData'=>$data['data']]);
-            return TRUE;
+
+            $data['data']['openid'] = "oVKdms_Cc6a3KCW5o7Xs-cs_fLxE";
+            if (is_array($data['data']['sub_orders'])) {
+                for ($i = 0; $i < count($data['data']['sub_orders']); $i++) {
+                    $data['data']['sub_orders'][$i]['thumbnail_path'] = NULL;
+                }
+            }
+            $sign_str = $this->jys_tool->taiping_sign($data['data']);
+            if (!empty($sign_str)) {
+                $request_time = 0;
+                $post_data = array('orderData'=>json_encode($data['data'], JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE), 'signature'=>$sign_str);
+//                echo  $post_data['orderData'];
+                while (TRUE) {
+                    if ($this->send_info($post_data)) {
+                        return TRUE;
+                    }else if ($request_time >= 3) {
+                        return FALSE;
+                    }else {
+                        $request_time++;
+                    }
+                }
+            }else {
+                return FALSE;
+            }
         }else {
             return FALSE;
+        }
+    }
+
+    /**
+     * 发送通知请求
+     * @param $post_data 发送的数据
+     * @return bool 请求的结果
+     */
+    private function send_info($post_data) {
+        $url = "http://wxtest.life.cntaiping.com/taiping-lxjk/service/shines/ordercallback.do";
+        $result = $this->jys_tool->http_post_request($url, $post_data);
+//        echo $result;
+        $result = json_decode($result, TRUE);
+        if ($result['status'] == 'fail') {
+            return FALSE;
+        }else {
+            return TRUE;
         }
     }
 }

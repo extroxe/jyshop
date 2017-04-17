@@ -22,7 +22,7 @@ Class Shopping_cart extends CI_Controller {
     public function __construct(){
         parent::__construct();
         $this->load->library(['form_validation', 'Jys_db_helper']);
-        $this->load->model(['Common_model', 'Shopping_cart_model', 'Commodity_model']);
+        $this->load->model(['Common_model', 'Shopping_cart_model', 'Commodity_model', 'User_model']);
     }
 
     /**
@@ -36,7 +36,10 @@ Class Shopping_cart extends CI_Controller {
         $data['isset_search'] = TRUE;
         $data['isset_nav'] = FALSE;
         $data['is_cart'] = TRUE;
-        $data['shopping_carts'] = $this->Shopping_cart_model->all($_SESSION['user_id'])['data'];
+        $user_info = $this->User_model->get_user_detail_by_condition(['user.id' => $_SESSION['user_id']]);
+        $shopping_carts = $this->Shopping_cart_model->all($_SESSION['user_id'])['data'];
+        $data['shopping_carts'] = $this->Commodity_model->calculate_discount_price($shopping_carts, $user_info['price_discount']);
+
         $data['commodity_type_id'] = $this->Commodity_model->get_commodity_list_by_condition(['commodity.id'=>$data['shopping_carts'][0]['commodity_id']], FALSE)['type_id'];
         $this->load->view('includes/template_view', $data);
     }
@@ -71,8 +74,13 @@ Class Shopping_cart extends CI_Controller {
      * 获取该用户的全部购物车信息
      */
     public function all(){
-        $user_id = $_SESSION['user_id'];
-        $data = $this->Shopping_cart_model->all($user_id, ['commodity.type_id !='=>jys_system_code::COMMODITY_TYPE_MEMBER]);
+        if (!empty($_SESSION['user_id']) && !empty($_SESSION['role_id']) && intval($_SESSION['role_id']) == jys_system_code::ROLE_USER) {
+            $user_info = $this->User_model->get_user_detail_by_condition(['user.id'=>$_SESSION['user_id']]);
+            $data = $this->Shopping_cart_model->all($_SESSION['user_id'], ['commodity.type_id !='=>jys_system_code::COMMODITY_TYPE_MEMBER]);
+            $data['data'] = $this->Commodity_model->calculate_discount_price($data['data'], $user_info['price_discount']);
+        }else {
+            $data = $this->Shopping_cart_model->all(0, ['commodity.type_id !='=>jys_system_code::COMMODITY_TYPE_MEMBER]);
+        }
 
         echo json_encode($data);
     }

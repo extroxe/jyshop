@@ -99,25 +99,34 @@ Class User_model extends CI_Model {
      * @param $condition 查询条件
      * @return 返回用户信息或FALSE
      */
-    public function get_user_detail_by_condition($condition = [], $show_psd = FALSE) {
+    public function get_user_detail_by_condition($condition = [], $show_psd = FALSE, $is_agent_user = FALSE) {
         if (!is_array($condition) || empty($condition)) {
             return FALSE;
         }
 
         $this->db->select('user.*,
+                           user_agent.uid,
+                           user_agent.agent_id,
                            avatar_attachment.path as avatar_path,
                            role.name as role_name,
                            level.name as level_name,
+                           level.price_discount,
+                           level.points_coefficient,
                            level_attachment.path as level_icon_path');
         $this->db->join('level', 'level.id = user.level', 'left');
         $this->db->join('attachment as level_attachment', 'level_attachment.id = level.icon_id', 'left');
         $this->db->join('attachment as avatar_attachment', 'avatar_attachment.id = user.avatar', 'left');
         $this->db->join('system_code as role', 'role.value = user.role_id and role.type = "'.jys_system_code::ROLE.'"', 'left');
+        $this->db->join('user_agent', 'user_agent.user_id = user.id', 'left');
         $this->db->where($condition);
         $result = $this->db->get('user');
 
         if ($result && $result->num_rows() > 0) {
             $user_info = $result->row_array();
+            if (!$is_agent_user) {
+                unset($user_info['uid']);
+                unset($user_info['agent_id']);
+            }
             if (!$show_psd){
                 $user_info['password'] = NULL;
             }

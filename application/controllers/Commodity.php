@@ -22,7 +22,7 @@ Class Commodity extends CI_Controller {
     public function __construct(){
         parent::__construct();
         $this->load->library(['form_validation', 'Jys_db_helper']);
-        $this->load->model(['Commodity_model', 'Category_model']);
+        $this->load->model(['Commodity_model', 'Category_model', 'User_model']);
     }
 
     /**
@@ -43,16 +43,31 @@ Class Commodity extends CI_Controller {
         $data['isset_search'] = TRUE;
         $data['isset_nav'] = TRUE;
         $data['collection'] = $this->Category_model->get_category();
-        $data['commodity'] = $this->Commodity_model->get_commodity_by_condition(['commodity.id'=>$commodity_id])['data'];
+        $user_info = [];
+        if (!empty($_SESSION['user_id']) && !empty($_SESSION['role_id']) && intval($_SESSION['role_id']) == jys_system_code::ROLE_USER) {
+            $user_info = $this->User_model->get_user_detail_by_condition(['user.id' => $_SESSION['user_id']]);
+            $data['commodity'] = $this->Commodity_model->get_commodity_by_condition(['commodity.id'=>$commodity_id], FALSE, FALSE, FALSE, $user_info)['data'];
+        }else {
+            $data['commodity'] = $this->Commodity_model->get_commodity_by_condition(['commodity.id'=>$commodity_id])['data'];
+        }
+
 
         if (empty($data['commodity'])){
             show_404();
         }
 
-        if ($data['commodity']['is_point']){
-            $data['recommend'] = $this->Commodity_model->get_home_recommend(4, 2);
-        }else{
-            $data['recommend'] = $this->Commodity_model->get_home_recommend(4, 1);
+        if (!empty($_SESSION['user_id']) && !empty($_SESSION['role_id']) && intval($_SESSION['role_id']) == jys_system_code::ROLE_USER) {
+            if ($data['commodity']['is_point']){
+                $data['recommend'] = $this->Commodity_model->get_home_recommend(4, jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_EXCHANGE, $user_info);
+            }else{
+                $data['recommend'] = $this->Commodity_model->get_home_recommend(4, jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_SALE, $user_info);
+            }
+        }else {
+            if ($data['commodity']['is_point']){
+                $data['recommend'] = $this->Commodity_model->get_home_recommend(4, jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_EXCHANGE);
+            }else{
+                $data['recommend'] = $this->Commodity_model->get_home_recommend(4, jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_SALE);
+            }
         }
 
         $data['commodity_thumbnail'] = $this->Commodity_model->show_thumbnail($commodity_id)['data'];
@@ -161,7 +176,12 @@ Class Commodity extends CI_Controller {
             'msg' => '没有推荐商品',
             'data' => NULL
         ];
-        $recommend_commodity = $this->Commodity_model->get_recommend(10)['data'];
+        if (!empty($_SESSION['user_id']) && !empty($_SESSION['role_id']) && intval($_SESSION['role_id']) == jys_system_code::ROLE_USER) {
+            $user_info = $this->User_model->get_user_detail_by_condition(['user.id' => $_SESSION['user_id']]);
+            $recommend_commodity = $this->Commodity_model->get_home_recommend(10, jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_SALE, $user_info);
+        }else {
+            $recommend_commodity = $this->Commodity_model->get_home_recommend(10, jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_SALE);
+        }
         if (!empty($recommend_commodity)){
             $data = [
                 'success' => TRUE,

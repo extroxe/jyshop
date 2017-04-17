@@ -84,7 +84,10 @@ class Shopping_cart_model extends CI_Model{
      */
     public function amount($user_id){
         $this->db->select('sum(shopping_cart.amount) as amount');
+        $this->db->join('commodity', 'commodity.id = shopping_cart.commodity_id');
         $this->db->where('shopping_cart.user_id', $user_id);
+        $this->db->where('commodity.is_point', 0);
+        $this->db->where('commodity.status_id', Jys_system_code::COMMODITY_STATUS_PUTAWAY);
         $result = $this->db->get('shopping_cart');
 
         if ($result && $result->num_rows() > 0){

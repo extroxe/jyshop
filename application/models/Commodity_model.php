@@ -623,7 +623,7 @@ class Commodity_model extends CI_Model{
     }
 
     /**
-     * 获取推荐商品
+     * 管理员端获取获取推荐商品
      *
      * @return array
      */
@@ -679,9 +679,11 @@ class Commodity_model extends CI_Model{
      * 获取热换商品
      *
      * @param int $new_num 热换条数
+     * @param int $type_id 推荐类型
+     * @param  array $user_info 用户信息
      * @return array
      */
-    public function get_home_recommend($new_num = NULL, $type_id = jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_EXCHANGE){
+    public function get_home_recommend($new_num = NULL, $type_id = jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_EXCHANGE, $user_info = []){
         $date_now = date('Y-m-d H:i:s');
 
         $this->db->select('recommend_commodity.id,
@@ -712,7 +714,11 @@ class Commodity_model extends CI_Model{
         $result = $this->db->get('recommend_commodity');
 
         if ($result && $result->num_rows() > 0){
-            return $result->result_array();
+            if ($type_id == Jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_SALE && isset($user_info['price_discount']) && floatval($user_info['price_discount']) > 0) {
+                return $this->calculate_discount_price($result->result_array(), $user_info['price_discount']);
+            }else {
+                return $result->result_array();
+            }
         }else{
             return [];
         }
@@ -857,9 +863,10 @@ class Commodity_model extends CI_Model{
      * @param bool $multiple 返回多条数据
      * @param bool $thumb 返回缩略图
      * @param bool $limit 数据数量
+     * @param array $user_info 用户信息（数组）
      * @return array 商品详情
      */
-    public function get_commodity_by_condition($condition = [], $multiple = FALSE, $thumb = FALSE, $limit = FALSE){
+    public function get_commodity_by_condition($condition = [], $multiple = FALSE, $thumb = FALSE, $limit = FALSE, $user_info = []){
         $data = [
             'success' => FALSE,
             'msg' => '没有商品数据',
@@ -921,10 +928,24 @@ class Commodity_model extends CI_Model{
         $result = $this->db->get('commodity');
 
         if ($result && $result->num_rows() > 0){
+            $response_data = array();
+            if (isset($user_info['price_discount']) && floatval($user_info['price_discount']) > 0) {
+                if ($multiple) {
+                    $result_data = $result->result_array();
+
+                }else {
+                    $result_data = $result->row_array();
+                }
+                $result_data = $this->calculate_discount_price($result_data, $user_info['price_discount']);
+                $response_data = $this->commodity_html_decode($result_data);
+            }else {
+                $response_data = $this->commodity_html_decode($multiple ? $result->result_array() : $result->row_array());
+            }
+
             $data = [
                 'success' => TRUE,
                 'msg' => '',
-                'data' => $this->commodity_html_decode($multiple ? $result->result_array() : $result->row_array())
+                'data' => $response_data
             ];
         }
 
@@ -1208,5 +1229,159 @@ class Commodity_model extends CI_Model{
         }
 
         return FALSE;
+    }
+
+    /**
+     * 根据代理商ID分页获取代理商商品
+     * @param $agent_id 代理商ID
+     * @param $page 页数
+     * @param $page_size 页面大小
+     */
+    public function paginate_by_agent_id($agent_id = 0, $page = 1, $page_size = 10, $condition = NULL, $keyword = '', $user_info = []) {
+        $response = array('success'=>FALSE, 'msg'=>'获取商品列表失败', 'data'=>[], 'total_page'=>0);
+        if (intval($page) < 1 || intval($page_size) < 1) {
+            $response['msg'] = '参数错误，获取商品列表失败';
+            return $response;
+        }
+        $this->db->select('commodity.id,
+                           commodity.name,
+                           commodity.number,
+                           commodity.price,
+                           commodity.points,
+                           commodity.introduce,
+                           commodity.detail,
+                           commodity.sales_volume,
+                           commodity.create_time,
+                           commodity.update_time,
+                           commodity.category_id,
+                           commodity.level_id,
+                           agent_home.agent_id,
+                           flash_sale.price as flash_sale_price,
+                           flash_sale.start_time as flash_sale_start_time,
+                           flash_sale.end_time as flash_sale_end_time,
+                           category.name as category_name,
+                           r_commodity.id as recommend_id,
+                           r_commodity.name as recommend_name,
+                           recommend_commodity.start_time,
+                           recommend_commodity.end_time,
+                           commodity.status_id,
+                           commodity_status.name as status,
+                           commodity.type_id,
+                           commodity_type.name as type,
+                           commodity.is_point,
+                           attachment.path');
+
+        $this->db->join('commodity_thumbnail', 'commodity_thumbnail.commodity_id = commodity.id', 'left');
+        $this->db->join('attachment', 'attachment.id = commodity_thumbnail.attachment_id', 'left');
+        $this->db->join('category', 'category.id = commodity.category_id', 'left');
+        $this->db->join('recommend_commodity', 'recommend_commodity.commodity_id = commodity.id', 'left');
+        $this->db->join('commodity as r_commodity', 'r_commodity.id = recommend_commodity.commodity_id', 'left');
+        $this->db->join('flash_sale', 'flash_sale.commodity_id = commodity.id', 'left');
+        $this->db->join('system_code as commodity_status', 'commodity_status.value = commodity.status_id and commodity_status.type = "'.jys_system_code::COMMODITY_STATUS.'"', 'left');
+        $this->db->join('system_code as commodity_type', 'commodity_type.value = commodity.type_id and commodity_type.type = "'.jys_system_code::COMMODITY_TYPE.'"', 'left');
+        $this->db->join('agent_home', 'agent_home.commodity_id = commodity.id', 'left');
+
+
+        $this->db->where('commodity.status_id !=', jys_system_code::COMMODITY_STATUS_DELETE);
+        if (intval($agent_id) > 0) {
+            $this->db->where('agent_home.agent_id', intval($agent_id));
+        }
+        if (!empty($condition)){
+            $this->db->where($condition);
+        }
+
+        if (!empty($keyword)) {
+            // 关键字模糊查找
+            $this->db->group_start();
+            $this->db->like('commodity.name', $keyword);
+            $this->db->or_like('commodity.introduce', $keyword);
+            $this->db->or_like('category.name', $keyword);
+            $this->db->group_end();
+        }
+
+        $this->db->group_by('commodity.id');
+        $this->db->limit($page_size, ($page - 1) * $page_size);
+        $result = $this->db->get('commodity');
+        if ($result && $result->num_rows() > 0) {
+            $response['success'] = TRUE;
+            $commodity_list = $result->result_array();
+            if (isset($user_info['price_discount']) && floatval($user_info['price_discount']) > 0) {
+                $commodity_list = $this->calculate_discount_price($commodity_list, $user_info['price_discount']);
+            }
+            $response['data'] = $commodity_list;
+            $response['msg'] = '获取成功';
+
+            $this->db->select('COUNT(commodity.id) AS count');
+            $this->db->join('commodity_thumbnail', 'commodity_thumbnail.commodity_id = commodity.id', 'left');
+            $this->db->join('attachment', 'attachment.id = commodity_thumbnail.attachment_id', 'left');
+            $this->db->join('category', 'category.id = commodity.category_id', 'left');
+            $this->db->join('recommend_commodity', 'recommend_commodity.commodity_id = commodity.id', 'left');
+            $this->db->join('commodity as r_commodity', 'r_commodity.id = recommend_commodity.commodity_id', 'left');
+            $this->db->join('flash_sale', 'flash_sale.commodity_id = commodity.id', 'left');
+            $this->db->join('system_code as commodity_status', 'commodity_status.value = commodity.status_id and commodity_status.type = "'.jys_system_code::COMMODITY_STATUS.'"', 'left');
+            $this->db->join('system_code as commodity_type', 'commodity_type.value = commodity.type_id and commodity_type.type = "'.jys_system_code::COMMODITY_TYPE.'"', 'left');
+            $this->db->join('agent_home', 'agent_home.commodity_id = commodity.id', 'left');
+
+            $this->db->where('commodity.status_id !=', jys_system_code::COMMODITY_STATUS_DELETE);
+            if (intval($agent_id) > 0) {
+                $this->db->where('agent_home.agent_id', intval($agent_id));
+            }
+            if (!empty($condition)){
+                $this->db->where($condition);
+            }
+
+            if (!empty($keyword)) {
+                // 关键字模糊查找
+                $this->db->group_start();
+                $this->db->like('commodity.name', $keyword);
+                $this->db->or_like('commodity.introduce', $keyword);
+                $this->db->or_like('category.name', $keyword);
+                $this->db->group_end();
+            }
+
+            $this->db->group_by('commodity.id');
+            $data_result = $this->db->get('commodity');
+            if ($data_result && $data_result->num_rows() > 0) {
+                $data_result = $data_result->row_array();
+                $response['total_page'] = intval($data_result['count']) > 0 ? intval($data_result['count']) : 1;
+            }else {
+                $response['total_page'] = 1;
+            }
+        }else {
+            $response['msg'] = '未找到符合要求的商品';
+        }
+
+        return $response;
+    }
+
+    /**
+     * 计算折扣价格
+     * @param array $commodity_list 商品信息列表
+     * @param $price_discount 折扣率
+     * @return array 修改价格后的商品信息列表
+     */
+    public function calculate_discount_price($commodity_list = [], $price_discount) {
+        if (empty($commodity_list) || floatval($price_discount) < 0) {
+            return $commodity_list;
+        }
+
+        if (isset($commodity_list['price']) && floatval($commodity_list['price']) > 0) {
+            // 商品信息是一维数组
+            $commodity_list['price'] = floatval($price_discount) * floatval($commodity_list['price']);
+            if ($commodity_list['price'] < 0.01) {
+                $commodity_list['price'] = 0.01;
+            }
+        }else {
+            for ($i = 0; $i < count($commodity_list); $i++) {
+                if (isset($commodity_list[$i]['price']) && floatval($commodity_list[$i]['price']) > 0) {
+                    $commodity_list[$i]['price'] = floatval($price_discount) * floatval($commodity_list[$i]['price']);
+                    if ($commodity_list[$i]['price'] < 0.01) {
+                        $commodity_list[$i]['price'] = 0.01;
+                    }
+                }
+            }
+        }
+
+        return $commodity_list;
     }
 }

@@ -132,6 +132,8 @@ class Order_admin extends CI_Controller{
                 if ($this->jys_db_helper->update('order', $id, $post)){
                     $data['success'] = TRUE;
                     $data['msg'] = '更新成功';
+
+                    $this->Order_model->notify_inform_order_info($id);
                 }
             }
         }else{
@@ -144,6 +146,7 @@ class Order_admin extends CI_Controller{
             $order = $this->jys_db_helper->get('order', $id);
             $express_company = $this->jys_db_helper->get('express_company', $order['express_company_id']);
             $user = $this->jys_db_helper->get('user', $order['user_id']);
+
             if ($order['status_id'] == Jys_system_code::ORDER_STATUS_DELIVERED){
                 $url = site_url('weixin/index/logistics_details/'.$order['id']);
                 $tm = $this->config->item('wx_tm_order_delivered');
@@ -316,7 +319,9 @@ class Order_admin extends CI_Controller{
                     ]
                 ];
             }
-            $this->jys_weixin->send_template_message($user['openid'], $tm, $info, $url);
+            if (!empty($user['openid']) && !empty($tm) && !empty($info) && !empty($url)) {
+                $this->jys_weixin->send_template_message($user['openid'], $tm, $info, $url);
+            }
         }
 
         echo json_encode($data);

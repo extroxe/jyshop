@@ -45,6 +45,8 @@ class Order extends CI_Controller{
             $data['settlement'] = $this->Commodity_model->get_commodity_by_condition(['commodity.id'=>$shopping_cart_ids[0]], TRUE, TRUE)['data'];
         }else{
             $data['settlement'] = $this->Order_model->get_order_settlement($shopping_cart_ids, $user_id );
+            $user_info = $this->User_model->get_user_detail_by_condition(['user.id' => $_SESSION['user_id']]);
+            $data['settlement'] = $this->Commodity_model->calculate_discount_price($data['settlement'], $user_info['price_discount']);
         }
 
         if (empty($data['settlement'])){
@@ -52,7 +54,7 @@ class Order extends CI_Controller{
         }
 
         $data['discount'] = $this->Discount_coupon_model->get_user_discount_coupon_list_by_user_id($_SESSION['user_id'], jys_system_code::USER_DISCOUNT_COUPON_STATUS_UNUSED)['data'];
-        $data['payments'] = $this->jys_db_helper->get_where_multi('system_code', ['type'=>'payment']);
+        $data['payments'] = $this->jys_db_helper->get_where_multi('system_code', ['type'=>jys_system_code::PAYMENT]);
         $data['isset_search'] = FALSE;
         $data['isset_nav'] = FALSE;
         $this->load->view('includes/template_view', $data);
@@ -275,6 +277,7 @@ class Order extends CI_Controller{
                 $this->db->trans_rollback();
             }else{
                 $this->db->trans_commit();
+                $this->Order_model->notify_inform_order_info($data['insert_id']);
             }
         }else{
             $data['success'] = FALSE;
@@ -417,7 +420,9 @@ class Order extends CI_Controller{
 //        $result = $this->Express_model->show_express_info_by_order_id(37);
 //
 //        echo json_encode($result);
-        $this->Order_model->auto_cancel_not_paid_order();
+//        $this->Order_model->auto_cancel_not_paid_order();
+
+//        $this->Order_model->notify_inform_order_info(0, '7548021491444393');
     }
 
     /**

@@ -36,12 +36,19 @@ Class Index extends CI_Controller {
 		$data['main_content'] = 'index';
 		$data['collection'] = $this->Category_model->get_category();
 		$data['member_category'] = $this->Category_model->get_member_category();
-		$data['banner'] = $this->Banner_model->get_home_banner(5, 1);
-		$data['new_recent'] = $this->Commodity_model->get_commodity_by_condition(['commodity.is_point'=>0], TRUE, TRUE, 4)['data'];
+		$data['banner'] = $this->Banner_model->get_home_banner(5, jys_system_code::BANNER_POSITION_PC_HOME);
+        if (!empty($_SESSION['user_id']) && !empty($_SESSION['role_id']) && intval($_SESSION['role_id']) == jys_system_code::ROLE_USER) {
+            $user_info = $this->User_model->get_user_detail_by_condition(['user.id'=>$_SESSION['user_id']]);
+            $data['new_recent'] = $this->Commodity_model->get_commodity_by_condition(['commodity.is_point'=>0], TRUE, TRUE, 4, $user_info)['data'];
+            $data['recommend_hot_sale'] = $this->Commodity_model->get_home_recommend(4, jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_SALE, $user_info);
+        }else {
+            $data['new_recent'] = $this->Commodity_model->get_commodity_by_condition(['commodity.is_point'=>0], TRUE, TRUE, 4)['data'];
+            $data['recommend_hot_sale'] = $this->Commodity_model->get_home_recommend(4, jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_SALE);
+        }
+
 		$data['flash_sale'] = $this->Commodity_model->get_flash_sale(3)['data'];
-		$data['recommend_hot_sale'] = $this->Commodity_model->get_home_recommend(4, 1);
 		$data['recommend_hot_sale_cover'] = $this->System_setting_model->get_hot_sale_cover()['data'];
-		$data['recommend_hot_exchange'] = $this->Commodity_model->get_home_recommend(4, 2);
+		$data['recommend_hot_exchange'] = $this->Commodity_model->get_home_recommend(4, jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_EXCHANGE);
 		$data['recommend_hot_exchange_cover'] = $this->System_setting_model->get_hot_exchange_cover()['data'];
 		$data['isset_search'] = TRUE;
 		$data['isset_nav'] = TRUE;
@@ -74,6 +81,11 @@ Class Index extends CI_Controller {
 		$data['search'] = $search;
 		$data['collection'] = $this->Category_model->get_category();
 		$commodity = $this->Commodity_model->paginate($page, $page_size, $search_str);
+        $user_info = [];
+        if (!empty($_SESSION['user_id']) && !empty($_SESSION['role_id']) && intval($_SESSION['role_id']) == jys_system_code::ROLE_USER) {
+            $user_info = $this->User_model->get_user_detail_by_condition(['user.id'=>$_SESSION['user_id']]);
+            $commodity['data'] = $this->Commodity_model->calculate_discount_price($commodity['data'], $user_info['price_discount']);
+        }
 		$data['search_commodity'] = $commodity['data'];
 		$data['render'] = $this->Common_model->render($page, $commodity['total_page']);
 		$data['category'] = $this->Common_model->unique_queue($data['search_commodity'], ['category_id', 'category_name']);
@@ -87,12 +99,19 @@ Class Index extends CI_Controller {
 				}
 			}
 		}
-
-		if ($all_point_flag){
-			$data['recommend'] = $this->Commodity_model->get_home_recommend(3, 2);
-		}else{
-			$data['recommend'] = $this->Commodity_model->get_home_recommend(3, 1);
-		}
+        if (!empty($_SESSION['user_id']) && !empty($_SESSION['role_id']) && intval($_SESSION['role_id']) == jys_system_code::ROLE_USER) {
+            if ($all_point_flag){
+                $data['recommend'] = $this->Commodity_model->get_home_recommend(3, jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_EXCHANGE, $user_info);
+            }else{
+                $data['recommend'] = $this->Commodity_model->get_home_recommend(3, jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_SALE, $user_info);
+            }
+        }else {
+            if ($all_point_flag){
+                $data['recommend'] = $this->Commodity_model->get_home_recommend(3, jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_EXCHANGE);
+            }else{
+                $data['recommend'] = $this->Commodity_model->get_home_recommend(3, jys_system_code::RECOMMEND_COMMODITY_STATUS_HOT_SALE);
+            }
+        }
 
 		$data['all_point_flag'] = $all_point_flag;
 
@@ -228,7 +247,12 @@ Class Index extends CI_Controller {
 	 */
 	public function get_commodity_by_id(){
 		$commodity_id = $this->input->post('commodity_id', TRUE);
-		$data = $this->Commodity_model->get_commodity_list_by_condition(['commodity.id'=>$commodity_id], FALSE);
+        $data = $this->Commodity_model->get_commodity_list_by_condition(['commodity.id'=>$commodity_id], FALSE);
+        if (!empty($_SESSION['user_id']) && !empty($_SESSION['role_id']) && intval($_SESSION['role_id']) == jys_system_code::ROLE_USER) {
+            $user_info = $this->User_model->get_user_detail_by_condition(['user.id' => $_SESSION['user_id']]);
+            $data = $this->Commodity_model->calculate_discount_price($data, $user_info['price_discount']);
+        }
+
 
 		echo json_encode($data);
 	}

@@ -44,12 +44,14 @@ class Jys_tool{
      */
     public function taiping_sign($data) {
         $taiping_key_path = APPPATH.'libraries/taiping_private_key.pem';
+
         $key = openssl_pkey_get_private(file_get_contents($taiping_key_path));
-        if (!is_string($data)) {
-            $data = json_encode($data);
-        }
+
+        $data = json_encode($data, JSON_UNESCAPED_UNICODE);
         $sign = "";
-        openssl_sign($data, $sign, $key, OPENSSL_ALGO_SHA1);
+        $res = openssl_get_privatekey($key);
+        openssl_sign(base64_encode($data), $sign, $res, OPENSSL_ALGO_SHA1);
+        openssl_free_key($res);
         $sign = base64_encode($sign);
         return $sign;
     }
@@ -78,10 +80,7 @@ class Jys_tool{
         curl_setopt($ch, CURLOPT_POST, TRUE);
         // 设置请求参数
         if (!empty($parameters)) {
-            if (is_array($parameters) || is_object($parameters)) {
-                $parameters = $this -> json_encode_ex($parameters);
-            }
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $parameters);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($parameters));
         }
         // 执行请求动作，并获取结果
         $result = curl_exec($ch);
